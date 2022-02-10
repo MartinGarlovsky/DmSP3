@@ -508,26 +508,30 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3treed098234e6dafefef80e1c03591ec2e4473786386targetblankd098234a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/MartinGarlovsky/DmSP3/tree/d098234e6dafefef80e1c03591ec2e4473786386" target="_blank">d098234</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3tree8e0c73045fe75eb50cfa8ef2c27c03f6b7b4d24btargetblank8e0c730a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/MartinGarlovsky/DmSP3/tree/8e0c73045fe75eb50cfa8ef2c27c03f6b7b4d24b" target="_blank">8e0c730</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3treed098234e6dafefef80e1c03591ec2e4473786386targetblankd098234a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3tree8e0c73045fe75eb50cfa8ef2c27c03f6b7b4d24btargetblank8e0c730a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/MartinGarlovsky/DmSP3/tree/d098234e6dafefef80e1c03591ec2e4473786386" target="_blank">d098234</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/MartinGarlovsky/DmSP3/tree/8e0c73045fe75eb50cfa8ef2c27c03f6b7b4d24b" target="_blank">8e0c730</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
     Ignored:    data/.DS_Store
     Ignored:    output/.DS_Store
 
 Untracked files:
+    Untracked:  README.html
     Untracked:  code/parse_PAML.R
     Untracked:  data/040721_PBS_NaCl_1PeptideLFQ.csv
     Untracked:  data/DmSP3_Xlinked_Ribosomes.xlsx
@@ -540,7 +544,17 @@ Untracked files:
     Untracked:  data/KB_10MSE_sperm_Edited.xlsx
     Untracked:  data/dm6_ver78_age.csv
     Untracked:  data/dmel_SFPs_wigby_etal2020.csv
+    Untracked:  data/oneratio_SWAMP.txt
+    Untracked:  figures/
+    Untracked:  output/DmSP_ribosomes.csv
+    Untracked:  output/DmSP_which_proteome.csv
+    Untracked:  output/GO_lists/
+    Untracked:  output/OMIM_results/
     Untracked:  output/PAML/
+    Untracked:  output/Recent_DmSP3.csv
+    Untracked:  output/Top20DmSP3.csv
+    Untracked:  output/Ylinked_DmSP3.csv
+    Untracked:  output/paralog_switches.csv
 
 </code></pre>
 <p>
@@ -579,6 +593,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/8e0c73045fe75eb50cfa8ef2c27c03f6b7b4d24b/analysis/statistical_analysis.Rmd" target="_blank">8e0c730</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+<td>
+change readme, fix figures
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/MartinGarlovsky/DmSP3/3ce1c47a48de012c7883d568131a50529ecd5316/docs/statistical_analysis.html" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1004,7 +1052,7 @@ DmSP3 &lt;- tibble(
 #   #write_csv(&#39;output/DmSP_which_proteome.csv&#39;)
 
 # write FBgn to file for GO analysis
-#DmSP3 %&gt;% dplyr::select(FBgn) %&gt;% write_csv(&#39;output/GO_lists/DmSP3_3177.csv&#39;)
+#DmSP3 %&gt;% dplyr::select(FBgn) %&gt;% write_csv(&#39;output/GO_lists/DmSP3_3176.csv&#39;)
 
 # number identified by two or more unique peptides in a single experiment
 #DmSP3 %&gt;% filter(comb.peps == &#39;confident&#39;) %&gt;% dim
@@ -1250,7 +1298,7 @@ chm_plot &lt;- chm_dist %&gt;%
         legend.text = element_text(size = 10),
         strip.text.y = element_text(face = &quot;italic&quot;)) +
   geom_text(aes(label = sigLabel), 
-            size = 5, colour = &quot;black&quot;) +
+            size = 10, colour = &quot;black&quot;) +
   geom_text(aes(y = -0.05, label = paste0(obs.genes, &#39;/&#39;, exp.genes)), 
             size = 5, colour = &quot;black&quot;) +
   #ggsave(filename = &#39;figures/chm_dist.pdf&#39;, width = 4, height = 3) +
@@ -1494,7 +1542,7 @@ age_plot &lt;- age_dist %&gt;%
         legend.text = element_text(size = 10),
         strip.text.y = element_text(face = &quot;italic&quot;)) +
   geom_text(aes(label = sigLabel), 
-            size = 5, colour = &quot;black&quot;) +
+            size = 10, colour = &quot;black&quot;) +
   geom_text(aes(y = -0.05, label = paste0(obs.genes, &#39;/&#39;, exp.genes)), 
             size = 5, colour = &quot;black&quot;) +
   #ggsave(filename = &#39;figures/age_dist.pdf&#39;, width = 4, height = 3) +
@@ -4621,13 +4669,6 @@ MartinGarlovsky
 
 
 # # write to file for GO
-# pbst_low %&gt;% filter(Sfp == &#39;Sperm.only&#39;) #%&gt;% write_csv(&#39;output/pbst_low_spermonly.csv&#39;)
-# lrt.pbst_v_rest.tTags %&gt;% filter(Sfp != &#39;SFP.high&#39;) #%&gt;% write_csv(&#39;output/pbst_low_notSFP.csv&#39;)
-# 
-# lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == &#39;SFP.high&#39; &amp; lrt.pbst_v_rest.tTags$logFC &gt; 1 &amp; lrt.pbst_v_rest.tTags$FDR &lt; 0.05, ] %&gt;% dim
-# 
-# lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp != &#39;SFP.high&#39; &amp; lrt.pbst_v_rest.tTags$logFC &gt; 1 &amp; lrt.pbst_v_rest.tTags$FDR &lt; 0.05, ] #%&gt;% write_csv(&#39;output/GO_lists/pbst_low_noSFP.csv&#39;)
-# 
 # lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$logFC &gt; 1 &amp; lrt.pbst_v_rest.tTags$FDR &lt; 0.05, ] #%&gt;% write_csv(&#39;output/GO_lists/pbst_low.csv&#39;)</code></pre>
 </div>
 <div id="proteins-depleted-after-pbst-treatment" class="section level4">
@@ -4645,7 +4686,7 @@ MartinGarlovsky
 </div>
 <div id="sfps-depleted-after-pbst-treatment" class="section level4">
 <h4>Sfps depleted after PBST treatment</h4>
-<pre class="r"><code>lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == &#39;SFP.high&#39; &amp; lrt.pbst_v_rest.tTags$logFC &gt; 1 &amp; lrt.pbst_v_rest.tTags$FDR &lt; 0.05, ] %&gt;% #write_csv(&#39;output/PBST_Sfp_depleted.csv&#39;)
+<pre class="r"><code>lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == &#39;SFP.high&#39; &amp; lrt.pbst_v_rest.tTags$logFC &gt; 1 &amp; lrt.pbst_v_rest.tTags$FDR &lt; 0.05, ] %&gt;% #write_csv(&#39;output/GO_lists/PBST_Sfp_depleted.csv&#39;)
   dplyr::select(FBgn, Name = NAME, Symbol = SYMBOL, Chromosome = LOCATION_ARM) %&gt;% 
   arrange(Symbol) %&gt;% 
   my_data_table()</code></pre>
@@ -4654,7 +4695,7 @@ MartinGarlovsky
 </div>
 <div id="sfps-remaining-after-pbst-treatment" class="section level4">
 <h4>Sfps remaining after PBST treatment</h4>
-<pre class="r"><code>lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == &#39;SFP.high&#39; &amp; lrt.pbst_v_rest.tTags$FDR &gt; 0.05, ] %&gt;% #write_csv(&#39;output/PBST_Sfp_remaining.csv&#39;)
+<pre class="r"><code>lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == &#39;SFP.high&#39; &amp; lrt.pbst_v_rest.tTags$FDR &gt; 0.05, ] %&gt;% #write_csv(&#39;output/GO_lists/PBST_Sfp_remaining.csv&#39;)
   dplyr::select(FBgn, Name = NAME, Symbol = SYMBOL, Chromosome = LOCATION_ARM) %&gt;% 
   arrange(Symbol) %&gt;% 
   my_data_table()</code></pre>
@@ -7313,6 +7354,43 @@ bind_rows(one_ratio %&gt;% mutate(gene_set = &#39;Sfp&#39;) %&gt;% filter(Sfp ==
   #ggsave(&#39;figures/sperm_rates_all.vs.all.pdf&#39;, height = 4.5, width = 4) +
   NULL</code></pre>
 <p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-87-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-87-1">
+Past versions of unnamed-chunk-87-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-87-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-87-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># sperm rates only
 sperm_rates &lt;- one_ratio %&gt;% 
   filter(sperm_protein == &#39;Sperm&#39;) %&gt;% 
@@ -7415,14 +7493,51 @@ rates_plot &lt;- sperm_rates2 %&gt;%
         legend.title = element_blank(),
         legend.background = element_blank()) + 
   geom_text(aes(y = 0.05, label = N), size = 5, colour = &quot;black&quot;) +
-  geom_signif(y_position = 0.22, xmin = 1, xmax = 2, annotation = &quot;***&quot;, tip_length = 0.01, colour = &#39;black&#39;) +
-  geom_signif(y_position = 0.23, xmin = 1, xmax = 3, annotation = &quot;***&quot;, tip_length = 0.01, colour = &#39;black&#39;) +
-  geom_signif(y_position = 0.24, xmin = 1, xmax = 4, annotation = &quot;n.s.&quot;, tip_length = 0.01, colour = &#39;black&#39;) +
+  geom_signif(y_position = 0.205, xmin = 1, xmax = 2, annotation = &quot;***&quot;, tip_length = 0.01, colour = &#39;black&#39;) +
+  geom_signif(y_position = 0.215, xmin = 1, xmax = 3, annotation = &quot;***&quot;, tip_length = 0.01, colour = &#39;black&#39;) +
+  geom_signif(y_position = 0.225, xmin = 1, xmax = 4, annotation = &quot;n.s.&quot;, tip_length = 0.01, colour = &#39;black&#39;) +
   #ggsave(&#39;figures/sperm_rates_mn.pdf&#39;, height = 3, width = 3) +
   NULL
 
 rates_plot</code></pre>
 <p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-89-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-89-1">
+Past versions of unnamed-chunk-89-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-89-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-89-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="compare-experiments" class="section level1 tabset">
@@ -7466,6 +7581,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-90-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-90-1.png" target="_blank">5b13fbc</a>
@@ -7523,6 +7649,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-91-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-91-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -7578,6 +7715,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-92-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-92-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -7631,6 +7779,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-93-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-93-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -7673,6 +7832,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-94-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-94-1.png" target="_blank">5b13fbc</a>
@@ -7723,6 +7893,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-95-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-95-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -7768,6 +7949,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-96-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-96-1.png" target="_blank">5b13fbc</a>
@@ -7817,6 +8009,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-97-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-97-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -7863,6 +8066,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-98-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-98-1.png" target="_blank">5b13fbc</a>
