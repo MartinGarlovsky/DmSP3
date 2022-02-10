@@ -1,5 +1,3 @@
 # DmSP3
 
-A [workflowr][] project.
-
-[workflowr]: https://github.com/jdblischak/workflowr
+Click [here](https://martingarlovsky.github.io/DmSP3/) to view the html report for this project (created using the [workflowr](https://github.com/jdblischak/workflowr) package).
