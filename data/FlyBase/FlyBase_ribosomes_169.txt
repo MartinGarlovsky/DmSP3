@@ -1,0 +1,170 @@
+#SUBMITTED ID	FBID_KEY	ANNOTATION_SYMBOL	H_SAPIENS_ORTHOLOGS	LOCATION_ARM	M_MUSCULUS_ORTHOLOGS	NAME	SPECIES_ABBREVIATION	SYMBOL
+FBgn0261602	FBgn0261602	CG1263	Hsap\MIR6850 <newline> Hsap\RPL8 <newline> Hsap\MRPL2	3L	Mmus\Rpl8 <newline> Mmus\Mrpl2	Ribosomal protein L8	Dmel	RpL8
+FBgn0003941	FBgn0003941	CG2960	Hsap\UBA52 <newline> Hsap\RPS27A <newline> Hsap\UBC <newline> Hsap\NEDD8 <newline> Hsap\UBB <newline> Hsap\ISG15	2L	Mmus\Uba52 <newline> Mmus\Gm11808 <newline> Mmus\Uba52-ps <newline> Mmus\Ubb <newline> Mmus\LOC100042019 <newline> Mmus\Nedd8 <newline> Mmus\Gm4802 <newline> Mmus\Rps27a <newline> Mmus\Gm5239 <newline> Mmus\Isg15	Ribosomal protein L40	Dmel	RpL40
+FBgn0015288	FBgn0015288	CG7434	Hsap\RPL22L1 <newline> Hsap\RPL22	X	Mmus\Rpl22l1 <newline> Mmus\Rpl22 <newline> Mmus\Gm9457	Ribosomal protein L22	Dmel	RpL22
+FBgn0037328	FBgn0037328	CG2099	Hsap\RPL35A	3R	Mmus\Rpl35a <newline> Mmus\Gm10243 <newline> Mmus\Gm10247 <newline> Mmus\Gm10029	Ribosomal protein L35A	Dmel	RpL35A
+FBgn0034822	FBgn0034822	CG9873	Hsap\KCNQ1 <newline> Hsap\KCND1 <newline> Hsap\KCNA7 <newline> Hsap\KCNA5 <newline> Hsap\KCNQ4 <newline> Hsap\KCNC1 <newline> Hsap\RPL37 <newline> Hsap\KCNA6 <newline> Hsap\KCNS2 <newline> Hsap\KCNF1 <newline> Hsap\KCNG3 <newline> Hsap\KCNS1 <newline> Hsap\KCNG4 <newline> Hsap\KCNG2 <newline> Hsap\KCND3 <newline> Hsap\KCNA4 <newline> Hsap\KCND2 <newline> Hsap\KCNQ5 <newline> Hsap\KCNQ2 <newline> Hsap\KCNA3 <newline> Hsap\KCNA10 <newline> Hsap\KCNC4 <newline> Hsap\KCNG1 <newline> Hsap\KCNB1 <newline> Hsap\KCNV2 <newline> Hsap\KCNA1 <newline> Hsap\KCNQ3 <newline> Hsap\KCNS3 <newline> Hsap\KCNB2 <newline> Hsap\KCNA2 <newline> Hsap\KCNC3 <newline> Hsap\KCNV1 <newline> Hsap\KCNC2	2R	Mmus\Kcnc4 <newline> Mmus\Kcnq1 <newline> Mmus\Kcnd1 <newline> Mmus\Kcnv1 <newline> Mmus\Kcnq4 <newline> Mmus\Kcna4 <newline> Mmus\Kcns1 <newline> Mmus\Kcna2 <newline> Mmus\Rpl37 <newline> Mmus\Kcna3 <newline> Mmus\Kcng3 <newline> Mmus\Kcnv2 <newline> Mmus\Kcna1 <newline> Mmus\Kcna5 <newline> Mmus\Kcng4 <newline> Mmus\Kcnb1 <newline> Mmus\Kcns3 <newline> Mmus\Kcnq3 <newline> Mmus\Kcns2 <newline> Mmus\Kcng2 <newline> Mmus\Kcnd2 <newline> Mmus\Kcna10 <newline> Mmus\Kcnc2 <newline> Mmus\Kcnd3 <newline> Mmus\Kcna7 <newline> Mmus\Kcnc3 <newline> Mmus\Kcng1 <newline> Mmus\Kcna6 <newline> Mmus\Kcnq5 <newline> Mmus\Kcnq2 <newline> Mmus\Kcnc1 <newline> Mmus\Kcnb2 <newline> Mmus\Kcnf1 <newline> Mmus\Rpl37rt	Ribosomal protein L37b	Dmel	RpL37b
+FBgn0036825	FBgn0036825	CG6846	Hsap\RPL26 <newline> Hsap\RPL26L1 <newline> Hsap\MRPL24	3L	Mmus\Rpl26 <newline> Mmus\Mrpl24 <newline> Mmus\Gm10136	Ribosomal protein L26	Dmel	RpL26
+FBgn0037686	FBgn0037686	CG9354	Hsap\RPL34	3R	Mmus\Rpl34 <newline> Mmus\Gm2178 <newline> Mmus\Gm4705 <newline> Mmus\Rpl34-ps1 <newline> Mmus\Rpl34-ps2 <newline> Mmus\Gm10154	Ribosomal protein L34b	Dmel	RpL34b
+FBgn0035753	FBgn0035753	CG8615	Hsap\RPL18	3L	Mmus\Rpl18 <newline> Mmus\Gm29720	Ribosomal protein L18	Dmel	RpL18
+FBgn0020910	FBgn0020910	CG4863	Hsap\RPL3 <newline> Hsap\RPL3L <newline> Hsap\MRPL3	3R	Mmus\Rpl3 <newline> Mmus\Rpl3l <newline> Mmus\Mrpl3	Ribosomal protein L3	Dmel	RpL3
+FBgn0029785	FBgn0029785	CG4111	Hsap\RPL35	X	Mmus\Gm2000 <newline> Mmus\Rpl35 <newline> Mmus\Gm10269 <newline> Mmus\Gm8444	Ribosomal protein L35	Dmel	RpL35
+FBgn0002593	FBgn0002593	CG4087	Hsap\RPLP1 <newline> Hsap\RPLP2	2L	Mmus\Rplp1 <newline> Mmus\Gm10073 <newline> Mmus\Rplp2 <newline> Mmus\Gm17511 <newline> Mmus\Cct2 <newline> Mmus\LOC102637947 <newline> Mmus\Gm13249	Ribosomal protein LP1	Dmel	RpLP1
+FBgn0036213	FBgn0036213	CG7283	Hsap\RPL10A <newline> Hsap\MRPL1 <newline> Hsap\RSL1D1	3L	Mmus\Rpl10a <newline> Mmus\Mrpl1 <newline> Mmus\Rsl1d1	Ribosomal protein L10Ab	Dmel	RpL10Ab
+FBgn0034968	FBgn0034968	CG3195	Hsap\RPL12 <newline> Hsap\MRPL11	2R	Mmus\Rpl12 <newline> Mmus\Mrpl11 <newline> Mmus\Gm16519	Ribosomal protein L12	Dmel	RpL12
+FBgn0028697	FBgn0028697	CG17420	Hsap\RPL15	3L	Mmus\Rpl15 <newline> Mmus\Gm10020 <newline> Mmus\Gm5292	Ribosomal protein L15	Dmel	RpL15
+FBgn0039359	FBgn0039359	CG4759	Hsap\RPL27 <newline> Hsap\RPL14 <newline> Hsap\RPL6	3R	Mmus\Rpl27 <newline> Mmus\Rpl6 <newline> Mmus\Rpl14 <newline> Mmus\Rpl6l <newline> Mmus\LOC108167922 <newline> Mmus\Gm4825 <newline> Mmus\Rpl27-ps3	Ribosomal protein L27	Dmel	RpL27
+FBgn0086710	FBgn0086710	CG10652	Hsap\RPL30	2L	Mmus\Rpl30 <newline> Mmus\Gm46415 <newline> Mmus\Gm6109 <newline> Mmus\Gm5481 <newline> Mmus\Gm7429 <newline> Mmus\Gm6570 <newline> Mmus\Rpl30-ps6	Ribosomal protein L30	Dmel	RpL30
+FBgn0029897	FBgn0029897	CG3203	Hsap\RPL17 <newline> Hsap\MRPL22 <newline> Hsap\RPL17-C18orf32 <newline> Hsap\C18orf32	X	Mmus\Rpl17 <newline> Mmus\Mrpl22 <newline> Mmus\Gm10362 <newline> Mmus\Gm10268 <newline> Mmus\Gm6133	Ribosomal protein L17	Dmel	RpL17
+FBgn0033485	FBgn0033485	CG1381	Hsap\MRTO4 <newline> Hsap\RPLP0	2R	Mmus\Rplp0 <newline> Mmus\Mrto4 <newline> Mmus\Gm8730 <newline> Mmus\Mrto4-ps2 <newline> Mmus\Mrto4-ps1	Ribosomal protein LP0-like	Dmel	RpLP0-like
+FBgn0030616	FBgn0030616	CG9091	Hsap\KCNQ1 <newline> Hsap\KCND1 <newline> Hsap\KCNA7 <newline> Hsap\KCNA5 <newline> Hsap\KCNQ4 <newline> Hsap\KCNC1 <newline> Hsap\RPL37 <newline> Hsap\KCNA6 <newline> Hsap\KCNS2 <newline> Hsap\KCNF1 <newline> Hsap\KCNG3 <newline> Hsap\KCNS1 <newline> Hsap\KCNG4 <newline> Hsap\KCNG2 <newline> Hsap\KCND3 <newline> Hsap\KCNA4 <newline> Hsap\KCND2 <newline> Hsap\KCNQ5 <newline> Hsap\KCNQ2 <newline> Hsap\KCNA3 <newline> Hsap\KCNA10 <newline> Hsap\KCNC4 <newline> Hsap\KCNG1 <newline> Hsap\KCNB1 <newline> Hsap\KCNV2 <newline> Hsap\KCNA1 <newline> Hsap\KCNQ3 <newline> Hsap\KCNS3 <newline> Hsap\KCNB2 <newline> Hsap\KCNA2 <newline> Hsap\KCNC3 <newline> Hsap\KCNV1 <newline> Hsap\KCNC2	X	Mmus\Kcnc4 <newline> Mmus\Kcnq1 <newline> Mmus\Kcnd1 <newline> Mmus\Kcnv1 <newline> Mmus\Kcnq4 <newline> Mmus\Kcna4 <newline> Mmus\Kcns1 <newline> Mmus\Kcna2 <newline> Mmus\Rpl37 <newline> Mmus\Kcna3 <newline> Mmus\Kcng3 <newline> Mmus\Kcnv2 <newline> Mmus\Kcna1 <newline> Mmus\Kcna5 <newline> Mmus\Kcng4 <newline> Mmus\Kcnb1 <newline> Mmus\Kcns3 <newline> Mmus\Kcnq3 <newline> Mmus\Kcns2 <newline> Mmus\Kcng2 <newline> Mmus\Kcnd2 <newline> Mmus\Kcna10 <newline> Mmus\Kcnc2 <newline> Mmus\Kcnd3 <newline> Mmus\Kcna7 <newline> Mmus\Kcnc3 <newline> Mmus\Kcng1 <newline> Mmus\Kcna6 <newline> Mmus\Kcnq5 <newline> Mmus\Kcnq2 <newline> Mmus\Kcnc1 <newline> Mmus\Kcnb2 <newline> Mmus\Kcnf1 <newline> Mmus\Rpl37rt	Ribosomal protein L37a	Dmel	RpL37a
+FBgn0005593	FBgn0005593	CG4897	Hsap\RPL7L1 <newline> Hsap\RPL7 <newline> Hsap\NPSR1	2L	Mmus\Rpl7l1 <newline> Mmus\Rpl7 <newline> Mmus\Npsr1 <newline> Mmus\Tex48 <newline> Mmus\Gm5045 <newline> Mmus\1700084J12Rik	Ribosomal protein L7	Dmel	RpL7
+FBgn0032518	FBgn0032518	CG9282	Hsap\RPL24 <newline> Hsap\RSL24D1	2L	Mmus\Rpl24 <newline> Mmus\Rsl24d1 <newline> Mmus\Gm17430	Ribosomal protein L24	Dmel	RpL24
+FBgn0003279	FBgn0003279	CG5502	Hsap\RPL4 <newline> Hsap\RPS16 <newline> Hsap\MRPL4	3R	Mmus\Rpl4 <newline> Mmus\Mrpl4 <newline> Mmus\Rps16	Ribosomal protein L4	Dmel	RpL4
+FBgn0011272	FBgn0011272	CG4651	Hsap\RPL13	2L	Mmus\Rpl13 <newline> Mmus\Gm15710 <newline> Mmus\Rpl13-ps6	Ribosomal protein L13	Dmel	RpL13
+FBgn0026372	FBgn0026372	CG7977	Hsap\RPL23A	3L	Mmus\Rpl23a <newline> Mmus\Gm6096 <newline> Mmus\Gm10132 <newline> Mmus\Gm10335 <newline> Mmus\Gm10923 <newline> Mmus\Gm3940 <newline> Mmus\Gm6177 <newline> Mmus\Gm8137 <newline> Mmus\Gm8264 <newline> Mmus\Gm8158 <newline> Mmus\Gm8112 <newline> Mmus\Gm8290	Ribosomal protein L23A	Dmel	RpL23A
+FBgn0039406	FBgn0039406	CG6090	Hsap\RPL34	3R	Mmus\Rpl34 <newline> Mmus\Gm2178 <newline> Mmus\Gm4705 <newline> Mmus\Rpl34-ps1 <newline> Mmus\Rpl34-ps2 <newline> Mmus\Gm10154	Ribosomal protein L34a	Dmel	RpL34a
+FBgn0013325	FBgn0013325	CG7726	Hsap\RPL11	2R	Mmus\Rpl11 <newline> Mmus\Gm10036 <newline> Mmus\Gm5093 <newline> Mmus\Gm10288 <newline> Mmus\Gm7589 <newline> Mmus\Gm6745 <newline> Mmus\Gm48909	Ribosomal protein L11	Dmel	RpL11
+FBgn0038281	FBgn0038281	CG3843	Hsap\MRPL1 <newline> Hsap\RPL10A	3R	Mmus\Rpl10a <newline> Mmus\Mrpl1	Ribosomal protein L10Aa	Dmel	RpL10Aa
+FBgn0032987	FBgn0032987	CG12775	Hsap\RPL21	2L	Mmus\Rpl21 <newline> Mmus\Gm10240 <newline> Mmus\Gm10045 <newline> Mmus\Gm20764 <newline> Mmus\Gm10155 <newline> Mmus\Gm5528 <newline> Mmus\Gm9104	Ribosomal protein L21	Dmel	RpL21
+FBgn0010078	FBgn0010078	CG3661	Hsap\RPL23	2R	Mmus\Rpl23 <newline> Mmus\LOC100862455 <newline> Mmus\LOC100044627 <newline> Mmus\Gm15032	Ribosomal protein L23	Dmel	RpL23
+FBgn0003274	FBgn0003274	CG4918	Hsap\RPLP2 <newline> Hsap\RPLP1	2R	Mmus\Rplp2 <newline> Mmus\Rplp1 <newline> Mmus\Gm17511 <newline> Mmus\Gm10073	Ribosomal protein LP2	Dmel	RpLP2
+FBgn0002579	FBgn0002579	CG7622	Hsap\RPL36 <newline> Hsap\RPL36P14	X	Mmus\Gm8973 <newline> Mmus\Rpl36 <newline> Mmus\Gm5745 <newline> Mmus\Rpl36-ps4 <newline> Mmus\Gm8888 <newline> Mmus\Gm5614	Ribosomal protein L36	Dmel	RpL36
+FBgn0066084	FBgn0066084	CG30425	-	2R	-	Ribosomal protein L41	Dmel	RpL41
+FBgn0031980	FBgn0031980	CG7424	Hsap\RPL36AL <newline> Hsap\RPL36A <newline> Hsap\RPL36A-HNRNPH2	2L	Mmus\Rpl36al <newline> Mmus\Rpl36a <newline> Mmus\Gm6525 <newline> Mmus\Rpl36a-ps1	Ribosomal protein L36A	Dmel	RpL36A
+FBgn0032404	FBgn0032404	CG5317	Hsap\RPL7 <newline> Hsap\NPSR1 <newline> Hsap\RPL7L1	2L	Mmus\Npsr1 <newline> Mmus\Rpl7 <newline> Mmus\Rpl7l1 <newline> Mmus\Tex48	Ribosomal protein L7-like	Dmel	RpL7-like
+FBgn0064225	FBgn0064225	CG17489	Hsap\RPL5	2L	Mmus\Rpl5 <newline> Mmus\Gm15500	Ribosomal protein L5	Dmel	RpL5
+FBgn0040007	FBgn0040007	CG18001	Hsap\RPL38	2R	Mmus\Rpl38	Ribosomal protein L38	Dmel	RpL38
+FBgn0024733	FBgn0024733	CG17521	Hsap\RPL10L <newline> Hsap\RPL10 <newline> Hsap\HSPBP1 <newline> Hsap\MRPL16 <newline> Hsap\SIL1	3L	Mmus\Rpl10 <newline> Mmus\Rpl10l <newline> Mmus\Sil1 <newline> Mmus\Hspbp1 <newline> Mmus\Mrpl16 <newline> Mmus\Gm5621	Ribosomal protein L10	Dmel	RpL10
+FBgn0035422	FBgn0035422	CG12740	Hsap\MIR6805 <newline> Hsap\RPL28	3L	Mmus\Rpl28	Ribosomal protein L28	Dmel	RpL28
+FBgn0015756	FBgn0015756	CG6141	Hsap\RPL9	2L	Mmus\Rpl9 <newline> Mmus\Rpl9-ps1 <newline> Mmus\Rpl9-ps6 <newline> Mmus\Gm5451	Ribosomal protein L9	Dmel	RpL9
+FBgn0023170	FBgn0023170	CG3997	Hsap\RPL39L <newline> Hsap\QARS <newline> Hsap\RPL39 <newline> Hsap\EPRS <newline> Hsap\EARS2 <newline> Hsap\RPL39P5	2R	Mmus\Qars <newline> Mmus\Ears2 <newline> Mmus\Rpl39l <newline> Mmus\Eprs <newline> Mmus\Rpl39 <newline> Mmus\Rpl39-ps <newline> Mmus\Gm32886 <newline> Mmus\Gm32211	Ribosomal protein L39	Dmel	RpL39
+FBgn0000100	FBgn0000100	CG7490	Hsap\RPLP0 <newline> Hsap\MRTO4 <newline> Hsap\RPLP0P6	3L	Mmus\Rplp0 <newline> Mmus\Mrto4 <newline> Mmus\Gm8730	Ribosomal protein LP0	Dmel	RpLP0
+FBgn0261608	FBgn0261608	CG5827	Hsap\RPL37A <newline> Hsap\RPL37AP8	2L	Mmus\Rpl37a <newline> Mmus\Gm4149 <newline> Mmus\Gm4613	Ribosomal protein L37A	Dmel	RpL37A
+FBgn0010409	FBgn0010409	CG6510	Hsap\RPL18A	2R	Mmus\Rpl18a <newline> Mmus\2200002J24Rik <newline> Mmus\Gm4883	Ribosomal protein L18A	Dmel	RpL18A
+FBgn0016726	FBgn0016726	CG10071	Hsap\RPL29	2R	Mmus\Gm3550 <newline> Mmus\Rpl29 <newline> Mmus\Gm10709 <newline> Mmus\Gm13841 <newline> Mmus\Gm13213 <newline> Mmus\Gm4945 <newline> Mmus\Gm17669 <newline> Mmus\Gm5218 <newline> Mmus\Gm5561	Ribosomal protein L29	Dmel	RpL29
+FBgn0002626	FBgn0002626	CG7939	Hsap\RPL32	3R	Mmus\Rpl32 <newline> Mmus\Rpl32-ps <newline> Mmus\Rpl32l <newline> Mmus\Gm4987	Ribosomal protein L32	Dmel	RpL32
+FBgn0014026	FBgn0014026	CG3314	Hsap\RPS12 <newline> Hsap\NHP2 <newline> Hsap\RPL7A <newline> Hsap\SNU13 <newline> Hsap\DOCK4 <newline> Hsap\RPP38 <newline> Hsap\RSRC1	X	Mmus\Dock4 <newline> Mmus\Rpp38 <newline> Mmus\Rsrc1 <newline> Mmus\Rps12 <newline> Mmus\Snu13 <newline> Mmus\Rpl7a <newline> Mmus\Nhp2 <newline> Mmus\Gm5616 <newline> Mmus\Rpl7a-ps5 <newline> Mmus\Gm14853 <newline> Mmus\Gm14214	Ribosomal protein L7A	Dmel	RpL7A
+FBgn0034837	FBgn0034837	CG9871	Hsap\RPL22L1 <newline> Hsap\RPL22	2R	Mmus\Rpl22l1 <newline> Mmus\Rpl22 <newline> Mmus\Gm9457	Ribosomal protein L22-like	Dmel	RpL22-like
+FBgn0017579	FBgn0017579	CG6253	Hsap\RPL14 <newline> Hsap\RPL6	3L	Mmus\Rpl14 <newline> Mmus\Rpl6 <newline> Mmus\Rpl27 <newline> Mmus\Rpl6l	Ribosomal protein L14	Dmel	RpL14
+FBgn0037351	FBgn0037351	CG1475	Hsap\RPL13A <newline> Hsap\MRPL13 <newline> Hsap\RPL13AP3	3R	Mmus\Flt3l <newline> Mmus\Rpl13a <newline> Mmus\Mrpl13 <newline> Mmus\Rpl13a-ps1	Ribosomal protein L13A	Dmel	RpL13A
+FBgn0039857	FBgn0039857	CG11522	Hsap\RPL6 <newline> Hsap\RPL14	3R	Mmus\Rpl6 <newline> Mmus\Rpl27 <newline> Mmus\Rpl14 <newline> Mmus\Rpl6l <newline> Mmus\Gm6807	Ribosomal protein L6	Dmel	RpL6
+FBgn0037899	FBgn0037899	CG6764	Hsap\RSL24D1 <newline> Hsap\RPL24	3R	Mmus\Rsl24d1 <newline> Mmus\Rpl24	Ribosomal protein L24-like	Dmel	RpL24-like
+FBgn0285948	FBgn0285948	CG15442	Hsap\RPL27A <newline> Hsap\MRPL15	2L	Mmus\Rpl27a <newline> Mmus\Gm7536 <newline> Mmus\Mrpl15 <newline> Mmus\Gm5908	Ribosomal protein L27A	Dmel	RpL27A
+FBgn0285949	FBgn0285949	CG1821	Hsap\RPL31	2R	Mmus\Rpl31 <newline> Mmus\Rpl31-ps8 <newline> Mmus\Rpl31-ps12 <newline> Mmus\Rpl31-ps13 <newline> Mmus\Gm5670 <newline> Mmus\Rpl31-ps20	Ribosomal protein L31	Dmel	RpL31
+FBgn0285950	FBgn0285950	CG2746	Hsap\RPL19	2R	Mmus\Rpl19	Ribosomal protein L19	Dmel	RpL19
+FBgn0037566	FBgn0037566	CG7494	Hsap\MRPL1 <newline> Hsap\RPL10A <newline> Hsap\SNU13	3R	Mmus\Rpl10a <newline> Mmus\Mrpl1 <newline> Mmus\Snu13	mitochondrial ribosomal protein L1	Dmel	mRpL1
+FBgn0031231	FBgn0031231	CG11488	Hsap\MRPL10	2L	Mmus\Mrpl10	mitochondrial ribosomal protein L10	Dmel	mRpL10
+FBgn0038234	FBgn0038234	CG3351	Hsap\MRPL11 <newline> Hsap\RPL12	3R	Mmus\Mrpl11 <newline> Mmus\Gm16519 <newline> Mmus\Rpl12	mitochondrial ribosomal protein L11	Dmel	mRpL11
+FBgn0011787	FBgn0011787	CG5012	Hsap\MRPL12 <newline> Hsap\SLC25A10	3L	Mmus\Mrpl12	mitochondrial ribosomal protein L12	Dmel	mRpL12
+FBgn0032720	FBgn0032720	CG10603	Hsap\MRPL13 <newline> Hsap\RPL13A	2L	Mmus\Mrpl13 <newline> Mmus\Rpl13a	mitochondrial ribosomal protein L13	Dmel	mRpL13
+FBgn0040389	FBgn0040389	CG14048	Hsap\MRPL14	X	Mmus\Mrpl14	mitochondrial ribosomal protein L14	Dmel	mRpL14
+FBgn0036990	FBgn0036990	CG5219	Hsap\MRPL15 <newline> Hsap\RPL27A	3L	Mmus\Mrpl15 <newline> Mmus\Gm7536 <newline> Mmus\Rpl27a	mitochondrial ribosomal protein L15	Dmel	mRpL15
+FBgn0023519	FBgn0023519	CG3109	Hsap\MRPL16 <newline> Hsap\HSPBP1 <newline> Hsap\RPL10L <newline> Hsap\SIL1 <newline> Hsap\RPL10	X	Mmus\Mrpl16 <newline> Mmus\Rpl10 <newline> Mmus\Sil1 <newline> Mmus\Hspbp1 <newline> Mmus\Rpl10l	mitochondrial ribosomal protein L16	Dmel	mRpL16
+FBgn0035122	FBgn0035122	CG13880	Hsap\MRPL17	3L	Mmus\Mrpl17	mitochondrial ribosomal protein L17	Dmel	mRpL17
+FBgn0026741	FBgn0026741	CG12373	Hsap\MRPL18	2R	Mmus\Mrpl18	mitochondrial ribosomal protein L18	Dmel	mRpL18
+FBgn0037608	FBgn0037608	CG8039	Hsap\MRPL19	3R	Mmus\Mrpl19	mitochondrial ribosomal protein L19	Dmel	mRpL19
+FBgn0036135	FBgn0036135	CG7636	Hsap\MRPL2 <newline> Hsap\RPL8	3L	Mmus\Mrpl2 <newline> Mmus\Rpl8	mitochondrial ribosomal protein L2	Dmel	mRpL2
+FBgn0036335	FBgn0036335	CG11258	Hsap\MRPL20	3L	Mmus\Mrpl20	mitochondrial ribosomal protein L20	Dmel	mRpL20
+FBgn0036853	FBgn0036853	CG9730	Hsap\MRPL21	3L	Mmus\Mrpl21	mitochondrial ribosomal protein L21	Dmel	mRpL21
+FBgn0030786	FBgn0030786	CG4742	Hsap\MRPL22 <newline> Hsap\RPL17 <newline> Hsap\RPL17-C18orf32 <newline> Hsap\C18orf32	X	Mmus\Mrpl22 <newline> Mmus\Rpl17	mitochondrial ribosomal protein L22	Dmel	mRpL22
+FBgn0035335	FBgn0035335	CG1320	Hsap\MRPL23 <newline> Hsap\LOC107987373	3L	Mmus\Mrpl23	mitochondrial ribosomal protein L23	Dmel	mRpL23
+FBgn0031651	FBgn0031651	CG8849	Hsap\MRPL24 <newline> Hsap\RPL26L1 <newline> Hsap\RPL26	2L	Mmus\Mrpl24 <newline> Mmus\Rpl26	mitochondrial ribosomal protein L24	Dmel	mRpL24
+FBgn0053002	FBgn0053002	CG33002	Hsap\MRPL27	2L	Mmus\Mrpl27	mitochondrial ribosomal protein L27	Dmel	mRpL27
+FBgn0031660	FBgn0031660	CG3782	Hsap\MRPL28	2L	Mmus\Mrpl28	mitochondrial ribosomal protein L28	Dmel	mRpL28
+FBgn0030686	FBgn0030686	CG8288	Hsap\MRPL3 <newline> Hsap\RPL3L <newline> Hsap\RPL3	X	Mmus\Mrpl3 <newline> Mmus\Rpl3 <newline> Mmus\Rpl3l	mitochondrial ribosomal protein L3	Dmel	mRpL3
+FBgn0029718	FBgn0029718	CG7038	Hsap\MRPL30	X	Mmus\Mrpl30	mitochondrial ribosomal protein L30	Dmel	mRpL30
+FBgn0039835	FBgn0039835	CG12220	Hsap\MRPL32	3R	Mmus\Mrpl32	mitochondrial ribosomal protein L32	Dmel	mRpL32
+FBgn0040907	FBgn0040907	CG3712	Hsap\MRPL33	X	Mmus\Mrpl33	mitochondrial ribosomal protein L33	Dmel	mRpL33
+FBgn0083983	FBgn0083983	CG34147	Hsap\MRPL34	2R	Mmus\Mrpl34	mitochondrial ribosomal protein L34	Dmel	mRpL34
+FBgn0038923	FBgn0038923	CG13410	Hsap\MRPL35	3R	Mmus\Mrpl35	mitochondrial ribosomal protein L35	Dmel	mRpL35
+FBgn0042112	FBgn0042112	CG18767	Hsap\MRPL36 <newline> Hsap\MOCS3 <newline> Hsap\UBA2 <newline> Hsap\SAE1 <newline> Hsap\UBA6 <newline> Hsap\UBA7 <newline> Hsap\UBA1 <newline> Hsap\ATG7 <newline> Hsap\UBA5 <newline> Hsap\NAE1 <newline> Hsap\UBA3	3L	Mmus\Mrpl36 <newline> Mmus\Uba1 <newline> Mmus\Atg7 <newline> Mmus\Nae1 <newline> Mmus\Uba5 <newline> Mmus\Uba7 <newline> Mmus\Uba6 <newline> Mmus\Uba3 <newline> Mmus\Sae1 <newline> Mmus\Mocs3 <newline> Mmus\Uba2 <newline> Mmus\Uba1y	mitochondrial ribosomal protein L36	Dmel	mRpL36
+FBgn0261380	FBgn0261380	CG42632	Hsap\MRPL37	3R	Mmus\Mrpl37	mitochondrial ribosomal protein L37	Dmel	mRpL37
+FBgn0030552	FBgn0030552	CG15871	Hsap\MRPL38 <newline> Hsap\PEBP4 <newline> Hsap\PEBP1	X	Mmus\Mrpl38 <newline> Mmus\Pebp4 <newline> Mmus\Pebp1 <newline> Mmus\Pbp2	mitochondrial ribosomal protein L38	Dmel	mRpL38
+FBgn0036462	FBgn0036462	CG17166	Hsap\MRPL39 <newline> Hsap\TARSL2 <newline> Hsap\TARS2 <newline> Hsap\TARS	3L	Mmus\Mrpl39 <newline> Mmus\Tars <newline> Mmus\Tars2 <newline> Mmus\Tarsl2	mitochondrial ribosomal protein L39	Dmel	mRpL39
+FBgn0001995	FBgn0001995	CG5818	Hsap\MRPL4 <newline> Hsap\RPS16 <newline> Hsap\RPL4	2L	Mmus\Mrpl4 <newline> Mmus\Rpl4 <newline> Mmus\Rps16	mitochondrial ribosomal protein L4	Dmel	mRpL4
+FBgn0037892	FBgn0037892	CG5242	Hsap\MRPL40	3R	Mmus\Mrpl40	mitochondrial ribosomal protein L40	Dmel	mRpL40
+FBgn0034001	FBgn0034001	CG12954	Hsap\MRPL41	2R	Mmus\Mrpl41 <newline> Mmus\Gm6434	mitochondrial ribosomal protein L41	Dmel	mRpL41
+FBgn0033480	FBgn0033480	CG12921	Hsap\C3orf20 <newline> Hsap\MRPL42 <newline> Hsap\CCDC32	2R	Mmus\Ccdc32 <newline> Mmus\4930590J08Rik <newline> Mmus\Mrpl42	mitochondrial ribosomal protein L42	Dmel	mRpL42
+FBgn0034893	FBgn0034893	CG5479	Hsap\MRPL43	2R	Mmus\Mrpl43	mitochondrial ribosomal protein L43	Dmel	mRpL43
+FBgn0037330	FBgn0037330	CG2109	Hsap\MRPL44 <newline> Hsap\DROSHA <newline> Hsap\DICER1	3R	Mmus\Mrpl44 <newline> Mmus\Dicer1 <newline> Mmus\Drosha	mitochondrial ribosomal protein L44	Dmel	mRpL44
+FBgn0263863	FBgn0263863	CG6949	Hsap\MRPL45	3R	Mmus\Mrpl45	mitochondrial ribosomal protein L45	Dmel	mRpL45
+FBgn0035272	FBgn0035272	CG13922	Hsap\MRPL46	3L	Mmus\Mrpl46	mitochondrial ribosomal protein L46	Dmel	mRpL46
+FBgn0014023	FBgn0014023	CG9378	Hsap\MRPL47	3R	Mmus\Mrpl47	mitochondrial ribosomal protein L47	Dmel	mRpL47
+FBgn0031357	FBgn0031357	CG17642	Hsap\MRPL48	2L	Mmus\Mrpl48	mitochondrial ribosomal protein L48	Dmel	mRpL48
+FBgn0030433	FBgn0030433	CG4647	Hsap\MRPL49	X	Mmus\Mrpl49	mitochondrial ribosomal protein L49	Dmel	mRpL49
+FBgn0028648	FBgn0028648	CG8612	Hsap\MRPL50	3L	Mmus\Mrpl50	mitochondrial ribosomal protein L50	Dmel	mRpL50
+FBgn0032053	FBgn0032053	CG13098	Hsap\MRPL51	2L	Mmus\Mrpl51	mitochondrial ribosomal protein L51	Dmel	mRpL51
+FBgn0033208	FBgn0033208	CG1577	Hsap\MRPL52	2R	Mmus\Mrpl52	mitochondrial ribosomal protein L52	Dmel	mRpL52
+FBgn0050481	FBgn0050481	CG30481	Hsap\MRPL53	2R	Mmus\Mrpl53	mitochondrial ribosomal protein L53	Dmel	mRpL53
+FBgn0034579	FBgn0034579	CG9353	Hsap\MRPL54	2R	Mmus\Mrpl54	mitochondrial ribosomal protein L54	Dmel	mRpL54
+FBgn0038678	FBgn0038678	CG14283	Hsap\MRPL55	3R	Mmus\Mrpl55	mitochondrial ribosomal protein L55	Dmel	mRpL55
+FBgn0038319	FBgn0038319	CG31478	Hsap\MRPL9	3R	Mmus\Mrpl9	mitochondrial ribosomal protein L9	Dmel	mRpL9
+FBgn0039555	FBgn0039555	CG12261	Hsap\MRPS22	3R	Mmus\Mrps22	mitochondrial ribosomal protein S22	Dmel	mRpS22
+FBgn0038474	FBgn0038474	CG5184	Hsap\MRPS11 <newline> Hsap\RPS14	3R	Mmus\Mrps11 <newline> Mmus\Rps14	mitochondrial ribosomal protein S11	Dmel	mRpS11
+FBgn0033907	FBgn0033907	CG8338	Hsap\MRPS16	2R	Mmus\Mrps16	mitochondrial ribosomal protein S16	Dmel	mRpS16
+FBgn0038307	FBgn0038307	CG4247	Hsap\MRPS10 <newline> Hsap\RPS20	3R	Mmus\Mrps10 <newline> Mmus\Rps20	mitochondrial ribosomal protein S10	Dmel	mRpS10
+FBgn0038426	FBgn0038426	CG10406	Hsap\MRPS33	3R	Mmus\Mrps33	mitochondrial ribosomal protein S33	Dmel	mRpS33
+FBgn0044511	FBgn0044511	CG32854	Hsap\MRPS21	3R	Mmus\Mrps21 <newline> Mmus\Gm5316 <newline> Mmus\Gm6686	mitochondrial ribosomal protein S21	Dmel	mRpS21
+FBgn0051450	FBgn0051450	CG31450	Hsap\MRPS18A <newline> Hsap\MRPS18C	3R	Mmus\Mrps18a <newline> Mmus\Mrps18c	mitochondrial ribosomal protein S18A	Dmel	mRpS18A
+FBgn0036774	FBgn0036774	CG7354	Hsap\MRPS26 <newline> Hsap\GNRH2	3L	Mmus\Mrps26	mitochondrial ribosomal protein S26	Dmel	mRpS26
+FBgn0037529	FBgn0037529	CG2957	Hsap\MRPS9	3R	Mmus\Mrps9	mitochondrial ribosomal protein S9	Dmel	mRpS9
+FBgn0044030	FBgn0044030	CG32531	Hsap\MRPS14 <newline> Hsap\RPS29	X	Mmus\Mrps14 <newline> Mmus\Rps29 <newline> Mmus\Gm10126	mitochondrial ribosomal protein S14	Dmel	mRpS14
+FBgn0035374	FBgn0035374	CG2101	Hsap\MRPS35	3L	Mmus\Mrps35	mitochondrial ribosomal protein S35	Dmel	mRpS35
+FBgn0039159	FBgn0039159	CG13608	Hsap\MRPS24	3R	Mmus\Mrps24	mitochondrial ribosomal protein S24	Dmel	mRpS24
+FBgn0032849	FBgn0032849	CG10757	Hsap\MRPS18B <newline> Hsap\MRPS18A	2L	Mmus\Mrps18b <newline> Mmus\Mrps18a	mitochondrial ribosomal protein S18B	Dmel	mRpS18B
+FBgn0036557	FBgn0036557	CG5904	Hsap\MRPS31	3L	Mmus\Mrps31	mitochondrial ribosomal protein S31	Dmel	mRpS31
+FBgn0034727	FBgn0034727	CG3633	Hsap\DAP3	2R	Mmus\Dap3	mitochondrial ribosomal protein S29	Dmel	mRpS29
+FBgn0032236	FBgn0032236	CG5108	Hsap\MRPS7	2L	Mmus\Mrps7 <newline> Mmus\Rps5	mitochondrial ribosomal protein S7	Dmel	mRpS7
+FBgn0039765	FBgn0039765	CG9688	Hsap\MRPS18C <newline> Hsap\MRPS18A	3R	Mmus\Mrps18c <newline> Mmus\Mrps18a	mitochondrial ribosomal protein S18C	Dmel	mRpS18C
+FBgn0030572	FBgn0030572	CG14413	Hsap\MRPS25	X	Mmus\Mrps25	mitochondrial ribosomal protein S25	Dmel	mRpS25
+FBgn0031639	FBgn0031639	CG2937	Hsap\MRPS2 <newline> Hsap\RPSA <newline> Hsap\SMKR1	2L	Mmus\Mrps2 <newline> Mmus\Rpsa	mitochondrial ribosomal protein S2	Dmel	mRpS2
+FBgn0034361	FBgn0034361	CG5497	Hsap\MRPS28	2R	Mmus\Mrps28	mitochondrial ribosomal protein S28	Dmel	mRpS28
+FBgn0034986	FBgn0034986	CG4326	Hsap\MRPS17	2R	Mmus\Mrps17	mitochondrial ribosomal protein S17	Dmel	mRpS17
+FBgn0003714	FBgn0003714	CG7925	Hsap\MRPS12 <newline> Hsap\RPS23	X	Mmus\Mrps12 <newline> Mmus\Rps23	technical knockout	Dmel	tko
+FBgn0030692	FBgn0030692	CG8470	Hsap\MRPS30	X	Mmus\Mrps30	mitochondrial ribosomal protein S30	Dmel	mRpS30
+FBgn0026261	FBgn0026261	CG4207	Hsap\MRPS15 <newline> Hsap\RPS13	2R	Mmus\Mrps15 <newline> Mmus\Rps13	bonsai	Dmel	bonsai
+FBgn0035534	FBgn0035534	CG15016	Hsap\MRPS6	3L	Mmus\Mrps6	mitochondrial ribosomal protein S6	Dmel	mRpS6
+FBgn0260407	FBgn0260407	CG31842	Hsap\MRPS23	2L	Mmus\Mrps23	mitochondrial ribosomal protein S23	Dmel	mRpS23
+FBgn0285951	FBgn0285951	CG42648	Hsap\MRPS34	3L	Mmus\Mrps34	mitochondrial ribosomal protein S34	Dmel	mRpS34
+FBgn0287187	FBgn0287187	CG40049	Hsap\MRPS5 <newline> Hsap\RPS2	3L	Mmus\Mrps5 <newline> Mmus\Rps2	mitochondrial ribosomal protein S5	Dmel	mRpS5
+FBgn0039300	FBgn0039300	CG10423	Hsap\RPS27L <newline> Hsap\RPS27	3R	Mmus\Rps27l <newline> Mmus\Rps27 <newline> Mmus\Rps27rt	Ribosomal protein S27	Dmel	RpS27
+FBgn0039129	FBgn0039129	CG5338	Hsap\RPS19	3R	Mmus\Rps19 <newline> Mmus\Rps19-ps6 <newline> Mmus\Rps19-ps4 <newline> Mmus\Rps19-ps13	Ribosomal protein S19b	Dmel	RpS19b
+FBgn0010412	FBgn0010412	CG4464	Hsap\RPS19	X	Mmus\Rps19 <newline> Mmus\Rps19-ps6 <newline> Mmus\Rps19-ps4 <newline> Mmus\Rps19-ps13	Ribosomal protein S19a	Dmel	RpS19a
+FBgn0003517	FBgn0003517	CG14792	Hsap\RPSA <newline> Hsap\MRPS2 <newline> Hsap\SMKR1 <newline> Hsap\RPSAP58	X	Mmus\Rpsa <newline> Mmus\Mrps2	stubarista	Dmel	sta
+FBgn0034138	FBgn0034138	CG8332	Hsap\RPS15	2R	Mmus\Rps15	Ribosomal protein S15	Dmel	RpS15
+FBgn0261592	FBgn0261592	CG10944	Hsap\RPS6	X	Mmus\Rps6 <newline> Mmus\Rps6-ps4 <newline> Mmus\LOC105244208	Ribosomal protein S6	Dmel	RpS6
+FBgn0015521	FBgn0015521	CG2986	Hsap\RPS21	2L	Mmus\Rps21	Ribosomal protein S21	Dmel	RpS21
+FBgn0005533	FBgn0005533	CG3922	Hsap\RPS17	3L	Mmus\Rps17 <newline> Mmus\Gm5215	Ribosomal protein S17	Dmel	RpS17
+FBgn0085211	FBgn0085211	CG34182	Hsap\RPS28	2L	Mmus\Rps28	Ribosomal protein S28-like	Dmel	RpS28-like
+FBgn0010411	FBgn0010411	CG8900	Hsap\RPS18	2R	Mmus\Gm10260 <newline> Mmus\Rps18 <newline> Mmus\Gm6987 <newline> Mmus\Gm11361 <newline> Mmus\Gm5321	Ribosomal protein S18	Dmel	RpS18
+FBgn0019936	FBgn0019936	CG15693	Hsap\RPS20 <newline> Hsap\MRPS10	3R	Mmus\Rps20 <newline> Mmus\Mrps10	Ribosomal protein S20	Dmel	RpS20
+FBgn0034743	FBgn0034743	CG4046	Hsap\RPS16 <newline> Hsap\MRPL4 <newline> Hsap\RPL4	2R	Mmus\Rps16 <newline> Mmus\Mrpl4 <newline> Mmus\Rpl4 <newline> Mmus\LOC100862433	Ribosomal protein S16	Dmel	RpS16
+FBgn0011284	FBgn0011284	CG11276	Hsap\RPS4Y2 <newline> Hsap\RPS4X <newline> Hsap\RPS4Y1	3L	Mmus\Rps4x <newline> Mmus\Rps4l-ps <newline> Mmus\Gm15013	Ribosomal protein S4	Dmel	RpS4
+FBgn0039713	FBgn0039713	CG7808	Hsap\RPS8 <newline> Hsap\NSA2	3R	Mmus\Rps8 <newline> Mmus\Nsa2 <newline> Mmus\Gm15501 <newline> Mmus\Gm11353	Ribosomal protein S8	Dmel	RpS8
+FBgn0033699	FBgn0033699	CG8857	Hsap\RPS11	2R	Mmus\Rps11 <newline> Mmus\Rps11-ps4	Ribosomal protein S11	Dmel	RpS11
+FBgn0010198	FBgn0010198	CG2033	Hsap\RPS15A	X	Mmus\Rps15a	Ribosomal protein S15Aa	Dmel	RpS15Aa
+FBgn0002590	FBgn0002590	CG8922	Hsap\RPS5 <newline> Hsap\MRPS7	X	Mmus\Rps5 <newline> Mmus\Mrps7	Ribosomal protein S5a	Dmel	RpS5a
+FBgn0039739	FBgn0039739	CG15527	Hsap\RPS28	3R	Mmus\Rps28	Ribosomal protein S28a	Dmel	RpS28a
+FBgn0261596	FBgn0261596	CG3751	Hsap\RPS24	2R	Mmus\Rps24 <newline> Mmus\Gm4832	Ribosomal protein S24	Dmel	RpS24
+FBgn0030136	FBgn0030136	CG2998	Hsap\RPS28	X	Mmus\Rps28	Ribosomal protein S28b	Dmel	RpS28b
+FBgn0038834	FBgn0038834	CG15697	Hsap\FAU <newline> Hsap\LOC101927789	3R	Mmus\Fau <newline> Mmus\Gm9843	Ribosomal protein S30	Dmel	RpS30
+FBgn0261597	FBgn0261597	CG10305	Hsap\RPS26 <newline> Hsap\RPS26P11 <newline> Hsap\RPS26P25 <newline> Hsap\LOC100996747	2L	Mmus\Rps26	Ribosomal protein S26	Dmel	RpS26
+FBgn0027494	FBgn0027494	CG12275	Hsap\PLEC <newline> Hsap\RPS10-NUDT3 <newline> Hsap\RPS10 <newline> Hsap\RPS10P5	3R	Mmus\Plec <newline> Mmus\Rps10	Ribosomal protein S10a	Dmel	RpS10a
+FBgn0010265	FBgn0010265	CG13389	Hsap\RPS13 <newline> Hsap\MRPS15	2L	Mmus\Rps13 <newline> Mmus\Mrps15 <newline> Mmus\Rps13-ps5	Ribosomal protein S13	Dmel	RpS13
+FBgn0261599	FBgn0261599	CG8495	Hsap\RPS29 <newline> Hsap\MRPS14	3R	Mmus\Rps29 <newline> Mmus\Gm10126 <newline> Mmus\Mrps14 <newline> Mmus\Gm14303	Ribosomal protein S29	Dmel	RpS29
+FBgn0003942	FBgn0003942	CG5271	Hsap\NEDD8 <newline> Hsap\OASL <newline> Hsap\RPS27A <newline> Hsap\UBB <newline> Hsap\UBL4B <newline> Hsap\ZFAND4 <newline> Hsap\UBQLN2 <newline> Hsap\UBQLN3 <newline> Hsap\RAD23B <newline> Hsap\UBQLN4 <newline> Hsap\UBL4A <newline> Hsap\UBQLN1 <newline> Hsap\UBD <newline> Hsap\ISG15 <newline> Hsap\UBQLNL <newline> Hsap\NEDD8-MDP1 <newline> Hsap\FAU <newline> Hsap\UBL7 <newline> Hsap\RAD23A <newline> Hsap\UBC <newline> Hsap\UBA52	2L	Mmus\Rad23a <newline> Mmus\Ubqln4 <newline> Mmus\Nedd8 <newline> Mmus\Ubb <newline> Mmus\Rad23b <newline> Mmus\Oasl1 <newline> Mmus\Oasl2 <newline> Mmus\Ubd <newline> Mmus\Oas1d <newline> Mmus\Ubqln1 <newline> Mmus\Ubqln3 <newline> Mmus\Ubqlnl <newline> Mmus\Ubqln2 <newline> Mmus\Oas1f <newline> Mmus\Ubqln5 <newline> Mmus\Oas1h <newline> Mmus\Oas1a <newline> Mmus\Isg15 <newline> Mmus\Oas1g <newline> Mmus\Oas1e <newline> Mmus\Rps27a <newline> Mmus\Ubl4b <newline> Mmus\Zfand4 <newline> Mmus\Oas1c <newline> Mmus\Ubc <newline> Mmus\Ubl4a <newline> Mmus\Ubl7 <newline> Mmus\Gm9843 <newline> Mmus\Fau <newline> Mmus\LOC100042019 <newline> Mmus\Uba52 <newline> Mmus\Gm4802 <newline> Mmus\Gm5239 <newline> Mmus\Gm8797	Ribosomal protein S27A	Dmel	RpS27A
+FBgn0002622	FBgn0002622	CG6779	Hsap\GET1 <newline> Hsap\RPS3	3R	Mmus\Rps3 <newline> Mmus\Wrb	Ribosomal protein S3	Dmel	RpS3
+FBgn0004867	FBgn0004867	CG5920	Hsap\RPS2 <newline> Hsap\MRPS5	2L	Mmus\Rps2 <newline> Mmus\Mrps5 <newline> Mmus\Gm8225 <newline> Mmus\Gm5921 <newline> Mmus\Gm6139 <newline> Mmus\Gm5978	Ribosomal protein S2	Dmel	RpS2
+FBgn0004403	FBgn0004403	CG1524	Hsap\RPS14 <newline> Hsap\MRPS11	X	Mmus\Rps14 <newline> Mmus\Mrps11	Ribosomal protein S14a	Dmel	RpS14a
+FBgn0038277	FBgn0038277	CG7014	Hsap\RPS5 <newline> Hsap\MRPS7	3R	Mmus\Rps5 <newline> Mmus\Mrps7	Ribosomal protein S5b	Dmel	RpS5b
+FBgn0033912	FBgn0033912	CG8415	Hsap\RPS23 <newline> Hsap\MRPS12	2R	Mmus\Rps23 <newline> Mmus\Mrps12 <newline> Mmus\Rps23-ps1 <newline> Mmus\Gm8618 <newline> Mmus\Gm9372	Ribosomal protein S23	Dmel	RpS23
+FBgn0086472	FBgn0086472	CG6684	Hsap\RPS25	3R	Mmus\Rps25 <newline> Mmus\Gm4963	Ribosomal protein S25	Dmel	RpS25
+FBgn0004404	FBgn0004404	CG1527	Hsap\RPS14 <newline> Hsap\MRPS11	X	Mmus\Rps14 <newline> Mmus\Mrps11 <newline> Mmus\Gm5805	Ribosomal protein S14b	Dmel	RpS14b
+FBgn0017545	FBgn0017545	CG2168	Hsap\RPS3A	4	Mmus\Rps3a1 <newline> Mmus\Rps3a2 <newline> Mmus\Rps3a3	Ribosomal protein S3A	Dmel	RpS3A
+FBgn0039757	FBgn0039757	CG1883	Hsap\RPS7	3R	Mmus\Rps7 <newline> Mmus\Gm6472 <newline> Mmus\LOC102638448 <newline> Mmus\Gm9493	Ribosomal protein S7	Dmel	RpS7
+FBgn0010408	FBgn0010408	CG3395	Hsap\RPS9 <newline> Hsap\IMP3	3L	Mmus\Rps9 <newline> Mmus\Imp3	Ribosomal protein S9	Dmel	RpS9
+FBgn0033555	FBgn0033555	CG12324	Hsap\RPS15A	2R	Mmus\Rps15a	Ribosomal protein S15Ab	Dmel	RpS15Ab
+FBgn0285947	FBgn0285947	CG14206	Hsap\PLEC <newline> Hsap\RPS10-NUDT3 <newline> Hsap\RPS10 <newline> Hsap\RPS10P5	X	Mmus\Plec <newline> Mmus\Rps10	Ribosomal protein S10b	Dmel	RpS10b
+FBgn0286213	FBgn0286213	CG11271	Hsap\RPS12 <newline> Hsap\NHP2 <newline> Hsap\RPL7A <newline> Hsap\SNU13 <newline> Hsap\DOCK4 <newline> Hsap\RPP38 <newline> Hsap\RSRC1	3L	Mmus\Rps12 <newline> Mmus\Dock4 <newline> Mmus\Rpp38 <newline> Mmus\Rsrc1 <newline> Mmus\Snu13 <newline> Mmus\Rpl7a <newline> Mmus\Nhp2 <newline> Mmus\Gm5616 <newline> Mmus\Rps12-ps10 <newline> Mmus\Rps12-ps9 <newline> Mmus\Gm4925 <newline> Mmus\Rps12-ps24	Ribosomal protein S12	Dmel	RpS12
+FBgn0020618	FBgn0020618	CG7111	Hsap\RACK1 <newline> Hsap\WDR31 <newline> Hsap\WSB2 <newline> Hsap\WSB1	2L	Mmus\Rack1 <newline> Mmus\Wdr31 <newline> Mmus\Wsb1	Receptor of activated protein kinase C 1	Dmel	Rack1
