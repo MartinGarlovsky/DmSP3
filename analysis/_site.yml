@@ -1,7 +1,7 @@
-name: "DmSP3"
+name: DmSP3
 output_dir: ../docs
 navbar:
-  title: "DmSP3"
+  title: DmSP3
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/MartinGarlovsky/DmSP3
 output:
   workflowr::wflow_html:
     toc: yes
