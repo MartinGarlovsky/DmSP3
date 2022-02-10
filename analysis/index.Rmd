@@ -8,4 +8,4 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+Click [here](https://martingarlovsky.github.io/DmSP3/) to view the html report for this project (created using the [workflowr](https://github.com/jdblischak/workflowr) package).

@@ -1,0 +1,3094 @@
+---
+title: "statistical_analysis"
+author: "MartinGarlovsky"
+date: "2021-04-01"
+output: 
+  workflowr::wflow_html:
+    code_folding: hide 
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+### Load packages
+```{r}
+library(tidyverse)
+library(UpSetR)
+library(eulerr)
+library(readxl)
+library(tidybayes)
+library(kableExtra)
+library(ggpubr)
+library(edgeR)
+library(pheatmap)
+library(ComplexHeatmap)
+library(boot)
+library(DT)
+library(pals)
+
+library(knitrhooks) # install with devtools::install_github("nathaneastwood/knitrhooks")
+
+output_max_height() # a knitrhook option
+
+# set colourblind friendly palette
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+my_data_table <- function(df){
+  datatable(
+    df, rownames = FALSE,
+    autoHideNavigation = TRUE,
+    extensions = c("Scroller",  "Buttons"),
+    options = list(
+      dom = 'Bfrtip',
+      deferRender = TRUE,
+      scrollX = TRUE, scrollY = 400,
+      scrollCollapse = TRUE,
+      buttons = 
+        list('csv', list(
+          extend = 'pdf',
+          pageSize = 'A4',
+          orientation = 'landscape',
+          filename = 'Dpseudo_respiration')),
+      pageLength = 50
+    )
+  )
+}
+
+```
+
+### Load data
+* Files downloaded from [FlyBase.org](http://flybase.org/): 
+  + Genes to Transcript to Protein IDs
+  + Gene names and gene symbols, GO terms, chromosomal location (`LOCATION_ARM`)
+  + [All 168 ribosomal proteins, including paralogs](https://flybase.org/reports/FBgg0000130.html)
+
+* List of all putative Sfps identified by [Wigby et al. (2020). *Phil. trans. B*](https://royalsocietypublishing.org/doi/10.1098/rstb.2020.0072)
+
+* Previous *D. melanogaster* sperm proteomes:
+  + [DmSP1](http://www.nature.com/articles/ng1915)
+  + [DmSP2](http://www.sciencedirect.com/science/article/pii/S1874391910002538), comprising 1108 proteins, combined with the DmSP1
+
+* New data generated:
+  + Experiment 1: All identified proteins and abundance data
+  + Experiment 2: Abundance data for proteins from 'NoHalt', 'Halt' controls or 'PBST' treatment
+  + Experiment 3: Abundance data for proteins from 'PBS' control or 'NaCl' treatment
+
+```{r}
+# gene conversion table from FlyBase.org
+gene2tran2prot <- read.csv('data/FlyBase/fbgn_fbtr_fbpp_fb_2021_01.csv')
+
+# gene IDs and GO terms (by importing gene conversion table FBgns to flybase)
+flybase_results <- read.delim('data/FlyBase/flybase_all-genes.csv', sep = ',') %>% 
+  dplyr::select(-H_SAPIENS_ORTHOLOGS, -NAME) %>% 
+  dplyr::rename(FBgn = X.SUBMITTED.ID)
+
+# Dmel ribosomes - all and those found in sperm
+Dm_ribosomes <- read_delim('data/FlyBase/FlyBase_ribosomes_169.txt') %>% 
+  dplyr::select(FBgn = `#SUBMITTED ID`, H_SAPIENS_ORTHOLOGS:SYMBOL, -SPECIES_ABBREVIATION)
+
+# List of SFPs collated by Wigby et al. 2020 Phil. Trans. B.
+wigbySFP <- read.csv('data/dmel_SFPs_wigby_etal2020.csv')
+# only high confidence Sfps
+SFPs <- wigbySFP %>% 
+  filter(category == 'highconf')
+
+# Dmel Sperm proteome 1/2 from Wasbrough et al. 2010 J. Prot. 
+DmSPI <- read.csv('data/DmSPii_Supp.Table3.csv') %>% 
+  filter(Proteome.Overlap == 'DmSPI' | Proteome.Overlap == 'Current Study and DmSPI')
+DmSPII <- read.csv('data/DmSPii_Supp.Table3.csv') %>% 
+  filter(Proteome.Overlap == 'Current Study' | Proteome.Overlap == 'Current Study and DmSPI')
+DmSP2 <- read.csv('data/DmSPii_Supp.Table3.csv') 
+
+### new data ###
+DmSPIII <- read_excel('data/DmSP3_Xlinked_Ribosomes.xlsx', sheet = 1) %>% 
+  dplyr::rename(CG.no = `CG#`)
+
+# Protein abundance data 
+DmSPintensity <- read_excel('data/KB_10MSE_sperm_Edited.xlsx', sheet = 1) %>% 
+  dplyr::rename(FBgn = `Ensembl Gene ID`) 
+
+# Halt/NoHalt/PBST treatment experiment
+PBST_dat <- readxl::read_excel('data/Halt_NoHalt_PBST.xlsx') %>% 
+  left_join(read_csv('data/HaltNohaltPBST_uniprot.csv')) %>% 
+  left_join(read.delim('data/FlyBase/uniprot2FlyBase_chrm.txt'), 
+            by = c('FBgn' = 'X.SUBMITTED.ID')) %>% 
+  distinct(Accession, .keep_all = TRUE)
+
+# NaCl wash data
+salt_dat <- read.csv('data/040721_PBS_NaCl_1PeptideLFQ.csv', 
+                     na.strings = c("NA", "NaN", " ", '')) %>% 
+  dplyr::rename(FBgn = Ensembl.Gene.ID)
+
+```
+
+### Overlap between new datasets
+We performed three LC-MS experiments on purified sperm samples. For experiment 1, we combine the IDs from two algorithms (i) identifying proteins and (ii) from protein quantitation. We then combine all IDs across the three experiments to compile a complete list of all proteins IDd in the current study. 
+```{r, fig.height=4, fig.width=4}
+### Additional abundance data 
+# Data processed for identification was processed separately for quantification. Differences in algorithms results in a slight disparity in the number of protein identifications. 
+
+ab_fbgn <- data.frame(FBgn = unlist(str_split(DmSPintensity$FBgn, pattern = '; '))) %>% na.omit()
+
+# upset(fromList(list(DmSPIII.id = DmSPIII$FBgn,
+#                     DmSPIII.ab = ab_fbgn$FBgn)))
+
+# proteins IDd in DmSP3 (identification + abundance data)
+DmSP_exp1 <- data.frame(FBgn = unique(c(DmSPIII$FBgn, ab_fbgn$FBgn))) %>% 
+  left_join(flybase_results %>% dplyr::select(FBgn, SYMBOL))
+
+## compare ids in each dataset
+# upset(fromList(list(exp1 = DmSP_exp1$FBgn,
+#                     PBST = PBST_dat$FBgn,
+#                     Salt = salt_dat$FBgn)))
+
+# euler diagram
+#pdf('figures/current_study_overlap.pdf', height = 4, width = 4)
+plot(euler(c('exp1' = 392, "exp2" = 247, "exp3" = 416, 
+             'exp1&exp2' = 74, 
+             'exp1&exp3' = 169, 
+             'exp2&exp3' = 240, 
+             'exp1&exp2&exp3' = 1009)
+           ),
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3), alpha = .5))
+#dev.off()
+
+# combine all new data
+DmSPIII.2 <- data.frame(FBgn = unique(
+  c(DmSP_exp1$FBgn, PBST_dat$FBgn, salt_dat$FBgn))) %>%
+  separate_rows(FBgn) %>% 
+  left_join(flybase_results %>% dplyr::select(FBgn, SYMBOL)) %>% 
+  distinct(FBgn, .keep_all = TRUE)
+
+```
+
+
+## Overlap between DmSP-1, -2, and -3 {.tabset}
+Here we look at the overlap between proteins IDd in the current study (n = `r nrow(DmSPIII.2)`) with the previous releases of the DmSP (n  = `r nrow(DmSP2)`. The current study increases the number of identified proteins significantly.
+
+### DmSP1 vs. DmSP2 vs. DmSP3
+```{r, fig.height=3, fig.width=3}
+# upset plot to get numbers in each group
+listInput <- list(DmSP.1 = DmSPI$FBgn,
+                  DmSP.2 = DmSPII$FBgn,
+                  DmSP.3 = DmSPIII.2$FBgn)
+
+#upset(fromList(listInput), order.by = 'degree')
+
+# Eulerr diagram
+DmSP_overlap <- plot(euler(c('DmSP1' = 68, "DmSP2" = 538, "Current Study" = 2069, 
+                             'DmSP1&DmSP2' = 8, 
+                             'DmSP1&Current Study' = 84, 
+                             'DmSP2&Current Study' = 229,
+                             'DmSP1&DmSP2&Current Study' = 181)),
+     quantities = TRUE,
+     fills = list(fill = viridis::viridis(n = 3), alpha = .5))
+
+#pdf('figures/DmSP1-2-3_overlap.pdf', height = 4, width = 4)
+DmSP_overlap
+#dev.off()
+
+# extract genes in each category
+x <- upset(fromList(listInput))
+
+intersect_dat <- x$New_data %>% rownames_to_column()
+
+x1 <- unlist(listInput, use.names = FALSE)
+x1 <- x1[ !duplicated(x1) ]
+
+# in all 3
+all_3 <- intersect_dat %>% filter(DmSP.1 == 1, DmSP.2 == 1, DmSP.3 == 1)
+# in 1 and 2
+in1_2 <- intersect_dat %>% filter(DmSP.1 == 1, DmSP.2 == 1, DmSP.3 == 0)
+# in 1 and 3
+in1_3 <- intersect_dat %>% filter(DmSP.1 == 1, DmSP.2 == 0, DmSP.3 == 1)
+# in 2 and 3
+in2_3 <- intersect_dat %>% filter(DmSP.1 == 0, DmSP.2 == 1, DmSP.3 == 1)
+# 1 only 
+only1 <- intersect_dat %>% filter(DmSP.1 == 1, DmSP.2 == 0, DmSP.3 == 0)
+# 1 only 
+only2 <- intersect_dat %>% filter(DmSP.1 == 0, DmSP.2 == 1, DmSP.3 == 0)
+# 1 only 
+only3 <- intersect_dat %>% filter(DmSP.1 == 0, DmSP.2 == 0, DmSP.3 == 1)
+
+```
+
+### Cumulative number ID'd
+Here we combine the list of all proteins identified in the current study with the DmSP2 to compile the DmSP3. We calculated average abundances across experiments, excluding the PBST treatment values, which had a significant effect on the abundance of a large number of proteins ([see below](#PBST)). We also create our ‘high-confidence’ DmSP3, excluding proteins identified by fewer than 2 unique peptides or identified in fewer than 2 biological replicates across all experiments. 
+
+```{r, fig.height=3, fig.width=3}
+# new column names for abundance data
+exp_names <- c('REP1.1',	'REP1.2',	'REP1.3',	
+               'Halt1',	'Halt2', 'Halt3',	
+               'NoHalt1',	'NoHalt2', 'NoHalt3',	
+               'NaCl1.1',	'NaCl1.2', 'NaCl2.1',	'NaCl2.2', 
+               'NaCl3.1', 'NaCl3.2', 'NaCl4.1', 'NaCl4.2',	
+               'PBS1.1', 'PBS1.2', 'PBS2.1', 'PBS2.2', 
+               'PBS3.1', 'PBS3.2', 'PBS4.1', 'PBS4.2',	
+               'NaCl1',	'NaCl2', 'NaCl3',	'NaCl4',	
+               'PBS1',	'PBS2', 'PBS3',	'PBS4')
+
+# Make the combined DmSP table 
+DmSP3 <- tibble(
+  # combine IDs for DmSP1, DmSP2, and current study
+  FBgn = c(DmSPI$FBgn, DmSPII$FBgn, DmSPIII.2$FBgn)) %>% 
+  left_join(read.delim('data/FlyBase/uniprot2FlyBase_chrm.txt'), 
+            by = c('FBgn' = 'X.SUBMITTED.ID')) %>% 
+  separate_rows(FBgn) %>% 
+  distinct(FBgn, .keep_all = TRUE) %>% 
+  # variable indicating which study each protein is identified in
+  mutate(Sperm_Proteome = case_when(FBgn %in% x1[as.numeric(all_3$rowname)] ~ 'DmSP1_2_3',
+                                    FBgn %in% x1[as.numeric(in1_2$rowname)] ~ 'DmSP1_2',
+                                    FBgn %in% x1[as.numeric(in1_3$rowname)] ~ 'DmSP1_3',
+                                    FBgn %in% x1[as.numeric(in2_3$rowname)] ~ 'DmSP2_3',
+                                    FBgn %in% x1[as.numeric(only1$rowname)] ~ 'DmSP1',
+                                    FBgn %in% x1[as.numeric(only2$rowname)] ~ 'DmSP2',
+                                    FBgn %in% x1[as.numeric(only3$rowname)] ~ 'DmSP3')) %>%
+  # Add abundance data from experiment 1 and calculate mean abundance
+  left_join(DmSPintensity %>% 
+              dplyr::select(FBgn, unique.one = `# Unique Peptides`, contains('ed):')) %>% 
+              mutate(reps.one = rowSums(dplyr::select(., contains('ed):')) > 0),
+                     mn.one = rowMeans(dplyr::select(., contains('ed):')), na.rm = TRUE))
+            ) %>% 
+  # Add abundance data from experiment 2 excluding PBST treatment and calculate mean abundance
+  left_join(PBST_dat %>% dplyr::select(FBgn, unique.two = `# Unique Peptides`, 45:50) %>% 
+              mutate(reps.two = rowSums(dplyr::select(., contains('Ab')) > 0),
+                     mn.two = rowMeans(dplyr::select(., contains('Ab')), na.rm = TRUE))
+            ) %>% 
+  # Add abundance data from experiment 3 and calculate mean abundance
+  left_join(salt_dat %>% dplyr::select(FBgn, unique.three = X..Unique.Peptides, 55:70) %>% 
+              mutate(repl1 = rowSums(dplyr::select(., 3:4), na.rm = TRUE),
+                     repl2 = rowSums(dplyr::select(., 5:6), na.rm = TRUE),
+                     repl3 = rowSums(dplyr::select(., 7:8), na.rm = TRUE),
+                     repl4 = rowSums(dplyr::select(., 9:10), na.rm = TRUE),
+                     
+                     repl5 = rowSums(dplyr::select(., 11:12), na.rm = TRUE),
+                     repl6 = rowSums(dplyr::select(., 13:14), na.rm = TRUE),
+                     repl7 = rowSums(dplyr::select(., 15:16), na.rm = TRUE),
+                     repl8 = rowSums(dplyr::select(., 17:18), na.rm = TRUE)) %>% 
+              mutate(reps.three = rowSums(dplyr::select(., contains('repl')) > 0),
+                     mn.three = rowMeans(dplyr::select(., contains('repl')), na.rm = TRUE))
+            ) %>% 
+  distinct(FBgn, .keep_all = TRUE) %>%
+  # Add variables indicating protein confidence
+  mutate(
+    # number of replicates each protein found in separately for each experiment and combined
+    comb.reps = case_when(reps.one >= 2 | reps.two >= 2 | reps.three >= 2 ~ 'confident',
+                          rowSums(dplyr::select(., starts_with('reps')), 
+                                  na.rm = TRUE) >= 2 ~ 'found',
+                          TRUE ~ 'no.reps'),
+    # number of unique peptides each protein identified by separately for each experiment and combined
+    comb.peps = case_when(unique.one >= 2 | unique.two >= 2 | unique.three >= 2 ~ 'confident',
+                          rowSums(dplyr::select(., starts_with('un')), 
+                                  na.rm = TRUE) >= 2 ~ 'found',
+                          TRUE ~ 'no.peps'),
+    # ranked abundance separately for each experiment
+    perc.one = percent_rank(mn.one) * 100,
+    perc.two = percent_rank(mn.two) * 100,
+    perc.three = percent_rank(mn.three) * 100) %>% 
+  # rename abundance columns
+    rename_at(all_of(
+      colnames(dplyr::select(., starts_with('Abun'), starts_with('repl')))), ~ exp_names) %>% 
+  mutate(
+    # calculate mean abundance across all experiments 
+    grand.mean = rowMeans(dplyr::select(., REP1.1:REP1.3, Halt1:NoHalt3, NaCl1:PBS4), na.rm = TRUE),
+    # ranked abundance across all experiments
+    mean.perc = percent_rank(grand.mean) * 100,
+    # add variable for presence in list of putative Sfps
+    Sfp = case_when(FBgn %in% SFPs$FBgn ~ 'SFP.high',
+                    FBgn %in% wigbySFP$FBgn ~ 'SFP.low',
+                    TRUE ~ 'Sperm.only')) %>% 
+  drop_na(FBgn)
+
+# #write to file
+# DmSP3 %>% 
+#   mutate(DmSP2 = if_else(FBgn %in% DmSP2$FBgn, TRUE, FALSE)) %>% 
+#   #filter(comb.reps == 'found' | comb.peps != 'no.peps') %>% dim
+#   #write_csv('output/DmSP_which_proteome.csv')
+
+# write FBgn to file for GO analysis
+#DmSP3 %>% dplyr::select(FBgn) %>% write_csv('output/GO_lists/DmSP3_3177.csv')
+
+# number identified by two or more unique peptides in a single experiment
+#DmSP3 %>% filter(comb.peps == 'confident') %>% dim
+
+# number identified in two or more replicates across any experiment 
+#DmSP3 %>% filter(comb.reps != 'no.reps') %>% dim
+
+# Confident proteins in current study
+DmSPnew_conf <- DmSP3 %>% 
+  filter(comb.peps != 'no.peps' | comb.reps != 'no.reps')
+
+# combined DmSP1+2+DmSP3 (confident)
+DmSP_comb <- DmSP3 %>% 
+  filter(comb.peps != 'no.peps' | comb.reps != 'no.reps' | FBgn %in% DmSP2$FBgn)
+
+# plot cumulative total IDs
+cum_plot <- DmSP3 %>% 
+  mutate(SP = str_sub(Sperm_Proteome, start = 5)) %>% 
+  separate(SP, into = c('one', 'two', 'three'), sep = '_', extra = 'merge') %>% 
+  pivot_longer(cols = c(one, two, three)) %>% 
+  drop_na(value) %>% distinct(FBgn, .keep_all = TRUE) %>% 
+  group_by(value) %>% 
+  dplyr::count() %>% ungroup %>% 
+  mutate(cum_sum = cumsum(n)) %>% 
+  ggplot(aes(x = value, y = cum_sum)) +
+  geom_col() +
+  geom_bar(stat = 'identity', aes(y = n, fill = value)) +
+  scale_fill_viridis_d() +
+  scale_x_discrete(labels = c('1' = 'DmSP1', 
+                              '2' = 'DmSP2',
+                              '3' = 'DmSP3')) + 
+  labs(y = 'No. identified proteins') +
+  theme_bw() +
+  theme(legend.position = 'none',
+        axis.title.x = element_blank()) +
+  #ggsave(filename = 'figures/cumulative_IDs.pdf', width = 3, height = 3) +
+  NULL
+
+cum_plot
+
+```
+
+### Coefficient of variation
+For each experiment we calculate the coefficient of variation across replicates (log10 protein abundance).
+```{r, fig.height=4, fig.width=4}
+cv <- function(x) sd(x, na.rm = TRUE)/mean(x, na.rm = TRUE)
+
+# get all experiments
+allexp <- apply(log10(DmSP3 %>% dplyr::select(REP1.1:REP1.3, Halt1:NoHalt3, NaCl1:PBS4)), FUN = cv, 1)
+
+CV_dat <- DmSP3 %>% 
+  dplyr::select(FBgn, 
+                REP1.1:REP1.3, 
+                Halt1:NoHalt3,
+                NaCl1:PBS4) %>% 
+  pivot_longer(cols = 2:18) %>% 
+  mutate(log_val = log10(value),
+         experiment = case_when(grepl('REP', name) ~ 'Experiment 1',
+                                grepl('Halt', name) ~ 'Experiment 2',
+                                TRUE ~ 'Experiment 3'),
+         treatment = case_when(grepl('REP', name) ~ 'exp1',
+                               grepl('^Halt', name) ~ 'exp2.1',
+                               grepl('No', name) ~ 'exp2.2',
+                               grepl('NaCl', name) ~ 'exp3.1',
+                               TRUE ~ 'exp3.2'))
+
+# calculate medians
+CV_dat %>% 
+  group_by(FBgn, experiment) %>% 
+  summarise(CV = cv(log_val)) %>% 
+  bind_rows(data.frame(FBgn = DmSP3$FBgn,
+                       experiment = 'All',
+                       CV = allexp)) %>%
+  group_by(experiment) %>%
+  summarise(N = n(),
+            md = median(CV, na.rm = TRUE),
+            sd = sd(CV, na.rm = TRUE))
+  
+CV_plot <- CV_dat %>% 
+  group_by(FBgn, experiment) %>% 
+  summarise(CV = cv(log_val)) %>% 
+  ggplot(aes(x = experiment, y = CV, fill = experiment)) + 
+  geom_boxplot(notch = TRUE) + 
+  scale_fill_viridis_d(option = 'plasma') +
+  theme_bw() + 
+  theme(legend.position = '',
+        axis.title.x = element_blank()) + 
+  NULL
+
+CV_plot
+
+```
+
+### Top 20 most abundant proteins
+```{r, fig.height=3, fig.width=3}
+DmSP3 %>% 
+  arrange(desc(grand.mean)) %>% 
+  head(20) %>% #write_csv('output/Top20DmSP3.csv')
+  mutate(NAME = if_else(NAME == '-', ANNOTATION_SYMBOL, NAME)) %>% 
+  dplyr::select(FBgn, Name = NAME, `Ranked abundance (%)` = mean.perc) %>% 
+  mutate(across(3, ~round(.x, 1))) %>% 
+  my_data_table()
+  
+```
+
+# Chromosomal distribution {.tabset}
+We retrieved chromosomal location of all genes in the genome from [FlyBase.org](http://flybase.org/) (n = `r read.delim('data/FlyBase/uniprot2FlyBase_chrm.txt') %>% dplyr::select(FBgn = X.SUBMITTED.ID, LOCATION_ARM) %>% distinct(FBgn, .keep_all = TRUE) %>% nrow`) and summarised the total number of genes on each chromosome. We then counted the observed number of sperm genes (n = `r n_distinct(DmSP3$FBgn)`) on each chromosome, and calculated the expected number based on the total number of sperm proteins identified. Finally, we calculated $\chi^2$ statistics for each chromosome and the associated p-values. We excluded the Y chromosome due to the small numbers of proteins. We used the Bejamini-Hochberg false discovery rate procedure to correct for multiple testing. 
+
+```{r, fig.height=3, fig.width=5}
+# Total number of genes on each chromosome - to work out 'expected'
+TotalGeneNumber <- 
+  # here I parsed the ~22k proteins from the Dmel uniprot proteome and submitted to FlyBase.org
+  # I then remove any duplicate genes (i.e. some proteins have multiple isoforms)
+  read.delim('data/FlyBase/uniprot2FlyBase_chrm.txt') %>% 
+  dplyr::select(FBgn = X.SUBMITTED.ID, LOCATION_ARM) %>% 
+  distinct(FBgn, .keep_all = TRUE) %>% 
+  filter(LOCATION_ARM %in% c('2L', '2R', '3L', '3R', '4', 'X', 'Y')) %>% 
+  group_by(LOCATION_ARM) %>%
+  summarise(N = n()) %>% 
+  mutate(pr.total.genes = N/sum(N))
+
+# Number of sperm genes on each chromosome - 'observed'
+gene.no <- DmSP3 %>% 
+  # replace DmSP3 with DmSP2 to compare results with previous studies
+  # DmSP2 %>% 
+  # left_join(read.delim('data/FlyBase/uniprot2FlyBase_chrm.txt'), 
+  #           by = c('FBgn' = 'X.SUBMITTED.ID')) %>% 
+  distinct(FBgn, .keep_all = TRUE) %>% 
+  filter(LOCATION_ARM %in% c('2L', '2R', '3L', '3R', '4', 'X', 'Y')) %>%
+  group_by(LOCATION_ARM) %>% 
+  summarise(obs.genes = n())
+
+# Calculate observed and expected no. genes in each comparison on each chromosome to do X^2 test
+chm_dist <- gene.no %>% 
+  inner_join(TotalGeneNumber %>% 
+               dplyr::rename(all.genes = N)) %>% 
+  # remove Chm 4 and Y due to low numbers of genes present
+  filter(LOCATION_ARM != 'Y') %>% 
+  # Calculate X^2 statistics
+  mutate(exp.genes = round(n_distinct(DmSP3$FBgn) * pr.total.genes, 1), # expected no. genes 
+         obs.exp = obs.genes/exp.genes, # observed / expected no. genes
+         X2 = (obs.genes - exp.genes)^2/exp.genes, # calculate X^2 stat
+         pval = 1 - (pchisq(X2, df = 1))) # get pvalue
+
+# FDR corrected pval
+chm_dist$FDR <- p.adjust(chm_dist$pval, method = 'fdr') 
+
+# plot chromosomal distribution
+chm_plot <- chm_dist %>% 
+  mutate(sigLabel = case_when(FDR < 0.001 ~ "***", 
+                              FDR < 0.01 & FDR > 0.001 ~ "**",
+                              FDR < 0.05 & FDR > 0.01 ~ "*",
+                              TRUE ~ ''),
+         Chromosome = fct_relevel(LOCATION_ARM, 'X', '2L', '2R', '3L', '3R', '4')) %>% 
+  mutate(chm_n = paste0(Chromosome, '\n(', all.genes, ')')) %>% 
+  ggplot(aes(x = Chromosome, y = obs.exp, fill = Chromosome)) +
+  geom_histogram(stat = 'identity') +
+  geom_hline(yintercept = 1, linetype = "dashed", colour = "black") +
+  #scale_fill_viridis_d(direction = -1) +
+  scale_fill_brewer(palette = 'Spectral') +
+  labs(x = "Chromosome", y = "observed/expected\n no. genes") +
+  theme_bw() +
+  theme(legend.position = 'none',
+        legend.text = element_text(size = 10),
+        strip.text.y = element_text(face = "italic")) +
+  geom_text(aes(label = sigLabel), 
+            size = 5, colour = "black") +
+  geom_text(aes(y = -0.05, label = paste0(obs.genes, '/', exp.genes)), 
+            size = 5, colour = "black") +
+  #ggsave(filename = 'figures/chm_dist.pdf', width = 4, height = 3) +
+  NULL
+
+```
+
+## Plot
+The X and 3R chromosomes have significantly fewer sperm genes than expected with a FDR cut-off < 0.05.
+```{r, fig.height=3, fig.width=5}
+chm_plot
+
+```
+
+## Y-linked genes
+We identified 9 Y chromosome genes. All above the DmSP3 average abundance:
+```{r}
+DmSP3 %>%
+  filter(LOCATION_ARM == 'Y') %>% 
+  distinct(FBgn, .keep_all = TRUE) %>% 
+  dplyr::select(FBgn, Name = NAME, `Ranked abundance (%)` = mean.perc) %>% 
+  arrange(desc(`Ranked abundance (%)`)) %>% #write_csv('output/Ylinked_DmSP3.csv')
+  kable(digits = 1) %>% 
+  kable_styling(full_width = FALSE)
+
+```
+
+# Gene age
+As with chromosomal distribution, we calculated the observed and expected number of genes in each age class (retrieved from http://gentree.ioz.ac.cn/index.php and recoded as in [Patlar et al. (2021). *Evolution*](https://onlinelibrary.wiley.com/doi/abs/10.1111/evo.14297)), calculated $\chi^2$ statistics and the associated p-values, and used the Bejamini-Hochberg false discovery rate procedure to correct for multiple testing. 
+
+```{r}
+gene_age <- read.csv('data/dm6_ver78_age.csv') %>% 
+  left_join(read.delim('data/FlyBase/uniprot2FlyBase_chrm.txt'), 
+            by = c('FBgn' = 'X.SUBMITTED.ID')) %>% 
+  distinct(FBtr, .keep_all = TRUE) %>% 
+  mutate(sp_prot = if_else(FBgn %in% DmSP3$FBgn, 'Sperm', 'Other'),
+         # recode age class
+         gene_class = case_when(branch == 0 ~ 'ancient',
+                                branch <= 2 ~ 'sophophora',
+                                branch <= 3 ~ 'mel_group',
+                                branch <= 4 ~ 'mel_sub',
+                                TRUE ~ 'recent'),
+         gene_class = fct_relevel(gene_class, 
+                                  'ancient', 'sophophora', 'mel_group', 'mel_sub', 
+                                  'recent'))
+
+#xtabs(~ gene_class + sp_prot, data = gene_age)
+
+# Total number of genes in each age class - to work out 'expected'
+TotalGeneNumber.ageclass <- gene_age %>% 
+  #filter(sp_prot == 'Sperm') %>%
+  group_by(gene_class) %>%
+  dplyr::count(name = 'N') %>% 
+  mutate(pr.total.genes = N/nrow(gene_age))
+
+# Number of sperm genes in each age class - 'observed'
+gene.no.ageclass <- gene_age %>% 
+  filter(sp_prot == 'Sperm') %>%
+  group_by(gene_class) %>% 
+  dplyr::count(name = 'obs.genes')
+
+# Calculate observed and expected no. genes in each comparison on each chromosome to do X^2 test
+age_dist <- gene.no.ageclass %>% 
+  inner_join(TotalGeneNumber.ageclass %>% 
+               dplyr::rename(all.genes = N)) %>% 
+  # Calculate X^2 statistics
+  mutate(exp.genes = round(nrow(gene_age %>% filter(sp_prot == 'Sperm')) * 
+                             pr.total.genes, 1), # expected no. genes 
+         obs.exp = obs.genes/exp.genes, # observed / expected no. genes
+         X2 = (obs.genes - exp.genes)^2/exp.genes, # calculate X^2 stat
+         pval = 1 - (pchisq(X2, df = 1))) # get pvalue
+
+# FDR corrected pval
+age_dist$FDR <- p.adjust(age_dist$pval, method = 'fdr') 
+
+# plot chromosomal distribution
+age_plot <- age_dist %>% 
+  mutate(sigLabel = case_when(FDR < 0.001 ~ "***", 
+                              FDR < 0.01 & FDR > 0.001 ~ "**",
+                              FDR < 0.05 & FDR > 0.01 ~ "*",
+                              TRUE ~ '')) %>% 
+  mutate(age_n = paste0(gene_class, '\n(', all.genes, ')')) %>% 
+  ggplot(aes(x = gene_class, y = obs.exp, fill = gene_class)) +
+  geom_histogram(stat = 'identity') +
+  geom_hline(yintercept = 1, linetype = "dashed", colour = "black") +
+  scale_fill_viridis_d() +
+  scale_x_discrete(labels = c('ancient' = 'Ancient', 'sophophora' = 'Sophophora',
+                              'mel_group' = expression(paste(italic('D. mel'), ' gr.')),
+                              'mel_sub' = expression(paste(italic('D. mel'), ' subgr.')),
+                              'recent' = 'Recent')) +
+  labs(x = "Age", y = "observed/expected\n no. genes") +
+  theme_bw() +
+  theme(legend.position = 'none',
+        legend.text = element_text(size = 10),
+        strip.text.y = element_text(face = "italic")) +
+  geom_text(aes(label = sigLabel), 
+            size = 5, colour = "black") +
+  geom_text(aes(y = -0.05, label = paste0(obs.genes, '/', exp.genes)), 
+            size = 5, colour = "black") +
+  #ggsave(filename = 'figures/age_dist.pdf', width = 4, height = 3) +
+  NULL
+
+```
+
+## Plot
+```{r, fig.height=3, fig.width=5}
+age_plot
+
+```
+
+## New/recent genes in the DmSP3
+```{r}
+gene_age %>%
+  filter(gene_class == 'recent' & sp_prot == 'Sperm') %>% #write_csv('output/Recent_DmSP3.csv')
+  dplyr::select(FBgn, Name = NAME, Symbol = SYMBOL, Chromosome = LOCATION_ARM) %>% 
+  mutate(Name = if_else(Name == '-', Symbol, Name)) %>% 
+  arrange(Symbol) %>% 
+  kable() %>% 
+  kable_styling(full_width = FALSE)
+
+```
+
+# OMIM {.tabset}
+We used the precomputed list of human disease orthologs from [FlyBase.org](http://flybase.org/) to retrieve [OMIM](omim.org) hits for proteins in the DmSP3.
+```{r}
+OMIM <- read.csv('data/FlyBase/DmSP3_OMIM.csv', na.strings = c('')) %>%
+  dplyr::rename(FBgn = X..Dmel_gene_ID)
+
+Hsap_hom <- read.delim('data/FlyBase/FlyBase_Hsap_homologs.txt', na.strings = c('NA', '', '-')) %>%
+  dplyr::rename(FBgn = X.SUBMITTED.ID)
+
+# # number of human homologs
+# Hsap_hom %>%
+#   drop_na(H_SAPIENS_ORTHOLOGS) %>%
+#   distinct(FBgn) %>%
+#   count()
+
+# # number of fly genes with more than one human homolog (disease vs not)
+# OMIM %>% 
+#   mutate(OMIM = if_else(is.na(OMIM_Phenotype_IDs), 'No', 'Yes')) %>% 
+#   group_by(FBgn, OMIM) %>% 
+#   summarise(N = n_distinct(Human_gene_symbol)) %>% 
+#   group_by(OMIM, N) %>% count %>% 
+#   mutate(N_genes = if_else(N > 1, '> 1', '1')) %>% 
+#   ggplot(aes(x = OMIM, y = n, fill = N_genes)) +
+#   geom_col(position = 'fill') +
+#   scale_fill_manual(values = cbPalette[2:1]) +
+#   scale_y_continuous(labels = scales::percent) +
+#   theme_bw() + 
+#   #theme(legend.title = element_blank()) +
+#   NULL
+
+# # total number of homologs per Dmel gene
+# Hsap_hom %>% 
+#   separate_rows(H_SAPIENS_ORTHOLOGS, sep = ' <newline> ') %>% 
+#   mutate(homolog = if_else(is.na(H_SAPIENS_ORTHOLOGS) == TRUE, 'no', 'yes')) %>% 
+#   group_by(FBgn, homolog) %>% count() %>% 
+#   mutate(N_genes = case_when(n > 1 & homolog == 'yes' ~ '> 1', 
+#                              n == 1 & homolog == 'yes' ~ '1',
+#                              TRUE ~ 'No')) %>% 
+#   group_by(N_genes) %>% count()
+
+# # number of genes with disease phenotype
+# Hsap_hom %>% 
+#   mutate(omim = case_when(FBgn %in% OMIM$FBgn[is.na(OMIM$OMIM_Phenotype_IDs) == FALSE] ~ 'omim',
+#                           TRUE ~ 'no')) %>% 
+#   group_by(omim) %>% count()
+
+# # number of human diseases per Dmel gene
+# OMIM %>% 
+#   drop_na(OMIM_Phenotype_IDs) %>% 
+#   left_join(Hsap_hom, by = 'FBgn') %>% 
+#   group_by(FBgn) %>% 
+#   count() %>% 
+#   mutate(N_genes = if_else(n > 1, '> 1', '1')) %>% 
+#   group_by(N_genes) %>% count()
+
+omim_1 <- data.frame(homolog = c('No', '1', '> 1'),
+                     n = c(1974, 785, 417),
+                     row = 'A') %>% 
+  ggplot(aes(x = n, y = row, fill = homolog)) +
+  geom_col(position = 'fill') +
+  scale_fill_manual(values = cbPalette[3:1],
+                    name = "Disease\nhomolog") +
+  scale_x_continuous(labels = scales::percent) +
+  theme_bw() + 
+  theme(#legend.title = element_blank(),
+        legend.position = 'bottom',
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  annotate("text", x = c(0.3, 0.75, 0.93), y = 1, label = c(1974, 785, 417),
+           size = 5) + 
+  #ggsave(filename = 'figures/OMIM_no.pdf', width = 2, height = 4) +
+  NULL
+
+
+omim_no <- OMIM %>% 
+  mutate(OMIM = if_else(is.na(OMIM_Phenotype_IDs), 'zNo', 'Yes')) %>% 
+  group_by(FBgn, OMIM) %>%
+  summarise(N = n_distinct(Human_gene_symbol)) %>% 
+  arrange(OMIM) %>%
+  group_by(FBgn) %>% 
+  slice(1) %>%
+  ungroup() %>% 
+  mutate(N_genes = case_when(N > 1 & OMIM == 'Yes' ~ '> 1', 
+                             N == 1 & OMIM == 'Yes' ~ '1',
+                             TRUE ~ 'No')) %>% 
+  group_by(OMIM, N_genes) %>% 
+  dplyr::count() %>% 
+  mutate(row = 'A') 
+
+omim_1 <- omim_no %>% 
+  ggplot(aes(x = n, y = row, fill = N_genes)) +
+  geom_col(position = 'fill') +
+  scale_fill_manual(values = cbPalette[3:1],
+                    name = "Disease\nhomolog") +
+  scale_x_continuous(labels = scales::percent) +
+  theme_bw() + 
+  theme(#legend.title = element_blank(),
+        legend.position = 'bottom',
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  annotate("text", x = c(0.25, 0.66, 0.91), y = 1, label = rev(omim_no$n),
+           size = 5) + 
+  #ggsave(filename = 'figures/OMIM_no.pdf', width = 2, height = 4) +
+  NULL
+
+## all FBgns with associated disease phenotype
+# OMIM %>%
+#   drop_na(OMIM_Phenotype_IDs) %>%
+#   distinct(FBgn, .keep_all = TRUE) #%>% write_csv('output/OMIM_results/all_FBgns.csv')
+
+# # % genes with no disease ortholog
+# OMIM %>%
+#   drop_na(OMIM_Phenotype_IDs) %>%
+#   distinct(FBgn) %>% dplyr::count() / n_distinct(OMIM$FBgn)
+
+omim_plot <- plot(euler(c('DmSP3' = length(DmSP3$FBgn),
+                          'DmSP3&Human\nhomologs' = 2598,
+                          'DmSP3&Human\nhomologs&Disease\nhomologs' = 1202)),
+                  quantities = TRUE,
+                  fills = list(fill = viridis::viridis(n = 3), alpha = .8))
+
+```
+
+## Number of OMIM orthologs
+```{r, fig.height=3, fig.width=3}
+#pdf('figures/OMIM_orths.pdf', height = 4, width = 4)
+omim_plot
+#dev.off()
+
+```
+
+## Human homologs
+```{r}
+#pdf('figures/OMIM_plot.pdf', height = 6, width = 4)
+gridExtra::grid.arrange(omim_plot, omim_1, 
+                        layout_matrix = rbind(c(1, 1),
+                                              c(1, 1),
+                                              c(2, 2)))
+#dev.off()
+
+```
+
+
+```{r, fig.height=3, fig.width=3}
+# chrom location of disease orthologs
+omim.no <- OMIM %>%
+  drop_na(OMIM_Phenotype_IDs) %>% 
+  left_join(read.delim('data/FlyBase/uniprot2FlyBase_chrm.txt'),
+            by = c('FBgn' = 'X.SUBMITTED.ID')) %>%
+  distinct(FBgn, .keep_all = TRUE) %>% 
+  filter(LOCATION_ARM %in% c('2L', '2R', '3L', '3R', '4', 'X', 'Y')) %>%
+  group_by(LOCATION_ARM) %>% 
+  summarise(obs.genes = n())
+
+# Calculate observed and expected no. genes to do X^2 test
+omim_dist <- omim.no %>% 
+  inner_join(TotalGeneNumber %>% 
+               dplyr::rename(all.genes = N)) %>% 
+  # remove Chm 4 and Y due to low numbers of genes present
+  filter(LOCATION_ARM != 'Y') %>% 
+  # Calculate X^2 statistics
+  mutate(exp.genes = round(1202 * pr.total.genes, 1), # expected no. genes 
+         obs.exp = obs.genes/exp.genes, # observed / expected no. genes
+         X2 = (obs.genes - exp.genes)^2/exp.genes, # calculate X^2 stat
+         pval = 1 - (pchisq(X2, df = 1))) # get pvalue
+
+# FDR corrected pval
+omim_dist$FDR <- p.adjust(omim_dist$pval, method = 'fdr')
+
+```
+
+## Chromosomal distribution table
+```{r}
+# table of results
+omim_dist %>% 
+  dplyr::select(Chromosome = LOCATION_ARM, Observed = obs.genes, Expected = exp.genes,
+                Chi2 = X2, FDR) %>% 
+  kable(digits = 2) %>% 
+  kable_styling(full_width = FALSE)
+
+# Parse Phenotype ID numbers and rank order
+top_IDs <- data.frame(ID = gsub('\\[.*', '',
+                                x = unlist(str_split(OMIM$OMIM_Phenotype_IDs.name.,
+                                                     pattern = '],'))),
+                      DESCRIPTION = gsub('.*\\[', '',
+                                         x = unlist(str_split(OMIM$OMIM_Phenotype_IDs.name.,
+                                                              pattern = '],')))) %>%
+  mutate(DESCRIPTION = gsub(']', '', x = DESCRIPTION))
+
+n_ids <- top_IDs %>%
+  group_by(ID) %>% dplyr::count() %>%
+  arrange(desc(n)) %>%
+  filter(ID != '')
+
+# n_ids %>% group_by(n) %>% dplyr::count() %>%
+#   arrange(-n) %>%
+#   mutate(n_genes = n * nn)
+
+# top_IDs[grep(paste(unlist(n_ids[1:34, 'ID']), collapse="|"), x = top_IDs$ID), ] %>%
+#   group_by(DESCRIPTION) %>%
+#   dplyr::count() %>%
+#   arrange(desc(n)) %>% print(n = 34) #%>% write_csv('output/OMIM_results/OMIM_tophits.csv')
+
+# # grep top 17 IDs
+# OMIM[grep(paste(c(top_IDs$ID[1:34]), collapse="|"),
+#           x = OMIM$OMIM_Phenotype_IDs.name.), ] %>%
+#   dplyr::select(-c(3:7)) %>%
+#   distinct(OMIM_Phenotype_IDs.name., .keep_all = TRUE)
+
+## write tophits to files - 1 per phenotype
+# for(i in 1:34) {
+#
+#   db = OMIM[grep(n_ids$ID[i], x = OMIM$OMIM_Phenotype_IDs.name.), ]
+#
+#   write_csv(db,
+#             paste0('output/OMIM_results/',
+#                    gsub(' ', '_',
+#                         str_replace_all(top_IDs$DESCRIPTION[i], "[[:punct:]]", " ")),
+#                    '.csv'))
+#
+# }
+
+### Ribosomal hits
+# OMIM %>% 
+#   drop_na(OMIM_Phenotype_IDs) %>%
+#   filter(FBgn %in% Dm_ribosomes$FBgn)
+
+```
+
+# Ribosomal proteins
+We downloaded the 169 *D. melanogaster* ribosomal proteins curated by [FlyBase.org](https://flybase.org/reports/FBgg0000130) to compare the number, abundance, and distribution of ribosomal proteins found in the DmSP3. We also searched for other recent proteomics studies from other tissues or cell types in *D. melanogaster* and downloaded the supplementary materials containing the full lists of proteins to extract the ribosomal proteins identified in each study to compare to the DmSP3.
+```{r}
+# rename the ribosomal data set and add data on presence in the sperm proteome and chromosomal location
+all_rib <- Dm_ribosomes %>%
+  # label genes based on presence in sperm proteome
+  mutate(sp_prot = case_when(
+    FBgn %in% c(DmSP3 %>% filter(comb.peps == 'confident') %>% pull(FBgn)) ~ 'Sperm.conf',
+    FBgn %in% c(DmSP3 %>% pull(FBgn)) ~ 'Sperm',
+    TRUE ~ 'Other'),
+    # define ribosomal class (small/large; cytoplasmic/mitochondrial)
+    CLASS = case_when(grepl('^RpL', x = SYMBOL) ~ 'CYT_LARGE',
+                      grepl('^RpS', x = SYMBOL) ~ 'CYT_SMALL',
+                      grepl('^mRpL', x = SYMBOL) ~ 'MIT_LARGE',
+                      SYMBOL == 'sta' ~ 'CYT_SMALL',
+                      TRUE ~ 'MIT_SMALL'),
+    loc = str_sub(CLASS, start = 1, 1),
+    size = str_sub(CLASS, start = 5, 5),
+    paralog = str_remove(SYMBOL, "[^0-9]+$"))
+
+# # write supp table
+# DmSP3 %>% filter(FBgn %in% all_rib$FBgn) %>% write_csv('output/DmSP_ribosomes.csv')
+
+# # number of ribosomal proteins found in sperm by type
+# all_rib %>% 
+#   filter(sp_prot != 'Other') %>% 
+#   group_by(loc) %>% count
+
+#### Compare DmSP's
+# upset(fromList(list(DmSP1 = intersect(DmSPI$FBgn, all_rib$FBgn),
+#                     DmSP2 = intersect(DmSP2$FBgn, all_rib$FBgn),
+#                     Current.study = intersect(DmSPIII.2$FBgn, all_rib$FBgn))))
+
+# # Compare experiments
+# upset(fromList(list(DmSP3 = all_rib %>% filter(sp_prot != 'Other') %>% pull(FBgn),
+#                     PBSTd = all_rib %>% filter(FBgn %in% PBST_dat$FBgn) %>% pull(FBgn),
+#                     SALTd = all_rib %>% filter(FBgn %in% salt_dat$FBgn) %>% pull(FBgn))))
+
+## Load external data 
+# Li et al. 2020 (Cell) - brain
+li_brain <- read_xlsx('data/Fly_Proteomes_LumosFusion/mmc2_Li_etal_2020.xlsx') %>%
+  dplyr::select(Accession = `UniProt Accession`, Species, UP = `Unique Peptides`) %>%
+  left_join(read.csv('data/Fly_Proteomes_LumosFusion/Li_etal_2020_uniprot2FBgn.csv')) %>%
+  filter(Species == 'DROME')
+
+# Cao et al. 2020 (Cell Reports) - embryo
+cao_embryo <- read.csv('data/Fly_Proteomes_LumosFusion/mmc2_Cao_etal_2020.csv') %>%
+  dplyr::rename(FBgn = 'FlyBase.ID')
+
+# McDonough-Goldstein et al. 2020 (Scientific Reports) - oocyte
+mcdonough_oocyte <- read_excel('data/Fly_Proteomes_LumosFusion/McDonough_etal_2021.xlsx') %>%
+  dplyr::select(FBgn = Description, UP = `Number of Unique Peptides`, starts_with('Abundance'))
+
+colnames(mcdonough_oocyte)[3:8] <- paste0(rep(c('V', 'M'), each = 3), 1:3)
+
+# Hopes et al. 2021 (Nucleic Acids Research)
+hopes <- read.csv('data/Fly_Proteomes_LumosFusion/Hopes_etal_2021.csv') %>% 
+  dplyr::rename(Accession = 'Inf_Accession.Information_BestAccession') %>% 
+  left_join(read.csv('data/Fly_Proteomes_LumosFusion/Hopes_etal_2021_Accession2FBgn.csv'), 
+            by = 'Accession')
+
+# # overlap between datasets
+# upset(fromList(list(
+#   DmSP3 = all_rib %>% filter(sp_prot != 'Other') %>% pull(FBgn),
+#   Oocyte = all_rib %>% filter(FBgn %in% mcdonough_oocyte$FBgn) %>% pull(FBgn),
+#   Brain = all_rib %>% filter(FBgn %in% li_brain$FBgn) %>% pull(FBgn),
+#   Embryo = all_rib %>% filter(FBgn %in% cao_embryo$FBgn) %>% pull(FBgn),
+#   Hopes = all_rib %>% filter(FBgn %in% hopes$FBgn) %>% pull(FBgn))))
+
+plot(venn(c(#'DmSP3' = 168, 'Oocyte' = 168, 'Brain' = 168, 'Embryo' = 168, 
+             'Hopes' = 2,
+             'Hopes&Embryo' = 4, 'Embryo&Oocyte' = 3, 'Hopes&Brain' = 1, 'DmSP3&Hopes' = 1,
+             'Oocyte&Hopes' = 1, 
+             'Embryo&Hopes&Oocyte' = 58, 'Embryo&Oocyte&DmSP3' = 2, 'Embryo&Hopes&DmSP3' = 2,
+             'Oocyte&DmSP3&Brain' = 1, 'Embryo&Oocyte&Brain' = 1, 
+             'Embryo&Hopes&Oocyte&DmSP3' = 14, 'Embryo&Hopes&Oocyte&Brain' = 13,
+             'Embryo&Hopes&DmSP3&Brain' = 5, 'Embryo&Oocyte&DmSP3&Brain' = 2, 
+             'Hopes&Oocyte&DmSP3&Brain' = 1, 
+             'Embryo&Hopes&Oocyte&DmSP3&Brain' = 55)),
+     quantities = TRUE)
+
+# combine data
+ribo_comb <- list(
+  DmSP3 = all_rib %>% filter(sp_prot != 'Other') %>% pull(FBgn),
+  Oocyte = all_rib %>% filter(FBgn %in% mcdonough_oocyte$FBgn) %>% pull(FBgn),
+  Brain = all_rib %>% filter(FBgn %in% li_brain$FBgn) %>% pull(FBgn),
+  Embryo = all_rib %>% filter(FBgn %in% cao_embryo$FBgn) %>% pull(FBgn)) %>%
+  reshape2::melt() %>%
+  dplyr::select(FBgn = value, Proteome = L1) %>%
+  left_join(all_rib %>% dplyr::select(FBgn, CLASS))
+
+# perform Chi2 test
+rib.test <- ribo_comb %>% 
+  group_by(Proteome, CLASS) %>% 
+  count() %>%
+  left_join(all_rib %>%
+              group_by(CLASS) %>% count(name = 'All')) %>%
+  mutate(obs.exp = n/All, # observed / expected no. genes
+         X2 = (n - All)^2/All, # calculate X^2 stat
+         pval = 1 - (pchisq(X2, df = 1))) # get pvalue
+
+# FDR corrected pval
+rib.test$FDR <- p.adjust(rib.test$pval, method = 'fdr')
+
+rib_plot <- rib.test %>%
+  mutate(sigLabel = case_when(FDR < 0.001 ~ "***",
+                              FDR < 0.01 & FDR > 0.001 ~ "**",
+                              FDR < 0.05 & FDR > 0.01 ~ "*",
+                              TRUE ~ ''),
+         Proteome = fct_relevel(Proteome, 'embryo', 'oocyte', 'brain', 'sperm')) %>%
+  ggplot(aes(x = CLASS, y = n, fill = Proteome)) +
+  geom_col(position = 'dodge') +
+  scale_fill_brewer(palette = 'RdBu', direction = -1) +
+  scale_x_discrete(labels = c('CYT_LARGE' = 'Cyt. large', 'CYT_SMALL' = 'Cyt. small',
+                              'MIT_LARGE' = 'Mt. large',  'MIT_SMALL' = 'Mt. small')) +
+  labs(x = "Class", y = "obs. no. genes") +
+  theme_bw() +
+  theme(legend.position = 'bottom',
+        legend.title = element_blank()) +
+  geom_text(aes(label = sigLabel),
+            size = 5, colour = "black", position = position_dodge(width = .9)) +
+  geom_segment(aes(x = 0.6, y = 54, xend = 1.4, yend = 54), lty = 2) +
+  geom_segment(aes(x = 1.6, y = 38, xend = 2.4, yend = 38), lty = 2) +
+  geom_segment(aes(x = 2.6, y = 47, xend = 3.4, yend = 47), lty = 2) +
+  geom_segment(aes(x = 3.6, y = 29, xend = 4.4, yend = 29), lty = 2) +
+  #ggsave(filename = 'figures/ribo_comp.pdf', width = 4, height = 3) +
+  NULL
+
+```
+
+## Compare tissue/cell types
+We calculated $\chi^2$ statistics with the null expectation that each tissue or cell type would have complete representation of all 168 ribosomal proteins. We also tested whether the overlap between ribosomal proteins in brain and sperm was greater than expected using Fisher's exact test.
+
+```{r, fig.height=4, fig.width=10}
+## overlap
+# upset(fromList(list(Ribosomes = all_rib %>% pull(FBgn),
+#                     DmSP3 = all_rib %>% filter(sp_prot != 'Other') %>% pull(FBgn),
+#                     Brain = all_rib %>% filter(FBgn %in% li_brain$FBgn) %>% pull(FBgn))))
+
+rib_br_sp <- plot(euler(c('Ribosomes' = 169,
+                          'Ribosomes&Brain' = 15,
+                          'Ribosomes&DmSP3' = 19,
+                          'Ribosomes&Brain&DmSP3' = 64)),
+                  quantities = TRUE,
+                  fills = list(fill = c(NA, RColorBrewer::brewer.pal(name = 'RdBu', n = 4)[4:3]), 
+                               alpha = 1))
+
+gridExtra::grid.arrange(rib_plot, rib_br_sp, nrow = 1)
+
+# # test overlap between brain and testes
+# broom::tidy(fisher.test(matrix(c(169, 19, 15, 63), nrow = 2), alternative = "greater"))
+
+```
+
+## Paralog switching
+There are 93 cytoplasmic ribosomal proteins on FlyBase.org, including 13 paralogs (for 80 per protein).
+```{r}
+paralogs <- read.csv('data/FlyBase/FlyBase_Ribosome_Paralogs.csv') %>% 
+  dplyr::select(-c(Location, Strand, Paralog_Location:DIOPT_score))
+
+p_genes <- paralogs %>% 
+  filter(FBgn %in% all_rib$FBgn, !str_detect(GeneSymbol, '^m')) %>% 
+  filter(Paralog_FBgn_ID %in% all_rib$FBgn, !str_detect(Paralog_GeneSymbol, '^m')) %>% 
+  mutate(base_gene = str_remove(GeneSymbol, "[^0-9]+$"),
+         para_gene = str_remove(Paralog_GeneSymbol, "[^0-9]+$")) %>% 
+  filter(base_gene == para_gene) %>% 
+  #distinct(GeneSymbol, .keep_all = TRUE) %>% 
+  mutate(ps = paste(pmin(GeneSymbol, Paralog_GeneSymbol), pmax(GeneSymbol, Paralog_GeneSymbol))) %>% 
+  distinct(ps, .keep_all = TRUE) %>% 
+  distinct(base_gene, .keep_all = TRUE)
+
+# # number of ribosomal proteins (cytoplasmic) in sperm proteome
+# all_rib %>% 
+#   filter(loc == 'C') %>% 
+#   group_by(sp_prot) %>% count()
+
+paralog_switches <- data.frame(FBgn = c(p_genes$FBgn, p_genes$Paralog_FBgn_ID),
+                               SYMBOL = c(p_genes$GeneSymbol, p_genes$Paralog_GeneSymbol))
+# abundance of each paralog
+rb_paralogs <- data.frame(FBgn = paralog_switches$FBgn,
+                          SYMBOL = c(p_genes$GeneSymbol, p_genes$Paralog_GeneSymbol)) %>% 
+  mutate(base_gene = str_remove(SYMBOL, "[^0-9]+$")) %>% 
+  left_join(DmSP3 %>% dplyr::select(FBgn, REP1.1:REP1.3, Halt1:NoHalt3, NaCl1:PBS4), 
+            by = 'FBgn') %>% 
+  pivot_longer(cols = REP1.1:PBS4) %>% 
+  mutate(log_val = log10(value + 1),
+         experiment = case_when(grepl('REP', name) ~ 'Experiment 1',
+                                grepl('Halt', name) ~ 'Experiment 2',
+                                TRUE ~ 'Experiment 3')) %>% 
+  group_by(FBgn, SYMBOL, base_gene) %>% 
+  summarise(N = n(),
+            mn = mean(log_val, na.rm = TRUE),
+            se = sd(log_val, na.rm = TRUE)/sqrt(N)) %>% 
+  drop_na(mn)
+
+# Hopes data
+hopes2 <- hopes %>% 
+  select(Accession, FBgn, NAME = TMT1_Primary.Gene.names, contains('Log2'), -contains('Scaled'))
+
+colnames(hopes2) <- gsub('Quantification_Log2.', '', colnames(hopes2))
+colnames(hopes2) <- gsub('Normalised.Abundances...F...', '', colnames(hopes2))
+colnames(hopes2) <- gsub('..Sample..', '_', colnames(hopes2))
+
+hopes_ribosomes <- hopes2 %>% 
+  filter(FBgn %in% all_rib$FBgn) %>% 
+  pivot_longer(cols = 4:19) %>% 
+  mutate(name = gsub('.fly.tissue', '', name),
+         name = gsub('\\.', '_', name),
+         base_gene = str_remove(NAME, "[^0-9]+$")) %>% 
+  separate(name, into = c('experiment', 'reporter', 'tissue', 'rib'), sep = '_')
+
+# # Hopes abundances
+# hopes_ribosomes %>% 
+#   filter(FBgn %in% paralog_switches,
+#          tissue == 'Testes' | tissue == 'Head' | tissue == 'Ovaries' | tissue == 'Embryo') %>% 
+#   ggplot(aes(x = NAME, y = value, fill = tissue)) +
+#   geom_col(position = 'dodge') +
+#   facet_wrap(~base_gene, scales = 'free_x', nrow = 1) + 
+#   NULL
+
+# # Ovary vs. Testes abundance (see Fig. 2b in hopes et al.)
+# hopes_ribosomes %>% 
+#   filter(FBgn %in% paralog_switches,
+#          tissue == 'Testes' | tissue == 'Ovaries') %>% 
+#   group_by(NAME, tissue, base_gene) %>% 
+#   summarise(mn = mean(value, na.rm = TRUE)) %>% 
+#   group_by(NAME, base_gene) %>% 
+#   summarise(diff = mn[1] - mn[2]) %>% 
+#   ggplot(aes(x = NAME, y = diff)) +
+#   geom_col(position = 'dodge') +
+#   facet_wrap(~base_gene, scales = 'free_x', nrow = 1) + 
+#   NULL
+
+# # correlation between hopes abundance and DmSP3
+# hopes_ribosomes %>% 
+#   filter(FBgn %in% paralog_switches) %>% 
+#   mutate(tissue = str_sub(tissue, 1, 4)) %>% 
+#   group_by(FBgn, NAME, tissue) %>% 
+#   summarise(N = n(),
+#             mn = mean(value, na.rm = TRUE),
+#             se = sd(value, na.rm = TRUE)/sqrt(N)) %>% 
+#   left_join(rb_paralogs, 
+#             by = 'FBgn') %>% 
+#   ggplot(aes(x = mn.x, y = mn.y)) +
+#   geom_point(aes(colour = tissue)) + 
+#   stat_smooth(method = 'lm') +
+#   ggpubr::stat_cor() +
+#   labs(x = 'Hopes', y = 'Current study') + 
+#   facet_wrap(~tissue)
+
+# # same paralog as Hopes?
+# hopes_ribosomes %>% 
+#   filter(FBgn %in% paralog_switches, tissue == 'Testes') %>%
+#   bind_rows(rb_paralogs %>% mutate(tissue = 'sperm') %>% 
+#               select(NAME = SYMBOL, base_gene, tissue, value = mn)) %>% 
+#   ggplot(aes(x = NAME, y = value, fill = tissue)) +
+#   geom_col(position = 'dodge') +
+#   facet_wrap(~base_gene, scales = 'free_x', nrow = 1) + 
+#   NULL
+
+# # RpL22 means per tissue/DmSP3
+# hopes_ribosomes %>% 
+#   mutate(tissue = str_sub(tissue, 1, 4)) %>% 
+#   filter(base_gene == 'RpL22') %>% 
+#   group_by(NAME, tissue) %>% 
+#   summarise(N = n(),
+#             mn = mean(value, na.rm = TRUE),
+#             se = sd(value, na.rm = TRUE)/sqrt(N)) %>% 
+#   bind_rows(rb_paralogs %>% mutate(tissue = 'Sperm') %>% 
+#               select(NAME = SYMBOL, base_gene, tissue, mn, se) %>% 
+#               filter(base_gene == 'RpL22')) %>% 
+#   ggplot(aes(x = NAME, y = mn, fill = tissue)) +
+#   geom_col(position = 'dodge') +
+#   geom_errorbar(aes(ymin = mn - se, ymax = mn + se), width = .2) +
+#   facet_wrap(~tissue, scales = 'free_x', nrow = 1,
+#              labeller = as_labeller(
+#                c(Embr = 'Embryo', Head = 'Head', 
+#                  Ovar = 'Ovaries', Sperm = 'Sperm', Test = 'Testes'))) + 
+#   theme_bw() + 
+#   theme(legend.position = '') +
+#   NULL
+
+# Table
+paralog_switches %>% 
+  left_join(
+    hopes_ribosomes %>% 
+      filter(FBgn %in% paralog_switches$FBgn) %>% 
+      mutate(tissue = str_sub(tissue, 1, 4)) %>% 
+      group_by(FBgn, NAME, tissue) %>% 
+      summarise(N = n(),
+                mn = mean(value, na.rm = TRUE),
+                se = sd(value, na.rm = TRUE)/sqrt(N)) %>% ungroup() %>% 
+      bind_rows(rb_paralogs %>% mutate(tissue = 'Sperm') %>% 
+                  select(NAME = SYMBOL, tissue, mn, se)) %>% 
+      dplyr::select(FBgn, NAME, tissue, mn) %>% 
+      pivot_wider(names_from = tissue, values_from = mn)) %>% 
+  mutate(base_gene = str_remove(SYMBOL, "[^0-9]+$")) %>% 
+  arrange(base_gene) %>% 
+  dplyr::select(-base_gene, -NAME) %>% 
+  #write_csv('output/paralog_switches.csv') %>% 
+  kable(digits = 1, 
+        caption = 'Abundance of each paralog') %>% 
+  kable_styling(full_width = FALSE) %>%
+  group_rows("RpL10", 1, 2) %>%
+  group_rows("RpL22", 3, 4) %>%
+  group_rows("RpL24", 5, 6) %>%
+  group_rows("RpL34", 7, 8) %>% 
+  group_rows("RpL37", 9, 10) %>% 
+  group_rows("RpL7", 11, 12) %>% 
+  group_rows("RpLP0", 13, 14) %>% 
+  group_rows("RpS10", 15, 16) %>% 
+  group_rows("RpS14", 17, 18) %>% 
+  group_rows("RpS15", 19, 20) %>% 
+  group_rows("RpS19", 21, 22) %>% 
+  group_rows("RpS28", 23, 24) %>% 
+  group_rows("RpS5", 25, 26)
+
+```
+
+
+## Abundance of proteins in the DmSP3 {.tabset}
+We tested for differences in abundance between proteins on the sex vs. autosomes, and those identified as ribosomal proteins, or putative Sfps, compared the the remaining sperm proteome using the Kruskal-Wallace rank sum test followed by pairwise Wilcoxon rank sum tests corrected for multiple testing using the Benjamini-Hochberg procedure. We used the grand mean abundance and used the filtered dataset where a protein must be identified by 2 or more unique peptides or in 2 or more biological replicates
+
+```{r}
+comb_abun <- DmSP_comb %>% 
+  drop_na(grand.mean) %>% 
+  dplyr::select(FBgn, NAME, SYMBOL, LOCATION_ARM, Sfp, grand.mean) %>% 
+  mutate(ribosome = if_else(FBgn %in% all_rib$FBgn, 'Ribosome', 'Other'),
+        # relabel chromosomes
+         Chromosome = case_when(
+           LOCATION_ARM %in% c('2L', '2R', '3L', '3R', '4', 'X', 'Y') ~ LOCATION_ARM,
+           LOCATION_ARM == 'MT; dmel_mitochondrion_genome' ~ 'mt',
+           TRUE ~ 'other'),
+         # label X/Y or autosomal
+         Chm = case_when(Chromosome %in% c('X', 'Y', 'mt') ~ Chromosome,
+                         Chromosome %in% c('2L', '2R', '3L', '3R', '4') ~ 'A',
+                         TRUE ~ 'other'))
+
+#### edgeR normalisation
+# make object for protein abundance data and replace NA's with 0's
+# expr_data <- DmSP_comb %>% dplyr::select(REP1.1:REP1.3, Halt1:NoHalt3, NaCl1:PBS4)
+# 
+# expr_data[is.na(expr_data)] <- 0
+# 
+# # get sample info
+# sampInfo = data.frame(Treatment = str_sub(colnames(expr_data), 1, 2),
+#                       Replicate = str_sub(colnames(expr_data), -1))
+# 
+# # make design matrix to test diffs between groups
+# design <- model.matrix(~0 + sampInfo$Treatment)
+# colnames(design) <- unique(sampInfo$Treatment)
+# rownames(design) <- sampInfo$Replicate
+# 
+# 
+# expr <- DGEList(expr_data, group = sampInfo$Treatment, genes = DmSP_comb$FBgn)
+# cpm_data <- cpm(expr)
+# keep <- rowSums(cpm(expr) > 1) >= 9
+# 
+# expr.Filtered <- expr[keep,, keep.lib.sizes = FALSE]
+# dim(expr.Filtered)
+# 
+# # create DGElist and fit model
+# dgeList <- calcNormFactors(expr.Filtered, method = 'TMM')
+# dgeList <- estimateCommonDisp(dgeList)
+# dgeList <- estimateTagwiseDisp(dgeList)
+# 
+# # voom normalisation
+# dgeListV <- voom(dgeList, plot = FALSE)
+# 
+# # fit linear model
+# lm_fit <- lmFit(dgeListV)
+# 
+# #### Diagnostic plots
+# #diagnostics
+# par(mfrow=c(2,2))
+# #Biological coefficient of variation
+# plotBCV(dgeList)
+# #mean-variance trend
+# voomed = voom(dgeList, plot=TRUE)
+# #QQ-plot
+# g <- gof(glmFit(dgeList))
+# z <- zscoreGamma(g$gof.statistics,shape=g$df/2,scale=2)
+# qqnorm(z); qqline(z, col = 4,lwd=1,lty=1)
+# #log2 transformed and normalize boxplot of counts across samples
+# boxplot(voomed$E, xlab="", ylab="log2(Abundance)",las=2,main="Voom transformed logCPM")
+# abline(h=median(voomed$E))
+# par(mfrow=c(1,1))
+# 
+# ##get normalised counts (Amean)
+# norm_dat <- data.frame(FBgn = unlist(lm_fit$genes),
+#                        norm_abun = lm_fit$Amean) %>%
+#   left_join(DmSP_comb,
+#             by = c('FBgn')) %>%
+#   mutate(ribosome = if_else(FBgn %in% all_rib$FBgn, 'Ribosome', 'Other'),
+#            # relabel chromosomes
+#          Chromosome = case_when(
+#            LOCATION_ARM %in% c('2L', '2R', '3L', '3R', '4', 'X', 'Y') ~ LOCATION_ARM,
+#            LOCATION_ARM == 'MT; dmel_mitochondrion_genome' ~ 'mt',
+#            TRUE ~ 'other'),
+#          # label X/Y or autosomal
+#          Chm = case_when(Chromosome %in% c('X', 'Y', 'mt') ~ Chromosome,
+#                          Chromosome %in% c('2L', '2R', '3L', '3R', '4') ~ 'A',
+#                          TRUE ~ 'other'))
+# 
+# ggplot(norm_dat, aes(x = log2(grand.mean + 1), norm_abun)) +
+#   geom_point()
+
+```
+
+### Ribosomes
+```{r}
+# KW test
+rib_kw <- broom::tidy(kruskal.test(grand.mean ~ as.factor(ribosome), data = comb_abun))
+
+```
+
+We compared the abundance of 70 ribosomal proteins to the remaining 1918 other sperm proteins. There was no significant difference in the abundance of ribosomal proteins compared to the remaining sperm proteins (`r rib_kw$method`, $\chi^2$ = `r round(rib_kw$statistic, 3)`, p = `r round(rib_kw$p.value, 3)`).
+
+```{r, fig.width=5, fig.height=5}
+ribo_abun <- comb_abun %>% 
+  ggplot(aes(x = ribosome, y = log2(grand.mean), fill = ribosome)) +
+  stat_halfeye() +
+  gghalves::geom_half_point(aes(colour = ribosome), size = .5, alpha = .35, side = "l", range_scale = 0.5) +
+  scale_fill_manual(values = c(cbPalette[2], 
+                                 RColorBrewer::brewer.pal(name = 'RdBu', n = 4)[4])) + 
+  scale_colour_manual(values = c(cbPalette[2], 
+                                 RColorBrewer::brewer.pal(name = 'RdBu', n = 4)[4])) +
+  labs(y = 'log2(abundance)') +
+  theme_bw() + 
+  theme(legend.position = '',
+        axis.title.x = element_blank()) + 
+  geom_signif(y_position = 37, xmin = 1, xmax = 2, annotation = 'n.s.', tip_length = 0.01) +
+  # ggrepel::geom_label_repel(
+  #   data = comb_abun %>% filter(ribosome == 'Ribosome'),
+  #   aes(label = SYMBOL),
+  #   size = 5, colour = 'black', fill = 'white',
+  #   box.padding = unit(0.35, "lines"),
+  #   point.padding = unit(0.3, "lines"),
+  #   max.overlaps = 100
+  # ) +
+  #ggsave('figures/ribo_abun.pdf', height = 4, width = 4) +
+  NULL
+
+ribo_abun
+
+```
+
+### Sex vs. autosomes
+```{r}
+# subset only proteins coded on sex chromosomes or autosomes
+axy <- comb_abun %>% filter(Chm %in% c('X', 'Y', 'A'))
+
+# KW test
+sex_kw <- kruskal.test(grand.mean ~ as.factor(Chm), data = axy)
+sex_wilcox <- broom::tidy(pairwise.wilcox.test(axy$grand.mean, axy$Chm, p.adjust.method = "BH"))
+
+```
+
+There was a significant difference in the abundance of proteins encoded on the X- or Y- chromosome and autosomes (`r sex_kw$method`, $\chi^2$ = `r round(sex_kw$statistic)`, p < 0.001). 
+
+```{r, fig.width=5, fig.height=5}
+axy_plot <- axy %>% 
+  mutate(Chm = fct_relevel(Chm, 'X', 'A', 'Y')) %>% 
+  ggplot(aes(x = Chm, y = log2(grand.mean), fill = Chm)) +
+  geom_violin(alpha = .5) +
+  geom_jitter(data = axy %>% filter(Chm == 'X'), 
+              colour = RColorBrewer::brewer.pal(name = 'RdBu', n = 3)[1], 
+              fill = RColorBrewer::brewer.pal(name = 'RdBu', n = 3)[1], width = .3) + 
+  geom_jitter(data = axy %>% filter(Chm == 'A'), 
+              colour = RColorBrewer::brewer.pal(name = 'RdBu', n = 3)[1], 
+              fill = RColorBrewer::brewer.pal(name = 'RdBu', n = 3)[1], width = .3, alpha = 0) + 
+  geom_jitter(data = axy %>% filter(Chm == 'Y'), 
+              colour = RColorBrewer::brewer.pal(name = 'RdBu', n = 3)[3], 
+              fill = RColorBrewer::brewer.pal(name = 'RdBu', n = 3)[3], width = .3) + 
+  geom_boxplot(alpha = .8, notch = TRUE, width = .3, outlier.shape = NA) +
+  scale_colour_manual(values = c(RColorBrewer::brewer.pal(name = 'RdBu', n = 3)[1],
+                                 NA,
+                                 RColorBrewer::brewer.pal(name = 'RdBu', n = 3)[3])) +
+  scale_fill_brewer(palette = 'RdBu') +
+  labs(x = 'Chromosome', y = 'log2(abundance)') +
+  theme_bw() +
+  theme(legend.position = 'none') +
+  geom_signif(y_position = 37, xmin = 1, xmax = 3, annotation = '***', tip_length = 0.01) +
+  geom_signif(y_position = 36, xmin = c(1, 2), xmax = c(2, 3), annotation = c('*', '***'), tip_length = 0.01) +
+  #ggsave('figures/chm_abundance.pdf', height = 4, width = 4) +
+  NULL
+
+axy_plot
+
+```
+
+# Seminal fluid proteins in the DmSP3
+We identified a considerable number of putative seminal fluid proteins (Sfps) in the DmSP3. 
+
+#### Overlap between the DmSP3 (n = `r nrow(DmSP3)`) and putative Sfps described in Wigby et al. (2020) as 'high confidence' Sfps, or 'low confidence/transferred Sfps'.
+```{r, fig.height=4, fig.width=4}
+# upset(fromList(list(Sfps = wigbySFP$FBgn,
+#                     Sfps.conf = wigbySFP$FBgn[wigbySFP$category == 'highconf'],
+#                     DmSP3 = DmSP3$FBgn)))
+
+# Eulerr diagram
+sfp_euler <- plot(euler(c('Sfps' = 161, "DmSP3" = 2899, 
+                          'Sfps&Sfps.conf' = 170, 
+                          'Sfps&DmSP3' = 156, 
+                          'Sfps&Sfps.conf&DmSP3' = 122)),
+                  quantities = TRUE,
+                  fills = list(fill = viridis::viridis(n = 3)[c(2, 1, 3)], alpha = .5))
+
+#pdf('figures/Sfp_sperm_overlap.pdf', height = 4, width = 4)
+sfp_euler
+#dev.off()
+
+```
+
+```{r}
+# # Kruskal-Wallis test
+sfp_kw <- broom::tidy(kruskal.test(grand.mean ~ as.factor(Sfp), data = comb_abun))
+
+```
+
+We found no significant difference in the abundance between 'high confidence' Sfps, 'low confidence/transferred' Sfps, or other proteins found in the DmSP3 (`r sfp_kw$method`, $\chi^2$ = `r round(sfp_kw$statistic, 3)`, p = `r round(sfp_kw$p.value, 3)`).
+
+```{r, fig.width=5, fig.height=5}
+# sfp vs. other
+sfp_abun <- comb_abun %>% 
+  ggplot(aes(x = Sfp, y = log2(grand.mean), fill = Sfp)) +
+  geom_violin(alpha = .5) +
+  geom_jitter(data = comb_abun %>% filter(Sfp == 'SFP.high'), 
+              colour = viridis::viridis(n = 3)[3], pch = 16, width = .3) + 
+  geom_jitter(data = comb_abun %>% filter(Sfp == 'SFP.low'),
+              colour = viridis::viridis(n = 3)[2], pch = 16, width = .3) + 
+  geom_jitter(data = comb_abun %>% filter(Sfp == 'Sperm.only'), pch = 16, width = .3, alpha = 0) + 
+  geom_boxplot(notch = TRUE, outlier.shape = NA, alpha = .6, width = .3) +
+  scale_fill_viridis_d(direction = -1) +
+  #scale_colour_manual(values = c(viridis::viridis(n = 3, direction = -1)[-3], NA)) +
+  scale_x_discrete(labels = c("SFP.high" = "\"High conf.\"\nSfps", 
+                              "SFP.low" = "\"Low conf.\"\nSfps",
+                              "Sperm.only" = "Other\nsperm")) + 
+  labs(y = 'log2(abundance)') +
+  theme_bw() +
+  theme(legend.position = 'none',
+        axis.title.x = element_blank()) +
+  # geom_signif(y_position = 37, xmin = 1, xmax = 3, annotation = '**', tip_length = 0.01) +
+  # geom_signif(y_position = 36, xmin = c(1, 2), xmax = c(2, 3), annotation = c('**', 'n.s.'), tip_length = 0.01) +
+  geom_text(data = comb_abun %>% group_by(Sfp) %>% dplyr::count(), 
+            aes(y = 13, label = n), size = 5, colour = "black") +
+  #ggsave('figures/sperm_sfp_abundance.pdf', height = 4, width = 4) +
+  NULL
+
+sfp_abun
+
+```
+
+### High abundance Sfps in the DmSP3
+```{r}
+comb_abun %>% 
+  mutate(p.rank = percent_rank(grand.mean) * 100,
+         p.rank = round(p.rank, 1),
+         NAME = if_else(NAME == '-', SYMBOL, NAME)) %>% 
+  filter(Sfp == 'SFP.high' & grand.mean > median(comb_abun$grand.mean[comb_abun$Sfp == 'Sperm.only'])) %>% 
+  dplyr::select(FBgn, Name = NAME, Chromosome, `Ranked abundance (%)` = p.rank) %>% 
+  arrange(desc(`Ranked abundance (%)`)) %>% 
+  my_data_table()
+
+```
+
+## Experiment 2 - PBST treatment {#PBST} {.tabset}
+In experiment 2 we washed sperm samples with PBS and Halt protease inhibitor ('Halt' treatment), PBS only ('NoHalt' treatment), or PBS containing Triton X detergent ('PBST' treatment) to denature the cell plasma membrane. We then performed pairswise differential abundance analysis between each treatment using `edgeR`. Few proteins were differentially abundant between the 'Halt' and 'NoHalt' controls. Subsequently, we performed differential abundance analysis between both controls compared to the 'PBST' treatment.
+
+```{r}
+pbst_dat <- PBST_dat %>% 
+  mutate(Sfp = case_when(FBgn %in% wigbySFP$FBgn[wigbySFP$category == 'highconf'] ~ 'SFP.high',
+                         FBgn %in% wigbySFP$FBgn ~ 'SFP.low',
+                         TRUE ~ 'Sperm.only')) %>% 
+  dplyr::select(Accession, FBgn, Sfp, SYMBOL, 73:77, UP = `# Unique Peptides`, starts_with('Abundance:')) %>% 
+  mutate(NAME = if_else(NAME == '-', ANNOTATION_SYMBOL, NAME)) %>% 
+  filter(UP >= 2)
+
+colnames(pbst_dat) <- gsub('.*, ', '', x = colnames(pbst_dat))
+
+colnames(pbst_dat)[9:17] <- paste0(colnames(pbst_dat)[9:17], 1:3)
+
+# remove proteins which are 0's across all reps of all treatments
+pbst_dat2 <- pbst_dat %>% 
+  mutate(across(9:17, ~replace_na(.x, 0)),
+         mn_Halt = rowMeans(dplyr::select(., starts_with("Halt")), na.rm = TRUE),
+         mn_NoHalt = rowMeans(dplyr::select(., starts_with("NoHalt")), na.rm = TRUE),
+         mn_PBST = rowMeans(dplyr::select(., starts_with("PBST")), na.rm = TRUE)) %>% 
+  filter(mn_Halt != 0 | mn_NoHalt != 0 | mn_PBST != 0) %>% 
+  mutate(across(18:20, ~replace_na(.x, 0)))
+
+# # Sfps detected in dataset?
+# pbst_dat2 %>% group_by(Sfp) %>% dplyr::count()
+
+# # how many ID'd in each
+# upset(fromList(list(Halt = pbst_dat2$Accession[pbst_dat2$mn_Halt != 0],
+#                     NoHalt = pbst_dat2$Accession[pbst_dat2$mn_NoHalt != 0],
+#                     PBST = pbst_dat2$Accession[pbst_dat2$mn_PBST != 0])))
+
+```
+
+### Pairwise analysis {.tabset}
+Here, we performed pairwise analyses between each treatment. We filtered proteins present in fewer than 7 out of 9 replicates.
+```{r}
+# make object for protein abundance data
+expr_pbst <- pbst_dat2[, 9:17]
+
+# filter data to exclude 0's
+thresh.pbst = expr_pbst > 0
+keep.pbst = rowSums(thresh.pbst) >= 7
+pbst.Filtered = expr_pbst[keep.pbst, ]
+
+# get sample info
+sampInfo_pbst = data.frame(condition = str_sub(colnames(pbst.Filtered), 1, 1),
+                           Replicate = str_sub(colnames(pbst.Filtered), -1))
+
+# make design matrix to test diffs between groups
+design_pbst <- model.matrix(~0 + sampInfo_pbst$condition)
+colnames(design_pbst) <- unique(sampInfo_pbst$condition)
+rownames(design_pbst) <- sampInfo_pbst$Replicate
+
+# create DGElist and fit model 
+dgeList_pbst <- DGEList(counts = pbst.Filtered, genes = pbst_dat2$Accession[keep.pbst], 
+                        group = sampInfo_pbst$condition)
+dgeList_pbst <- calcNormFactors(dgeList_pbst, method = 'TMM')
+dgeList_pbst <- estimateCommonDisp(dgeList_pbst)
+dgeList_pbst <- estimateTagwiseDisp(dgeList_pbst)
+
+# make contrasts - higher values = higher in mated
+cont.pbst <- makeContrasts(H.v.N = H - N,
+                           H.v.P = H - P,
+                           N.v.P = N - P,
+                           levels = design_pbst)
+
+# fit GLM
+glm_pbst <- glmFit(dgeList_pbst, design_pbst, robust = TRUE)
+
+# pairwise
+thresh.hn <- expr_pbst[, 1:6] > 0
+thresh.hp <- expr_pbst[, c(1:3, 7:9)] > 0
+thresh.np <- expr_pbst[, 4:9] > 0
+
+keep.hn <- rowSums(thresh.hn) >= 4
+keep.hp <- rowSums(thresh.hp) >= 4
+keep.np <- rowSums(thresh.np) >= 4
+
+hn.Filtered <- expr_pbst[keep.hn, ]
+hp.Filtered <- expr_pbst[keep.hp, ]
+np.Filtered <- expr_pbst[keep.np, ]
+
+dgeList_hn <- DGEList(counts = hn.Filtered, genes = pbst_dat2$Accession[keep.hn], group = sampInfo_pbst$condition)
+dgeList_hn <- calcNormFactors(dgeList_hn, method = 'TMM')
+dgeList_hn <- estimateCommonDisp(dgeList_hn)
+dgeList_hn <- estimateTagwiseDisp(dgeList_hn)
+
+dgeList_hp <- DGEList(counts = hp.Filtered, genes = pbst_dat2$Accession[keep.hp], group = sampInfo_pbst$condition)
+dgeList_hp <- calcNormFactors(dgeList_hp, method = 'TMM')
+dgeList_hp <- estimateCommonDisp(dgeList_hp)
+dgeList_hp <- estimateTagwiseDisp(dgeList_hp)
+
+dgeList_np <- DGEList(counts = np.Filtered, genes = pbst_dat2$Accession[keep.np], group = sampInfo_pbst$condition)
+dgeList_np <- calcNormFactors(dgeList_np, method = 'TMM')
+dgeList_np <- estimateCommonDisp(dgeList_np)
+dgeList_np <- estimateTagwiseDisp(dgeList_np)
+
+cont.hn <- makeContrasts(H.v.N = H - N, levels = design_pbst)
+cont.hp <- makeContrasts(H.v.P = H - P, levels = design_pbst)
+cont.np <- makeContrasts(N.v.P = N - P, levels = design_pbst)
+
+glm_hn <- glmFit(dgeList_hn, design_pbst, robust = TRUE)
+glm_hp <- glmFit(dgeList_hp, design_pbst, robust = TRUE)
+glm_np <- glmFit(dgeList_np, design_pbst, robust = TRUE)
+
+```
+
+#### Diagnostic plots {.tabset}
+```{r}
+diag_plot <- function(dgelist = NA, design = NA) {
+  
+  par(mfrow = c(2,2))
+  # Biological coefficient of variation
+  plotBCV(dgelist)
+  # mean-variance trend
+  voomed = voom(dgelist, design, plot=TRUE)
+  # QQ-plot
+  g <- gof(glmFit(dgelist, design_pbst))
+  z <- zscoreGamma(g$gof.statistics,shape=g$df/2,scale=2)
+  qqnorm(z); qqline(z, col = 4,lwd=1,lty=1)
+  # log2 transformed and normalize boxplot of counts across samples
+  boxplot(voomed$E, xlab="", ylab="log2(Abundance)",las=2,main="Voom transformed logCPM",
+        col = c(rep(2:4, each = 3)))
+  abline(h=median(voomed$E),col="blue")
+  par(mfrow=c(1,1))
+  
+}
+
+```
+
+##### H vs. N
+```{r, fig.width=6, fig.height=6}
+diag_plot(dgeList_hn, design_pbst)
+```
+
+##### H vs. P
+```{r, fig.width=6, fig.height=6}
+diag_plot(dgeList_hp, design_pbst)
+```
+
+##### N vs. P
+```{r, fig.width=6, fig.height=6}
+diag_plot(dgeList_np, design_pbst)
+```
+
+#### Correlation plot
+```{r, fig.width=5, fig.height=4}
+## Plot sample correlation
+data = glm_pbst$fitted.values %>% as_tibble()
+data = as.matrix(data)
+sample_cor = cor(data, method = 'pearson', use = 'pairwise.complete.obs')
+
+pheatmap(
+  mat               = sample_cor,
+  border_color      = NA,
+  annotation_legend = TRUE,
+  annotation_names_col = FALSE,
+  annotation_names_row = FALSE,
+  fontsize          = 12#, file = "plots/sample.cor.pdf", height = 5.5, width = 6.5    
+)
+
+```
+
+#### MDS plot {.tabset}
+```{r}
+mdsObj <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))$cmdscale.out
+
+mdsObj <- as.data.frame(as.matrix(mdsObj)) %>% 
+  rownames_to_column() %>% 
+  mutate(condition = str_sub(rowname, 1, 2)) %>% 
+  dplyr::rename(dim1 = V1, dim2 = V2, dim3 = V3)
+
+```
+
+##### Dim.1 vs. Dim. 2
+```{r, fig.width=4.5, fig.height=3.8}
+mdsObj %>% 
+  ggplot(aes(x = dim1, y = dim2, colour = condition)) +
+  geom_point(size = 8, alpha = .7) +
+  labs(x = "Dimension 1", y = "Dimension 2") +
+  theme_bw() +
+  theme(legend.title = element_blank(), 
+        legend.text.align = 0,
+        legend.text = element_text(size = 12),
+        legend.background = element_blank(),
+    axis.text = element_text(size = 10), 
+    axis.title = element_text(size = 12)) +
+  #ggsave('plots/MDSplot12_db.pdf', height = 4, width = 5, dpi = 600, useDingbats = FALSE) +
+  NULL
+
+```
+
+##### Dim.1 vs. Dim. 3
+```{r, fig.width=4.5, fig.height=3.8}
+mdsObj %>% 
+  ggplot(aes(x = dim1, y = dim3, colour = condition)) +
+  geom_point(size = 8, alpha = .7) +
+  labs( x = "Dimension 1", y = "Dimension 3") +
+  theme_bw() +
+  theme(legend.title = element_blank(), 
+        legend.text.align = 0,
+        legend.text = element_text(size = 12),
+        legend.background = element_blank(),
+    axis.text = element_text(size = 10), 
+    axis.title = element_text(size = 12)) +
+  #ggsave('plots/MDSplot13.pdf', height = 4, width = 5, dpi = 600, useDingbats = FALSE) +
+  NULL
+
+```
+
+##### Dim.2 vs. Dim. 3
+```{r, fig.width=4.5, fig.height=3.8}
+mdsObj %>% 
+  ggplot(aes(x = dim2, y = dim3, colour = condition)) +
+  geom_point(size = 8, alpha = .7) +
+  labs( x = "Dimension 2", y = "Dimension 3") +
+  theme_bw() +
+  theme(legend.title = element_blank(), 
+        legend.text.align = 0,
+        legend.text = element_text(size = 12),
+        legend.background = element_blank(),
+    axis.text = element_text(size = 10), 
+    axis.title = element_text(size = 12)) +
+  #ggsave('plots/MDSplot23.pdf', height = 4, width = 5, dpi = 600, useDingbats = FALSE) +
+  NULL
+
+```
+
+#### Perform differential abundance analysis
+```{r}
+# perform likelihood ratio tests
+lrt.hn <- glmLRT(glm_hn, contrast = cont.hn[,"H.v.N"])
+lrt.hp <- glmLRT(glm_hp, contrast = cont.hp[,"H.v.P"])
+lrt.np <- glmLRT(glm_np, contrast = cont.np[,"N.v.P"])
+
+# halt vs. no halt
+lm_hn.tTags.table <- topTags(lrt.hn, n = NULL) %>% as.data.frame() %>% 
+  mutate(condition = "hn",
+         threshold = if_else(FDR < 0.05 & abs(logFC) > 1, "SD", "NS"))
+
+# halt vs. pbst
+lm_hp.tTags.table <- topTags(lrt.hp, n = NULL) %>% as.data.frame() %>% 
+  mutate(condition = "hp",
+         threshold = if_else(FDR < 0.05 & abs(logFC) > 1, "SD", "NS"))
+
+# no halt vs. pbst
+lm_np.tTags.table <- topTags(lrt.np, n = NULL) %>% as.data.frame() %>% 
+  mutate(condition = "np",
+         threshold = if_else(FDR < 0.05 & abs(logFC) > 1, "SD", "NS"))
+
+# combine results
+comb_TABLES <- rbind(lm_hn.tTags.table,
+                     lm_hp.tTags.table, 
+                     lm_np.tTags.table) %>% 
+  left_join(pbst_dat2,
+            by = c('genes' = 'Accession'))
+
+
+# New facet label names
+new.labs <- c(hn = "Halt vs. No Halt",                    
+              hp = "Halt vs. PBST",
+              np = "No Halt vs. PBST")
+```
+
+##### volcano plot
+```{r, fig.height=4}
+comb_TABLES %>% filter(threshold != 'SD') %>% 
+  ggplot(aes(x = logFC, y = -log10(PValue))) +
+  geom_point(alpha = .3, colour = 'grey') +
+  geom_point(data = comb_TABLES %>% 
+               filter(threshold != 'NS'),
+             aes(colour = Sfp), alpha = .8) +
+  scale_colour_viridis_d(direction = -1) +
+  labs(x = 'logFC', y = '-log10(p-value)') +
+  facet_wrap(~condition, labeller = as_labeller(new.labs)) +
+  theme_bw() +
+  theme(legend.position = 'bottom',#c(0.8, 0.8),
+        legend.title = element_blank(),
+        legend.background = element_rect(fill = NA)) +
+  ggrepel::geom_label_repel(
+    data = comb_TABLES %>% filter(threshold != 'NS' & Sfp == 'SFP.high'),
+    aes(label = SYMBOL),
+    size = 2,
+    colour = 'black',
+    box.padding = unit(0.35, "lines"),
+    point.padding = unit(0.3, "lines"),
+    max.overlaps = 20
+  ) +
+  #ggsave('figures/volcano_PBSTexp.pdf', height = 4, width = 10) +
+  NULL
+
+# # DA proteins between 'controls'
+# comb_TABLES %>% filter(threshold == 'SD' & condition == 'hn')
+
+# # number DA in each comparison
+# comb_TABLES %>% 
+#   filter(threshold == 'SD') %>% 
+#   group_by(condition) %>% dplyr::count()
+
+# # Sfps remaining in PBST (i.e. not sig different compared to control)
+# comb_TABLES %>% 
+#   filter(condition != 'hn' & threshold != 'SD' & Sfp == 'SFP.high') %>% 
+#   distinct(FBgn, .keep_all = TRUE)
+
+pbst_keep <- data.frame(genes = intersect(
+  lm_hp.tTags.table$genes[lm_hp.tTags.table$FDR > 0.05],
+  lm_np.tTags.table$genes[lm_np.tTags.table$FDR > 0.05])) %>% 
+  left_join(pbst_dat2, by = c('genes' = 'Accession'))
+
+# pbst_keep %>% group_by(Sfp) %>% dplyr::count()
+# 
+# pbst_keep %>% filter(Sfp == 'SFP.high')
+# pbst_keep %>% filter(Sfp == 'SFP.low')
+
+# which are these proteins?
+pbst_high <- data.frame(genes = intersect(
+  lm_hp.tTags.table$genes[lm_hp.tTags.table$logFC < -1 & lm_hp.tTags.table$FDR < 0.05],
+  lm_np.tTags.table$genes[lm_np.tTags.table$logFC < -1 & lm_np.tTags.table$FDR < 0.05])) %>% 
+  left_join(pbst_dat2, by = c('genes' = 'Accession'))
+
+# absent from PBST
+pbst_absent <- data.frame(genes = intersect(pbst_dat2$Accession[!keep.hp], 
+                                            pbst_dat2$Accession[!keep.np])) %>% 
+  left_join(pbst_dat2, by = c('genes' = 'Accession'))
+
+# pbst_absent %>% group_by(Sfp) %>% dplyr::count()
+# 
+# pbst_absent %>% filter(Sfp == 'SFP.high')
+# pbst_absent %>% filter(Sfp == 'SFP.low')
+
+# # plot abundances of SFPs for each treatment
+# pbst_absent %>% filter(mn_Halt > 0) %>% 
+#   filter(Sfp == 'SFP.high') %>% 
+#   pivot_longer(cols = 9:17) %>% 
+#   mutate(condition = str_sub(name, end = -2),
+#          repl = str_sub(name, end = -1, -1)) %>% 
+#   ggplot(aes(x = condition, y = log2(value))) +
+#   geom_jitter(aes(colour = condition, shape = repl), width = .2, size = 3) +
+#   facet_wrap(~NAME, ncol = round(nrow(pbst_absent %>% filter(Sfp == 'SFP.high'))/3, 0), scales = 'free_y') +
+#   theme_bw() +
+#   theme(legend.position = '') +
+#   stat_summary(geom = 'point', fun = 'median', pch = 23, size = 3) +
+#   NULL
+```
+
+##### proteins lower in abundance in PBST vs. no/halt
+```{r, fig.height=4, fig.width=15}
+pbst_low <- data.frame(genes = intersect(
+  lm_hp.tTags.table$genes[lm_hp.tTags.table$logFC > 0 & lm_hp.tTags.table$FDR < 0.05],
+  lm_np.tTags.table$genes[lm_np.tTags.table$logFC > 0 & lm_np.tTags.table$FDR < 0.05])) %>% 
+  left_join(pbst_dat2, by = c('genes' = 'Accession'))
+
+# pbst_low %>% group_by(Sfp) %>% dplyr::count()
+# 
+# pbst_low %>% filter(Sfp == 'SFP.high')
+# pbst_low %>% filter(Sfp == 'SFP.low')
+
+# plot abundances of SFPs for each treatment
+pbst_low %>% 
+  filter(Sfp == 'SFP.high') %>% 
+  pivot_longer(cols = 9:17) %>% 
+  mutate(condition = str_sub(name, end = -2),
+         repl = str_sub(name, end = -1, -1)) %>% 
+  ggplot(aes(x = condition, y = log2(value))) +
+  geom_jitter(aes(colour = condition, shape = repl), width = .2, size = 3) +
+  facet_wrap(~NAME, ncol = round(nrow(pbst_low %>% filter(Sfp == 'SFP.high'))/3,0), scales = 'free_y') +
+  theme_bw() +
+  theme(legend.position = '') +
+  stat_summary(geom = 'point', fun = 'median', pch = 23, size = 3) +
+  NULL
+
+```
+
+### Single model {.tabset}
+Here we test for differences in abundance between the PBST treatment vs. the average of both controls. We first exclude the `r length(lm_hn.tTags.table$genes[lm_hn.tTags.table$threshold == 'SD'])` proteins which showed significant differences in abundance between 'Halt' and 'NoHalt'.
+```{r}
+# remove proteins differentially abundant between Halt/NoHalt
+expr_pbst2 <- pbst_dat2 %>% 
+  filter(!Accession %in% lm_hn.tTags.table$genes[lm_hn.tTags.table$threshold == 'SD']) %>% 
+  dplyr::select(Accession, 9:17)
+
+# filter data to exclude 0's
+thresh.pbst = expr_pbst2[, -1] > 0
+keep.pbst = rowSums(thresh.pbst) >= 7
+pbst.Filtered = expr_pbst2[keep.pbst, -1]
+
+# create DGElist and fit model 
+dgeList_pbst <- DGEList(counts = pbst.Filtered, genes = expr_pbst2$Accession[keep.pbst], 
+                        group = sampInfo_pbst$condition)
+dgeList_pbst <- calcNormFactors(dgeList_pbst, method = 'TMM')
+dgeList_pbst <- estimateCommonDisp(dgeList_pbst)
+dgeList_pbst <- estimateTagwiseDisp(dgeList_pbst)
+```
+
+#### Diagnostic plots
+```{r, fig.height=6, fig.height=6}
+par(mfrow = c(2,2))
+# Biological coefficient of variation
+plotBCV(dgeList_pbst)
+# mean-variance trend
+voomed = voom(dgeList_pbst, design_pbst, plot = TRUE)
+# QQ-plot
+g <- gof(glmFit(dgeList_pbst, design_pbst))
+z <- zscoreGamma(g$gof.statistics,shape=g$df/2,scale=2)
+qqnorm(z); qqline(z, col = 4,lwd=1,lty=1)
+# log2 transformed and normalize boxplot of counts across samples
+boxplot(voomed$E, xlab="", ylab="log2(Abundance)",las=2,main="Voom transformed logCPM",
+        col = c(rep(2:4, each = 3)))
+abline(h=median(voomed$E),col="blue")
+par(mfrow=c(1,1))
+
+# fit model
+dgeList2_fit <- glmFit(dgeList_pbst, design_pbst)
+
+```
+
+#### Correlation plot
+```{r, fig.width=5, fig.height=4}
+## Plot sample correlation
+data = glm_pbst$fitted.values %>% as_tibble()
+data = as.matrix(data)
+sample_cor = cor(data, method = 'pearson', use = 'pairwise.complete.obs')
+
+pheatmap(
+  mat               = sample_cor,
+  border_color      = NA,
+  annotation_legend = TRUE,
+  annotation_names_col = FALSE,
+  annotation_names_row = FALSE,
+  fontsize          = 12#, file = "plots/sample.cor.pdf", height = 5.5, width = 6.5    
+)
+
+```
+
+#### MDS plot {.tabset}
+```{r}
+mdsObj <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))$cmdscale.out
+
+mdsObj <- as.data.frame(as.matrix(mdsObj)) %>% 
+  rownames_to_column() %>% 
+  mutate(condition = str_sub(rowname, 1, 2)) %>% 
+  dplyr::rename(dim1 = V1, dim2 = V2, dim3 = V3)
+
+```
+
+##### Dim.1 vs. Dim. 2
+```{r, fig.width=4.5, fig.height=3.8}
+mdsObj %>% 
+  ggplot(aes(x = dim1, y = dim2, colour = condition)) +
+  geom_point(size = 8, alpha = .7) +
+  labs(x = "Dimension 1", y = "Dimension 2") +
+  theme_bw() +
+  theme(legend.title = element_blank(), 
+        legend.text.align = 0,
+        legend.text = element_text(size = 12),
+        legend.background = element_blank(),
+    axis.text = element_text(size = 10), 
+    axis.title = element_text(size = 12)) +
+  #ggsave('plots/MDSplot12_db.pdf', height = 4, width = 5, dpi = 600, useDingbats = FALSE) +
+  NULL
+
+```
+
+##### Dim.1 vs. Dim. 3
+```{r, fig.width=4.5, fig.height=3.8}
+mdsObj %>% 
+  ggplot(aes(x = dim1, y = dim3, colour = condition)) +
+  geom_point(size = 8, alpha = .7) +
+  labs( x = "Dimension 1", y = "Dimension 3") +
+  theme_bw() +
+  theme(legend.title = element_blank(), 
+        legend.text.align = 0,
+        legend.text = element_text(size = 12),
+        legend.background = element_blank(),
+    axis.text = element_text(size = 10), 
+    axis.title = element_text(size = 12)) +
+  #ggsave('plots/MDSplot13.pdf', height = 4, width = 5, dpi = 600, useDingbats = FALSE) +
+  NULL
+
+```
+
+##### Dim.2 vs. Dim. 3
+```{r, fig.width=4.5, fig.height=3.8}
+mdsObj %>% 
+  ggplot(aes(x = dim2, y = dim3, colour = condition)) +
+  geom_point(size = 8, alpha = .7) +
+  labs( x = "Dimension 2", y = "Dimension 3") +
+  theme_bw() +
+  theme(legend.title = element_blank(), 
+        legend.text.align = 0,
+        legend.text = element_text(size = 12),
+        legend.background = element_blank(),
+    axis.text = element_text(size = 10), 
+    axis.title = element_text(size = 12)) +
+  #ggsave('plots/MDSplot23.pdf', height = 4, width = 5, dpi = 600, useDingbats = FALSE) +
+  NULL
+
+```
+
+
+```{r, fig.height=6, fig.height=6}
+# make contrast
+pbst.v.rest <- makeContrasts(((H + N)/2) - P, levels = design_pbst)
+
+# perform LRT
+lrt.pbst_v_rest <- glmLRT(dgeList2_fit, contrast = pbst.v.rest)
+
+# make results table
+lrt.pbst_v_rest.tTags <- topTags(lrt.pbst_v_rest, n = NULL) %>% as.data.frame() %>% 
+  mutate(threshold = if_else(FDR < 0.05 & abs(logFC) > 1, "SD", "NS")) %>% 
+  left_join(pbst_dat2,
+            by = c('genes' = 'Accession'))
+
+pbst_volcano <- lrt.pbst_v_rest.tTags %>% filter(threshold != 'SD') %>% 
+  ggplot(aes(x = logFC, y = -log10(PValue))) +
+  geom_point(alpha = .3, colour = 'grey') +
+  geom_point(data = lrt.pbst_v_rest.tTags %>% filter(threshold != 'NS'),
+             aes(colour = Sfp), alpha = .6) +
+  scale_colour_viridis_d(direction = -1) +
+  labs(x = 'logFC', y = '-log10(p-value)') +
+  theme_bw() +
+  theme(legend.position = 'bottom',#c(0.8, 0.8),
+        legend.title = element_blank(),
+        legend.background = element_rect(fill = NA)) +
+  ggrepel::geom_label_repel(
+    data = lrt.pbst_v_rest.tTags %>% filter(threshold != 'NS' & Sfp == 'SFP.high'),
+    aes(label = SYMBOL),
+    size = 2,
+    colour = 'black',
+    box.padding = unit(0.35, "lines"),
+    point.padding = unit(0.3, "lines"),
+    max.overlaps = 20
+  ) +
+  #ggsave('figures/volcano_PBSTvCOMBINED.pdf', height = 4.5, width = 4) +
+  NULL
+
+```
+
+#### Volcano plot
+```{r, fig.height=4, fig.width=4}
+pbst_volcano
+
+#table(lrt.pbst_v_rest.tTags$threshold)
+
+# lrt.pbst_v_rest.tTags %>% filter(threshold == 'SD' & Sfp == 'SFP.high')
+# lrt.pbst_v_rest.tTags %>% filter(threshold != 'SD' & Sfp == 'SFP.high')
+
+# # number DA in each comparison
+# lrt.pbst_v_rest.tTags %>% filter(threshold == 'SD' & logFC < 0)
+# lrt.pbst_v_rest.tTags %>% filter(threshold == 'SD' & logFC > 0)
+
+# compare to pairwise analysis
+# upset(
+#   fromList(
+#     list(pairwise = pbst_low$genes,
+#          one_mod = lrt.pbst_v_rest.tTags$genes[lm_np.tTags.table$logFC > 1 & lm_np.tTags.table$FDR < 0.05])))
+
+# # what proteins are not DA or filtered?
+# upset(
+#   fromList(
+#     list(total = pbst_dat2 %>% filter(Sfp == 'SFP.high') %>% pull(Accession),
+#          filt = lrt.pbst_v_rest.tTags %>% filter(Sfp == 'SFP.high') %>% pull(genes))))
+
+# data.frame(Accession = setdiff(pbst_dat2 %>% filter(Sfp == 'SFP.high') %>% pull(Accession),
+#                                lrt.pbst_v_rest.tTags %>% filter(Sfp == 'SFP.high') %>% pull(genes))) %>% 
+#   left_join(pbst_dat2[, -c(2:8)], by = 'Accession')
+
+
+# # write to file for GO
+# pbst_low %>% filter(Sfp == 'Sperm.only') #%>% write_csv('output/pbst_low_spermonly.csv')
+# lrt.pbst_v_rest.tTags %>% filter(Sfp != 'SFP.high') #%>% write_csv('output/pbst_low_notSFP.csv')
+# 
+# lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == 'SFP.high' & lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] %>% dim
+# 
+# lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp != 'SFP.high' & lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] #%>% write_csv('output/GO_lists/pbst_low_noSFP.csv')
+# 
+# lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] #%>% write_csv('output/GO_lists/pbst_low.csv')
+
+```
+
+#### Proteins depleted after PBST treatment
+```{r}
+lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] %>% 
+  mutate(NAME = if_else(is.na(NAME) == TRUE, ANNOTATION_SYMBOL, NAME),
+         Sfp = case_when(Sfp == 'SFP.high' ~ 'High conf. Sfp',
+                         Sfp == 'SFP.low' ~ 'Low conf. Sfp',
+                         TRUE ~ 'Sperm')) %>% 
+  dplyr::select(FBgn, Name = NAME, genes, Sfp, Chromosome = LOCATION_ARM) %>% 
+  arrange(Name) %>% 
+  my_data_table()
+
+```
+
+#### Sfps depleted after PBST treatment
+```{r}
+lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == 'SFP.high' & lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] %>% #write_csv('output/PBST_Sfp_depleted.csv')
+  dplyr::select(FBgn, Name = NAME, Symbol = SYMBOL, Chromosome = LOCATION_ARM) %>% 
+  arrange(Symbol) %>% 
+  my_data_table()
+
+```
+
+#### Sfps remaining after PBST treatment
+```{r}
+lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == 'SFP.high' & lrt.pbst_v_rest.tTags$FDR > 0.05, ] %>% #write_csv('output/PBST_Sfp_remaining.csv')
+  dplyr::select(FBgn, Name = NAME, Symbol = SYMBOL, Chromosome = LOCATION_ARM) %>% 
+  arrange(Symbol) %>% 
+  my_data_table()
+
+```
+
+
+## Experiment 3 - salt wash {.tabset}
+Here we washed sperm samples with high molar NaCl or PBS (control). We performed LC-MS analysis for 4 biological replicates of each treatment, with 2 technical replicates each. We first summed technical replicates. We then filtered proteins present in fewer than 5 out of 8 replicates total. 
+
+```{r}
+salt_dat2 <- salt_dat %>% 
+  dplyr::select(FBgn, Accession, Gene.Symbol, UniqueP = X..Unique.Peptides,
+                contains('Abundance..F')) %>% 
+  mutate(across(5:20, ~replace_na(.x, 0)),
+         Sfp = case_when(FBgn %in% wigbySFP$FBgn[wigbySFP$category == 'highconf'] ~ 'SFP.high',
+                         FBgn %in% wigbySFP$FBgn ~ 'SFP.low',
+                         TRUE ~ 'Sperm.only'),
+         mn = rowMeans(.[, 5:20], na.rm = TRUE)) %>% 
+  # filter two unique peptides
+  filter(mn > 0, UniqueP >= 2) %>% dplyr::select(-mn)
+
+colnames(salt_dat2) <- gsub('.*Sample..', '', x = colnames(salt_dat2))
+colnames(salt_dat2)[5:20] <- paste(colnames(salt_dat2)[5:20], 1:8, sep = '_')
+
+# make object for protein abundance data and replace NA's with 0's
+expr_salt <- salt_dat2[, 5:20] %>% 
+  mutate(NaCl1 = rowSums(dplyr::select(., 1:2), na.rm = TRUE),
+         NaCl2 = rowSums(dplyr::select(., 3:4), na.rm = TRUE),
+         NaCl3 = rowSums(dplyr::select(., 5:6), na.rm = TRUE),
+         NaCl4 = rowSums(dplyr::select(., 7:8), na.rm = TRUE),
+         PBS1 = rowSums(dplyr::select(., 9:10), na.rm = TRUE),
+         PBS2 = rowSums(dplyr::select(., 11:12), na.rm = TRUE),
+         PBS3 = rowSums(dplyr::select(., 13:14), na.rm = TRUE),
+         PBS4 = rowSums(dplyr::select(., 15:16), na.rm = TRUE)) %>% 
+  dplyr::select(-c(1:16))
+
+# filter data to exclude 0's
+thresh.salt = expr_salt[, ] > 0
+keep.salt = rowSums(thresh.salt) >= 5
+salt.Filtered = expr_salt[keep.salt, ]
+
+# get sample info
+sampInfo_salt = data.frame(condition = str_sub(colnames(salt.Filtered), 1, 1),
+                           Replicate = str_sub(colnames(salt.Filtered), -1))
+
+# make design matrix to test diffs between groups
+design_salt <- model.matrix(~0 + sampInfo_salt$condition)
+colnames(design_salt) <- unique(sampInfo_salt$condition)
+rownames(design_salt) <- sampInfo_salt$Replicate
+
+# create DGElist and fit model 
+dgeList_salt <- DGEList(counts = salt.Filtered, genes = salt_dat2$Accession[keep.salt], 
+                        group = sampInfo_salt$condition)
+dgeList_salt <- calcNormFactors(dgeList_salt, method = 'TMM')
+dgeList_salt <- estimateCommonDisp(dgeList_salt)
+dgeList_salt <- estimateTagwiseDisp(dgeList_salt)
+
+# make contrasts - higher values = higher in mated
+cont.salt <- makeContrasts(N.v.P = N - P,
+                           levels = design_salt)
+
+glm_salt <- glmFit(dgeList_salt, design_salt, robust = TRUE)
+
+```
+
+### Diagnostic plots
+```{r, fig.width=6, fig.height=6}
+par(mfrow=c(2,2))
+# Biological coefficient of variation
+plotBCV(dgeList_salt)
+# mean-variance trend
+voomed = voom(dgeList_salt, design_salt, plot=TRUE)
+# QQ-plot
+g <- gof(glmFit(dgeList_salt, design_salt))
+z <- zscoreGamma(g$gof.statistics,shape=g$df/2,scale=2)
+qqnorm(z); qqline(z, col = 4,lwd=1,lty=1)
+# log2 transformed and normalize boxplot of counts across samples
+boxplot(voomed$E, xlab="", ylab="log2(Abundance)",las=2,main="Voom transformed logCPM",
+        col = c(rep(2:3, each = 4)))
+abline(h=median(voomed$E),col="blue")
+par(mfrow=c(1,1))
+
+```
+
+### MDS plot {.tabset}
+```{r}
+mdsObj <- plotMDS(dgeList_salt, plot = F, dim.plot = c(1,3))$cmdscale.out
+
+mdsObj <- as.data.frame(as.matrix(mdsObj)) %>% 
+  rownames_to_column() %>% 
+  mutate(condition = str_sub(rowname, 1, 2)) %>% 
+  dplyr::rename(dim1 = V1, dim2 = V2, dim3 = V3)
+
+```
+
+#### Dim.1 vs. Dim. 2
+```{r, fig.width=4.5, fig.height=3.8}
+mdsObj %>% 
+  ggplot(aes(x = dim1, y = dim2, colour = condition)) +
+  geom_point(size = 8, alpha = .7) +
+  labs(x = "Dimension 1", y = "Dimension 2") +
+  theme_bw() +
+  theme(legend.title = element_blank(), 
+        legend.text.align = 0,
+        legend.text = element_text(size = 12),
+        legend.background = element_blank(),
+    axis.text = element_text(size = 10), 
+    axis.title = element_text(size = 12)) +
+  #ggsave('plots/MDSplot12_db.pdf', height = 4, width = 5, dpi = 600, useDingbats = FALSE) +
+  NULL
+
+```
+
+#### Dim.1 vs. Dim. 3
+```{r, fig.width=4.5, fig.height=3.8}
+mdsObj %>% 
+  ggplot(aes(x = dim1, y = dim3, colour = condition)) +
+  geom_point(size = 8, alpha = .7) +
+  labs( x = "Dimension 1", y = "Dimension 3") +
+  theme_bw() +
+  theme(legend.title = element_blank(), 
+        legend.text.align = 0,
+        legend.text = element_text(size = 12),
+        legend.background = element_blank(),
+    axis.text = element_text(size = 10), 
+    axis.title = element_text(size = 12)) +
+  #ggsave('plots/MDSplot13.pdf', height = 4, width = 5, dpi = 600, useDingbats = FALSE) +
+  NULL
+
+```
+
+#### Dim.2 vs. Dim. 3
+```{r, fig.width=4.5, fig.height=3.8}
+mdsObj %>% 
+  ggplot(aes(x = dim2, y = dim3, colour = condition)) +
+  geom_point(size = 8, alpha = .7) +
+  labs( x = "Dimension 2", y = "Dimension 3") +
+  theme_bw() +
+  theme(legend.title = element_blank(), 
+        legend.text.align = 0,
+        legend.text = element_text(size = 12),
+        legend.background = element_blank(),
+    axis.text = element_text(size = 10), 
+    axis.title = element_text(size = 12)) +
+  #ggsave('plots/MDSplot23.pdf', height = 4, width = 5, dpi = 600, useDingbats = FALSE) +
+  NULL
+
+```
+
+### volcano plot
+```{r, fig.height=4, fig.width=4}
+# perform likelihood ratio tests
+lrt.salt <- glmLRT(glm_salt, contrast = cont.salt[,"N.v.P"])
+
+lm_salt.tTags.table <- topTags(lrt.salt, n = NULL) %>% as.data.frame() %>% 
+  mutate(threshold = if_else(FDR < 0.05 & abs(logFC) > 1, "SD", "NS")) %>% 
+  left_join(salt_dat2,
+            by = c('genes' = 'Accession')) %>% 
+  mutate(bin = ntile(logCPM, 10))
+lm_salt.tTags.table %>% filter(threshold != 'SD') %>% 
+  ggplot(aes(x = logFC, y = -log10(PValue))) +
+  geom_point(alpha = .1) +
+  geom_point(data = lm_salt.tTags.table %>% 
+               filter(threshold != 'NS'),
+             aes(colour = Sfp), alpha = .8) +
+  scale_colour_viridis_d(direction = -1) +
+  labs(x = 'logFC', y = '-log10(p-value)') +
+  #coord_cartesian(xlim = c(-6, 6)) +
+  theme_bw() +
+  theme(legend.position = 'bottom',#c(0.8, 0.8),
+        legend.title = element_blank(),
+        legend.background = element_rect(fill = NA)) +
+  ggrepel::geom_label_repel(
+    data = lm_salt.tTags.table %>% filter(threshold != 'NS' & Sfp == 'SFP.high'),
+    aes(label = Gene.Symbol),
+    size = 2,
+    colour = 'black',
+    box.padding = unit(0.35, "lines"),
+    point.padding = unit(0.3, "lines"),
+    max.overlaps = 20
+  ) +
+  #ggsave('figures/MAplot_PBSTvNoHalt_DEseq2.pdf', height = 4, width = 4) +
+  NULL
+
+# # number DA in each comparison
+# lm_salt.tTags.table %>% 
+#   group_by(threshold) %>% dplyr::count()
+
+# # Sfps remaining in Salt (i.e. NS)
+# lm_salt.tTags.table %>% 
+#   filter(threshold != 'SD' & logFC < 1 & Sfp == 'SFP.high') %>% 
+#   distinct(FBgn, .keep_all = TRUE)
+```
+
+### MA plot
+```{r, fig.height=4, fig.width=4}
+salt_ma <- lm_salt.tTags.table %>% filter(threshold != 'SD') %>% 
+  ggplot(aes(x = logCPM, y = logFC)) +
+  geom_point(alpha = .1) +
+  geom_point(data = lm_salt.tTags.table %>% 
+               filter(threshold != 'NS'),
+             aes(colour = Sfp), alpha = .8) +
+  scale_colour_viridis_d(direction = -1) +
+  labs(x = 'log2(normalised abundance)', y = 'logFC') +
+  theme_bw() +
+  theme(legend.position = 'bottom',#c(0.8, 0.8),
+        legend.title = element_blank(),
+        legend.background = element_rect(fill = NA)) +
+  ggrepel::geom_label_repel(
+    data = lm_salt.tTags.table %>% filter(bin >= 9 & Sfp == 'SFP.high'),
+    aes(label = Gene.Symbol),
+    size = 2, colour = 'black',
+    box.padding = unit(0.35, "lines"),  point.padding = unit(0.3, "lines"), max.overlaps = 20
+  ) +
+  ggrepel::geom_label_repel(
+    data = lm_salt.tTags.table %>% filter(threshold == 'SD' & Sfp == 'SFP.high'),
+    aes(label = Gene.Symbol),
+    size = 2, colour = 'black',
+    box.padding = unit(0.35, "lines"),  point.padding = unit(0.3, "lines"), max.overlaps = 20
+  ) +
+  #ggsave('figures/MAplot_Salt.pdf', height = 4.5, width = 4) +
+  NULL
+
+salt_ma
+
+```
+
+# Refined Sfp list {.tabset}
+Proteins that show no difference in abundance between treatments - i.e. proteins that putatively should be defined as sperm proteins rather than Sfps
+
+## High confidence Sfps remaining after PBST wash
+```{r}
+lrt.pbst_v_rest.tTags %>% filter(threshold != 'SD' & Sfp == 'SFP.high') %>% 
+  dplyr::select(FBgn, Name = NAME, Chromosome = LOCATION_ARM, Abundance = logCPM) %>% 
+  mutate(across(4, ~round(.x, 2))) %>% 
+  my_data_table()
+
+```
+
+## High confidence Sfps remaining after salt wash
+```{r}
+lm_salt.tTags.table %>% filter(threshold != 'SD' & Sfp == 'SFP.high') %>% 
+  dplyr::select(FBgn, Symbol = Gene.Symbol, Abundance = logCPM) %>% 
+  mutate(across(3, ~round(.x, 2))) %>% 
+  my_data_table()
+
+```
+
+## Overlap
+```{r}
+upset(
+  fromList(
+    list(PBST = lrt.pbst_v_rest.tTags$genes[lrt.pbst_v_rest.tTags$threshold != 'SD' & 
+                                              lrt.pbst_v_rest.tTags$Sfp == 'SFP.high'],
+         Salt = lm_salt.tTags.table$genes[lm_salt.tTags.table$threshold != 'SD' & 
+                                              lm_salt.tTags.table$Sfp == 'SFP.high'])))
+
+remaining_sfp <- data.frame(FBgn = unique(c(
+  lrt.pbst_v_rest.tTags$FBgn[lrt.pbst_v_rest.tTags$threshold != 'SD' & lrt.pbst_v_rest.tTags$Sfp == 'SFP.high'],
+  lm_salt.tTags.table$FBgn[lm_salt.tTags.table$threshold != 'SD' & lm_salt.tTags.table$Sfp == 'SFP.high']))) %>%
+  left_join(DmSP3, by = c('FBgn')) %>% 
+  mutate(NAME = if_else(NAME == '-', ANNOTATION_SYMBOL, NAME),
+         Abundance = log2(grand.mean))
+
+```
+
+## Sfps remaining after salt or detergent treatment 
+```{r}
+remaining_sfp %>% 
+  dplyr::select(FBgn, Symbol = NAME, Chromosome = LOCATION_ARM, Abundance) %>% 
+  mutate(across(4, ~round(.x, 2))) %>% 
+  arrange(desc(Abundance)) %>% 
+  my_data_table()
+
+```
+
+# FlyAtlas2 comparisons
+We downloaded gene expression data from [FlyAtlas2](https://flyatlas.gla.ac.uk/FlyAtlas2/index.html) (FPKM; fragments per kilobase of transcript per million mapped reads) for accessory glands, testis, and carcass. We also included female expression data for the ovary. We filtered genes with log2(FPKM) less than 2. We classified Sfps remaining in the DmSP3 after salt or detergent treatment as 'sperm associated Sfps' (SAS), and the remaining Sfps ans 'DmSP_Sfp'.
+
+```{r}
+flyatlas2_names <- c('Tissue',	
+                     'FPKM.m',	'SD.m',	'Enrichment.m',	
+                     'FPKM.f',	'SD.f',	'Enrichment.f',	
+                     'M.F',	'p.value',	'FPKM.mf',	'SD.mf',	'Enrichment.mf')
+
+flyatlas2 <- bind_rows(
+  read.delim('data/FlyAtlas2/FlyAtlas2_Acgs.txt', header = FALSE, na.strings = '-'),
+  read.delim('data/FlyAtlas2/FlyAtlas2_testis.txt', header = FALSE, na.strings = '-'),
+  read.delim('data/FlyAtlas2/FlyAtlas2_ovary.txt', header = FALSE, na.strings = '-')) %>% 
+  filter(!str_detect(V1, 'Name')) %>% 
+  rename_at(all_of(names(.)), ~ flyatlas2_names) %>% 
+  mutate(across(c(2:8, 10:12), ~as.numeric(.x)),
+         p.value = as.character(p.value)) %>% 
+  bind_rows(read.delim('data/FlyAtlas2/FlyAtlas2_carcass.txt', header = TRUE, na.strings = '-') %>% 
+              mutate(across(c(2:8, 10:12), ~as.numeric(.x)))) %>% 
+  mutate(FBgn = str_match(Tissue, "fbgn=(.*?)&t")[,2],
+         Tissue = gsub('.*:', '', x = Tissue),
+         across(2:12, ~as.numeric(.x)),
+         fpkm_mixed = if_else(Tissue == 'Ovary', FPKM.f, FPKM.m),
+         lfpkm = log(fpkm_mixed + 1, base = 2),
+         Sfp = case_when(FBgn %in% remaining_sfp$FBgn ~ 'SAS',
+                         FBgn %in% intersect(SFPs$FBgn, DmSP3$FBgn) ~ 'Sfp', 
+                         #FBgn %in% SFPs$FBgn ~ 'Sfp', 
+                         TRUE ~ 'other')) %>% 
+  left_join(DmSP3 %>% dplyr::select(FBgn, NAME, SYMBOL, grand.mean), by = 'FBgn') %>% 
+  # group_by(Tissue) %>%
+  # mutate(bin = ntile(lfpkm_mixed, 15)) %>% 
+  # ungroup() %>%
+  # filter(bin > 2) %>%
+  filter(FBgn %in% DmSP3$FBgn) 
+
+```
+
+## Gene expression in each tissue
+```{r}
+flyatlas2 %>% 
+  filter(fpkm_mixed > 2) %>% 
+  ggplot(aes(x = Sfp, y = lfpkm, fill = Tissue)) +
+  geom_boxplot(notch = TRUE) +
+  scale_fill_viridis_d(direction = -1) +
+  NULL
+
+flyatlas2 %>% 
+  filter(fpkm_mixed > 2) %>% 
+  ggplot(aes(x = lfpkm, y = Tissue, fill = Tissue)) +
+  ggridges::geom_density_ridges() +
+  scale_fill_viridis_d(direction = -1) +
+  facet_wrap(~ Sfp) +
+  theme_bw() +
+  theme(legend.position = '') +
+  NULL
+
+```
+
+```{r}
+flyatlas2 %>% 
+  filter(fpkm_mixed > 2) %>% 
+  group_by(Tissue) %>%
+  do(fit = broom::tidy(kruskal.test(lfpkm ~ Sfp, data = .))) %>% 
+  unnest(fit) %>% 
+  mutate(p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, 3))) %>% 
+  #dplyr::select(`Gene set`, Statistic = statistic, p.value) %>% 
+  kable(digits = 3, 
+        caption = 'Difference in expression between Sfp classes - per tissue') %>% 
+  kable_styling(full_width = FALSE)
+
+flyatlas2 %>% 
+  filter(fpkm_mixed > 2) %>% 
+  group_by(Tissue) %>%
+  do(fit = broom::tidy(pairwise.wilcox.test(.$lfpkm, .$Sfp))) %>% 
+  unnest(fit) %>% 
+  mutate(p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, 3))) %>% 
+  kable(digits = 3, 
+        caption = 'Model fits') %>% 
+  kable_styling(full_width = FALSE)
+
+flyatlas2 %>% 
+  filter(fpkm_mixed > 2) %>% 
+  group_by(Sfp) %>%
+  do(fit = broom::tidy(kruskal.test(lfpkm ~ Tissue, data = .))) %>% 
+  unnest(fit) %>% 
+  mutate(p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, 3))) %>% 
+  dplyr::select(-method) %>% 
+  kable(digits = 3, 
+        caption = 'Kruskal-Wallace rank sum tests for difference in expression between tissues') %>% 
+  kable_styling(full_width = FALSE)
+
+flyatlas2 %>% 
+  filter(fpkm_mixed > 2) %>% 
+  group_by(Sfp) %>%
+  do(fit = broom::tidy(pairwise.wilcox.test(.$lfpkm, .$Tissue))) %>% 
+  unnest(fit) %>% 
+  mutate(p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, 3))) %>% 
+  kable(digits = 3, 
+        caption = 'Pairwise Wilcoxen rank-sum tests') %>% 
+  kable_styling(full_width = FALSE)
+
+```
+
+## Compare gene expression between accessory glands and testis
+```{r}
+flyatlas2 %>%
+  filter(Tissue == 'Accessory glands' | Tissue == 'Testis') %>%
+  dplyr::select(Tissue, FBgn, lfpkm, Sfp) %>%
+  ggplot(aes(x = Tissue, y = lfpkm)) +
+  geom_line(alpha = .5, aes(group = FBgn)) +
+  stat_halfeye(alpha = .5, aes(fill = Tissue)) +
+  stat_pointinterval() +
+  facet_wrap(~Sfp, nrow = 1) +
+  theme_bw() +
+  theme(legend.position = '') +
+  NULL
+
+```
+
+## ‘Sperm associated Sfps’  with higher expression in testis than accessory glands.
+```{r}
+flyatlas2 %>%
+  filter(Tissue == 'Accessory glands' | Tissue == 'Testis') %>%
+  dplyr::select(Tissue, FBgn, lfpkm, Sfp, NAME) %>%
+  pivot_wider(names_from = Tissue, values_from = lfpkm) %>%
+  filter(Testis > `Accessory glands`, Sfp == 'SAS') %>% 
+  dplyr::select(-Sfp) %>% 
+  mutate(across(3:4, ~round(.x, 2))) %>% 
+  my_data_table()
+
+```
+
+## Abundance of proteins with higher expression in the testis
+```{r}
+testis_expr <- c(flyatlas2 %>%
+  filter(Tissue == 'Accessory glands' | Tissue == 'Testis') %>%
+  dplyr::select(Tissue, FBgn, lfpkm, Sfp, NAME) %>%
+  pivot_wider(names_from = Tissue, values_from = lfpkm) %>%
+  filter(Testis > `Accessory glands`, Sfp == 'SAS') %>% pull(FBgn))
+
+DmSP3 %>% 
+  mutate(testis_expr = if_else(FBgn %in% testis_expr, 'testis', 'other')) %>% 
+  filter(grand.mean > 0) %>% 
+  ggplot(aes(x = testis_expr, y = log2(grand.mean))) +
+  geom_boxplot() +
+  #geom_jitter(alpha = .5, aes(colour = testis_expr)) +
+  labs(x = 'XXX', y = 'log2(Protein abundance)') +
+  #scale_colour_viridis_d(direction = -1) +
+  theme_bw() +
+  theme(legend.position = '',
+        axis.title.x = element_blank()) +
+  NULL
+
+```
+
+## Heatmaps
+```{r}
+# make DF
+fa2wide <- flyatlas2 %>% 
+  dplyr::select(FBgn, Tissue, NAME, SYMBOL, Sfp, lfpkm) %>% 
+  pivot_wider(names_from = Tissue, values_from = lfpkm) %>% 
+  left_join(DmSP3 %>% dplyr::select(FBgn, grand.mean)) %>% 
+  mutate(prot = log2(grand.mean + 1))
+
+# remove rows with all 0's
+keep.wide <- rowSums(fa2wide[, 5:8] > 0) >= 1
+wide.Filtered <- fa2wide[keep.wide, ]
+
+mat_scaled <- t(apply(wide.Filtered[, 5:8], 1, scale))
+
+colnames(mat_scaled) <- colnames(fa2wide[, 5:8])
+
+labs1 <- rowAnnotation(Sfp_class = fa2wide$Sfp[keep.wide],
+                       col = list(Sfp_class = c(other = NA,
+                                                SAS = 'red', 
+                                                Sfp = 'blue')),
+                       Sfp_labs = anno_mark(at = c(grep(paste(testis_expr, collapse = '|'), 
+                                                        x = fa2wide$FBgn[keep.wide])), 
+                                            labels = data.frame(
+                                              FBgn = testis_expr) %>% 
+                                              left_join(flybase_results) %>% 
+                                              pull(SYMBOL),
+                                            labels_gp = gpar(fontsize = 10)),
+                       title = NULL,
+                       show_annotation_name = FALSE)
+
+# cat_lab1 <- rowAnnotation(clust_lab = sub_grp,
+#                           col = list(clust_lab = c(`1` = cbPalette[2],
+#                                                    `2` = cbPalette[3])),
+#                           title = NULL)
+
+ha <- HeatmapAnnotation(Tissue = anno_block(gp = gpar(fill = viridis::viridis(n = 4)),
+                                            labels = c('Testis', 'Carcass',
+                                                       'Accessory\nglands', 
+                                                       'Ovary'), 
+                                            labels_gp = gpar(col = c('white', 'white', 
+                                                                     'black', 'black'), 
+                                                                fontsize = 10)))
+
+fa2_heatmap <- Heatmap(mat_scaled, 
+        col = viridis::inferno(15),
+        heatmap_legend_param = list(title = "log2(FPKM)",
+                                    title_position = "leftcenter-rot"),
+        right_annotation = labs1,
+        #left_annotation = cat_lab1,
+        top_annotation = ha, 
+        show_row_names = FALSE, 
+        show_column_names = FALSE, 
+        #row_split = 2,
+        column_split = 4,
+        column_gap = unit(0, "mm"),
+        row_title = NULL,
+        column_title = NULL)
+
+#pdf('figures/heatmap_flyatlas2.pdf', height = 7, width = 5)
+fa2_heatmap
+#dev.off()
+
+
+# make DF
+sfps_wide <- flyatlas2 %>% 
+  filter(Sfp != 'other') %>% 
+  dplyr::select(FBgn, Tissue, NAME, SYMBOL, Sfp, lfpkm) %>% 
+  pivot_wider(names_from = Tissue, values_from = lfpkm)
+
+sfp_scaled <- t(apply(sfps_wide[, 5:8], 1, scale))
+
+colnames(sfp_scaled) <- colnames(sfps_wide[, 5:8])
+
+labs2 <- rowAnnotation(Sfp_class = sfps_wide$Sfp,
+                       col = list(Sfp_class = c(other = NA,
+                                        SAS = 'red', 
+                                        Sfp = 'blue')),
+                       Sfp_labs = anno_mark(at = c(grep('SAS', x = sfps_wide$Sfp)), 
+                                            labels = sfps_wide$SYMBOL[sfps_wide$Sfp == 'SAS'],
+                                            labels_gp = gpar(fontsize = 5)),
+                       title = NULL,
+                       show_annotation_name = FALSE)
+
+
+ha2 <- HeatmapAnnotation(Tissue = anno_block(gp = gpar(fill = viridis::viridis(n = 4)),
+                                            labels = c('Accessory\nglands',
+                                                       'Ovary', 'Testis', 'Carcass'), 
+                                            labels_gp = gpar(col = c('white', 'white', 
+                                                                     'black', 'black'), 
+                                                                fontsize = 10)))
+
+#pdf('figures/heatmap_sfp_expr.pdf', height = 8, width = 5)
+Heatmap(sfp_scaled, 
+        col = viridis::inferno(100),
+        heatmap_legend_param = list(title = "log2(FPKM)",
+                                    title_position = "leftcenter-rot"),
+        right_annotation = labs2,
+        #left_annotation = cat_lab1,
+        top_annotation = ha2, 
+        show_row_names = FALSE, 
+        show_column_names = FALSE, 
+        row_split = 2,
+        column_split = 4,
+        column_gap = unit(0, "mm"),
+        row_title = NULL,
+        column_title = NULL)
+#dev.off()
+
+```
+
+## Protein abundance - gene expression correlations {.tabset}
+We tested whether protein abundance from out datasets correlated with gene expression for (i) all proteins/genes and (ii) only sperm associated Sfps (SAS) or remaining Sfps. We scaled expression and abundance data to have mean 0 and unit variance and fit linear regressions separately for each tissue type. 
+
+### All proteins {.tabset}
+```{r}
+scaled_dat <- flyatlas2 %>% 
+  filter(grand.mean > 0, fpkm_mixed > 2) %>% 
+  group_by(Tissue) %>%
+  mutate(bin = ntile(lfpkm, 15)) %>%
+  ungroup() %>%
+  filter(bin > 2) %>%
+  mutate(scaled_prot = scale(log2(grand.mean + 1)),
+         scaled_expr = scale(lfpkm))
+
+# plot
+scaled_dat %>% 
+  ggplot(aes(x = scaled_expr, y = scaled_prot)) +
+  geom_abline(slope = 1, intercept = 0, lty = 2) +
+  geom_point(aes(colour = Tissue)) + 
+  geom_smooth(method = 'lm', se = FALSE) +
+  ggpubr::stat_cor(method = 'p', p.accuracy = 0.001) +
+  labs(x = 'log2(FPKM)', y = 'log2(Protein abundance)') +
+  scale_colour_manual(values = viridis(n = 4)[c(3, 2, 4, 1)]) +
+  #scale_colour_viridis_d(direction = -1) +
+  facet_wrap(~factor(Tissue, levels = c('Testis', 'Carcass', 'Accessory glands', 'Ovary')), 
+             nrow = 1) +
+  theme_bw() +
+  theme(legend.position = '') +
+  #ggsave('figures/cor_prot_expr.pdf', height = 3.5, width = 12) +
+  NULL
+```
+
+#### Diagnostic plots {.tabset}
+##### residual vs. fitted
+```{r, fig.width=9, fig.height=7}
+scaled_dat %>% group_by(Tissue) %>%
+  do(fit = broom::augment(lm(scaled_prot ~ scaled_expr, data = .))) %>% 
+  unnest(fit) %>% 
+  ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_smooth(colour = 'red', se = FALSE) +
+  facet_wrap(~Tissue, scales = 'free')
+
+```
+
+##### Scale location
+```{r, fig.width=9, fig.height=7}
+scaled_dat %>% group_by(Tissue) %>%
+  do(fit = broom::augment(lm(scaled_prot ~ scaled_expr, data = .))) %>% 
+  unnest(fit) %>% 
+  ggplot(aes(x = .fitted, y = sqrt(abs(.std.resid)))) +
+  geom_point() +
+  geom_smooth(colour = 'red', se = FALSE) +
+  facet_wrap(~Tissue, scales = 'free')
+
+```
+
+##### QQ plot
+```{r, fig.width=9, fig.height=7}
+scaled_dat %>% group_by(Tissue) %>%
+  do(fit = broom::augment(lm(scaled_prot ~ scaled_expr, data = .))) %>% 
+  unnest(fit) %>% 
+  ggplot(aes(sample = .std.resid)) + 
+  stat_qq() + geom_abline(slope = 1) + 
+  facet_wrap(~Tissue, scales = 'free')
+
+```
+
+##### Residuals vs leverage
+```{r, fig.width=9, fig.height=7}
+scaled_dat %>% group_by(Tissue) %>%
+  do(fit = broom::augment(lm(scaled_prot ~ scaled_expr, data = .))) %>% 
+  unnest(fit) %>% 
+  ggplot(aes(x = .hat, y = .std.resid)) +
+  geom_point() +
+  geom_smooth(colour = 'red', se = FALSE) +
+  facet_wrap(~Tissue, scales = 'free')
+
+```
+
+#### Model fits
+```{r}
+all_cor <- scaled_dat %>% group_by(Tissue) %>%
+  do(fit = broom::glance(lm(scaled_prot ~ scaled_expr, data = .))) %>% 
+  unnest(fit) %>% 
+  mutate(p.value = ifelse(p.value < 0.001, '< 0.001', paste0('= ', round(p.value, 3)))) %>% 
+  dplyr::select(-adj.r.squared, -sigma, -c(df:df.residual)) %>% 
+  left_join(scaled_dat %>% group_by(Tissue) %>%
+              do(fit = broom::tidy(lm(scaled_prot ~ scaled_expr, data = .))) %>% 
+              unnest(fit) %>% 
+              filter(term == 'scaled_expr') %>% 
+              dplyr::select(-statistic, -p.value),
+            by = 'Tissue')
+
+all_cor %>% 
+  dplyr::select(-term) %>% 
+  kable(digits = 3, 
+        caption = 'Model estimates') %>% 
+  kable_styling(full_width = FALSE)
+
+# plot
+cor_prot_expr <- scaled_dat %>% 
+  ggplot(aes(x = scaled_expr, y = scaled_prot)) +
+  geom_abline(slope = 1, intercept = 0, lty = 2) +
+  geom_point(aes(colour = Tissue)) + 
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = 'log2(FPKM)', y = 'log2(Protein abundance)') +
+  scale_colour_manual(values = viridis(n = 4)[c(3, 2, 4, 1)]) +
+  facet_wrap(~factor(Tissue, levels = c('Testis', 'Carcass', 'Accessory glands', 'Ovary')), 
+             nrow = 1) +
+  theme_bw() +
+  theme(legend.position = '',
+        axis.title.x = element_blank()) +
+  geom_text(data = all_cor,
+             aes(x = 2, y = -1, 
+                 label = paste0('rho = ', round(estimate, 3), 
+                                '\nR^2 = ', round(r.squared, 3), 
+                                '\np ', p.value)),
+             hjust = 'left', vjust = 1, size = 3) + 
+  #ggsave('figures/cor_prot_expr.pdf', height = 3.5, width = 12) +
+  NULL
+
+cor_prot_expr
+
+```
+
+### Sfps only
+```{r}
+scaled_dat %>% 
+  filter(Sfp != 'other') %>% 
+  ggplot(aes(x = scaled_expr, y = scaled_prot)) +
+  geom_abline(slope = 1, intercept = 0, lty = 2) +
+  geom_point(aes(colour = Tissue)) + 
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = 'log2(FPKM)', y = 'log2(Protein abundance)') +
+  scale_colour_manual(values = viridis(n = 4)[c(3, 2, 4, 1)]) +
+  facet_grid(Sfp~factor(Tissue, levels = c('Testis', 'Carcass', 'Accessory glands', 'Ovary'))) +
+  theme_bw() +
+  theme(legend.position = '') +
+  NULL
+
+sfp_cor <- scaled_dat %>% 
+  filter(Sfp != 'other') %>% 
+  group_by(Sfp, Tissue) %>%
+  do(fit = broom::glance(lm(scaled_prot ~ scaled_expr, data = .))) %>% 
+  unnest(fit) %>% 
+  mutate(p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, 3))) %>% 
+  dplyr::select(-adj.r.squared, -sigma, -c(df:df.residual)) %>% 
+  left_join(scaled_dat %>% 
+              filter(Sfp != 'other') %>% 
+              group_by(Sfp, Tissue) %>%
+              do(fit = broom::tidy(lm(scaled_prot ~ scaled_expr, data = .))) %>% 
+              unnest(fit) %>% 
+              dplyr::select(-statistic, -p.value) %>% 
+              filter(term == 'scaled_expr'),
+            by = c('Sfp', 'Tissue')) %>% 
+  dplyr::select(-term)
+
+sfp_cor %>% 
+  kable(digits = 3, 
+        caption = 'Model summaries') %>% 
+  kable_styling(full_width = FALSE)
+
+Sfp_prot_expr <- scaled_dat %>% 
+  filter(Sfp != 'other') %>% 
+  ggplot(aes(x = scaled_expr, y = scaled_prot)) +
+  geom_abline(slope = 1, intercept = 0, lty = 2) +
+  geom_point(aes(colour = Tissue)) + 
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = 'log2(FPKM)', y = 'log2(Protein abundance)') +
+  scale_colour_manual(values = viridis(n = 4)[c(3, 2, 4, 1)]) +
+  facet_grid(Sfp~factor(Tissue, levels = c('Testis', 'Carcass', 'Accessory glands', 'Ovary'))) +
+  theme_bw() +
+  theme(legend.position = '') +
+  geom_text(data = sfp_cor,
+             aes(x = 2, y = -1, 
+                 label = paste0('rho = ', round(estimate, 3), 
+                                '\nR^2 = ', round(r.squared, 3), 
+                                '\np ', p.value)),
+             hjust = 'left', vjust = 1, size = 3) + 
+  #ggsave('figures/Sfp_prot_expr.pdf', height = 4, width = 8) +
+  NULL
+
+Sfp_prot_expr
+
+```
+
+### Accessory glands vs. Testis only
+```{r}
+scaled_dat %>% 
+  filter(Sfp != 'other', Tissue == 'Accessory glands' | Tissue == 'Testis') %>% 
+  ggplot(aes(x = scaled_expr, y = scaled_prot, colour = Tissue)) +
+  geom_abline(slope = 1, intercept = 0, lty = 2) +
+  geom_point() + 
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = 'Gene expression (FPKM)', y = 'Protein abundance') +
+  scale_colour_manual(values = viridis(n = 4)[c(3, 1)]) +
+  facet_wrap(~ Sfp) +
+  theme_bw() +
+  theme(legend.position = 'bottom') +
+  geom_text(data = sfp_cor %>% filter(Tissue == 'Accessory glands' | Tissue == 'Testis'),
+             aes(x = c(1.5, 3, -1, 0.5), y = c(-1.25, -1.25, 3, 3), 
+                 label = paste0('rho = ', round(estimate, 3), 
+                                '\nR^2 = ', round(r.squared, 3), 
+                                '\np = ', p.value)),
+             hjust = 'left', vjust = 1, size = 4, show.legend = FALSE) + 
+  #ggsave('figures/Sfp_prot_expr_ag-te.pdf', height = 5, width = 8) +
+  NULL
+
+```
+
+### Combined plot
+```{r}
+#pdf('figures/fly_atlas_cors.pdf', height = 7, width = 8)
+gridExtra::grid.arrange(#fa2_heatmap, 
+                        cor_prot_expr,
+                        Sfp_prot_expr, 
+                        layout_matrix = rbind(c(1, 1, 1),
+                                              c(2, 2, 2),
+                                              c(2, 2, 2))
+                        )
+#dev.off()
+
+```
+
+# Evolutionary rates {.tabset}
+Here we import the results of an evolutionary rates analysis from [PAML](http://abacus.gene.ucl.ac.uk/software/paml.html) generated using a custom pipeline [Wright et al. (2015) *Molecular Ecology*](https://onlinelibrary.wiley.com/doi/abs/10.1111/mec.13113). We downloaded coding sequence (CDS) files for *D. melanogaster*, *D. sechellia*, *D. simulans*, and *D. yakuba*, and the protein coding sequence for *D. melanogaster* from [Ensembl](https://www.ensembl.org/index.html). We then identified the longest isoform of each gene and found reciprocal 1:1 orthologs. We aligned orthologs using [PRANK](https://www.ebi.ac.uk/research/goldman/software/prank) and masked poorly aligned reads using [SWAMP](https://journals.sagepub.com/doi/10.4137/EBO.S18193). We then calculated the ratio of nonsynoymous nucleotide substitutions (dN) to synonymous nucleotide substitutions (dS) for each gene using the one ratio test in CODEML (model 0). Finally, we filtered genes with dS < 2 and S*dS <= 1.
+
+```{r}
+one_ratio <- read.csv('output/PAML/oneRatio_SWAMP_nofilter.csv') %>% 
+  # filter dS < 2...
+  filter(dS < 2) %>% 
+  # filter S x dS <= 1
+  filter(S.dS >= 1) %>% 
+  # get FBgn from FBtr
+  left_join(gene2tran2prot, by = 'FBtr') %>%
+  # get chromosome
+  left_join(flybase_results %>% dplyr::select(FBgn, LOCATION_ARM, SYMBOL), 
+            by = c('FBgn')) %>% 
+  # get the FBgn to convert to gene names
+  #write_csv('data/one_ratio_wFBgn.csv') %>% 
+  distinct(FBgn, .keep_all = TRUE) %>% 
+  mutate(sperm_protein = case_when(FBgn %in% DmSP3$FBgn ~ 'Sperm', TRUE ~ 'Non-sperm'),
+         x_linked = case_when(LOCATION_ARM == 'X' ~ 'X-linked', TRUE ~ 'other'),
+         y_linked = case_when(LOCATION_ARM == 'Y' ~ 'Y-linked', TRUE ~ 'other'), # non
+         #ribosome = case_when(FBgn %in% all_rib$FBgn ~ 'Ribosomal', TRUE ~ 'other'),
+         Sfp = case_when(FBgn %in% SFPs$FBgn ~ 'Sfp', TRUE ~ 'other')) %>% 
+  # bin evo rates - each bin contains same number of genes - higher bin = higher rate
+  mutate(bin = ntile(dN.dS, 10))
+
+```
+
+## Sperm genes with dN/dS > 1
+```{r}
+one_ratio %>% 
+  filter(sperm_protein == 'Sperm' & dN.dS > 1)
+
+```
+
+We compared $\omega$ between groups of genes found in the sperm proteome compared to 'all' genes in the genome (n = 11457). Each group represents an independent set of genes such that 'Sfps' found in the sperm proteome are only in SpermP. Likewise, X_link are not included in SpermP, etc. The dashed line represents the genome average dN/dS.
+
+```{r}
+# Mann-Whitney U tests - sperm proteins vs. other in genome
+# all proteins
+wilcox.test(one_ratio$dN.dS[one_ratio$sperm_protein == 'Sperm'], 
+            one_ratio$dN.dS[one_ratio$sperm_protein == 'Non-sperm'])
+
+# sfps
+wilcox.test(one_ratio$dN.dS[one_ratio$Sfp == 'Sfp' & one_ratio$sperm_protein == 'Non-sperm'], 
+            one_ratio$dN.dS[one_ratio$Sfp == 'Sfp' & one_ratio$sperm_protein == 'Sperm'])
+
+# x-linked
+wilcox.test(one_ratio$dN.dS[one_ratio$x_linked == 'X-linked' & one_ratio$sperm_protein == 'Non-sperm'], 
+            one_ratio$dN.dS[one_ratio$x_linked == 'X-linked' & one_ratio$sperm_protein == 'Sperm'])
+
+```
+
+## Sperm proteins vs. other
+```{r, fig.height=4, fig.width=5}
+# boxplots
+bind_rows(#one_ratio %>% mutate(gene_set = 'Ribosomal') %>% filter(ribosome == 'Ribosomal'),
+          one_ratio %>% mutate(gene_set = 'Sfp') %>% filter(Sfp == 'Sfp'),
+          one_ratio %>% mutate(gene_set = 'X-linked') %>% filter(x_linked == 'X-linked'),
+          one_ratio %>% mutate(gene_set = 'All')) %>% 
+  ggplot(aes(x = gene_set, y = dN.dS, fill = sperm_protein)) +
+  geom_boxplot(notch = TRUE, outlier.shape = 1) +
+  theme_bw() +
+  scale_fill_manual(values = cbPalette[-1]) +
+  labs(x = 'Gene set', y = 'dN/dS') +
+  theme(legend.position = 'bottom',#c(0.8, 0.9),
+        legend.title = element_blank(),
+        legend.background = element_blank()) +
+    guides(fill = guide_legend(label.position = "left", label.hjust = 1)) +
+  geom_signif(
+    y_position = rep(1.6, 3),
+    xmin = c(0.8, 1.8, 2.8),
+    xmax = c(1.2, 2.2, 3.2),
+    annotation = c("***", "n.s.", "***"), tip_length = 0.01) +
+  #ggsave('figures/sperm_rates_all.vs.all.pdf', height = 4.5, width = 4) +
+  NULL
+
+# sperm rates only
+sperm_rates <- one_ratio %>% 
+  filter(sperm_protein == 'Sperm') %>% 
+  mutate(sperm_bin = ntile(dN.dS, 10),
+         Sfp = if_else(FBgn %in% remaining_sfp$FBgn, 'Sfp', 'other'),
+         OMIM = if_else(FBgn %in% intersect(DmSP3$FBgn, unique(OMIM$FBgn[is.na(OMIM$OMIM_Phenotype_IDs) == FALSE])), 'omim', 'other'))
+
+# write_csv(sperm_rates %>% filter(sperm_bin == 10), file = 'output/GO_lists/fast_sperm.csv')
+# write_csv(sperm_rates %>% filter(sperm_bin == 1), file = 'output/GO_lists/slow_sperm.csv')
+
+sperm_rates2 <- bind_rows(sperm_rates %>% mutate(gene_set = 'OMIM') %>% filter(OMIM == 'omim'),
+                          sperm_rates %>% mutate(gene_set = 'Sfp') %>% filter(Sfp == 'Sfp'),
+                          sperm_rates %>% mutate(gene_set = 'X-linked') %>% filter(x_linked == 'X-linked'),
+                          sperm_rates %>% mutate(gene_set = 'All'))
+
+```
+
+## Sperm rates
+```{r, fig.height=4, fig.width=4}
+## boxplots
+# sperm_rates2 %>% 
+#   ggplot(aes(x = gene_set, y = dN.dS, fill = gene_set)) + 
+#   geom_boxplot(notch = TRUE, outlier.shape = 1) +
+#   theme_bw() +
+#   scale_fill_manual(values = cbPalette) +
+#   labs(x = 'Gene set', y = 'dN/dS') +
+#   theme(legend.position = '',
+#         legend.title = element_blank(),
+#         legend.background = element_blank()) + 
+#   geom_text(data = sperm_rates2 %>% 
+#               group_by(gene_set) %>% dplyr::count(), 
+#             aes(y = -0.05, label = n), size = 5, colour = "black") +
+#   ggpubr::stat_compare_means(ref.group = 'All', method = "t.test", label = "p.signif") +
+#   NULL
+
+bind_rows(broom::tidy(wilcox.test(sperm_rates$dN.dS[sperm_rates$OMIM == 'omim'], 
+            sperm_rates$dN.dS[sperm_rates$OMIM != 'omim'])),
+          broom::tidy(wilcox.test(sperm_rates$dN.dS[sperm_rates$Sfp == 'Sfp'], 
+            sperm_rates$dN.dS[sperm_rates$Sfp != 'Sfp'])),
+          broom::tidy(wilcox.test(sperm_rates$dN.dS[sperm_rates$x_linked == 'X-linked'], 
+            sperm_rates$dN.dS[sperm_rates$x_linked != 'X-linked']))) %>% 
+  mutate(`Gene set` = c('OMIM', 'Sfp', 'X-linked'),
+         p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, 3))) %>% 
+  dplyr::select(`Gene set`, Statistic = statistic, p.value) %>% 
+  kable(digits = 3, 
+        caption = 'Wilcoxon rank sum test with continuity correction testing difference in evolutionary rates between each set of genes to the genome average') %>% 
+  kable_styling(full_width = FALSE)
+
+```
+
+## Means and standard errors
+```{r, fig.height=4, fig.width=4}
+# means ± SE
+rates_plot <- sperm_rates2 %>% 
+  group_by(gene_set) %>% 
+  summarise(N = n(),
+            mn = mean(dN.dS),
+            se = sd(dN.dS)/sqrt(N)) %>% 
+  ggplot(aes(x = gene_set, y = mn, colour = gene_set)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = mn - se, ymax = mn + se), width = .35) +
+  geom_hline(yintercept = mean(one_ratio$dN.dS), lty = 2) +
+  scale_colour_manual(values = cbPalette) +
+  labs(x = 'Gene set', y = 'dN/dS') +
+  theme_bw() + 
+  theme(legend.position = '',
+        legend.title = element_blank(),
+        legend.background = element_blank()) + 
+  geom_text(aes(y = 0.05, label = N), size = 5, colour = "black") +
+  geom_signif(y_position = 0.22, xmin = 1, xmax = 2, annotation = "***", tip_length = 0.01, colour = 'black') +
+  geom_signif(y_position = 0.23, xmin = 1, xmax = 3, annotation = "***", tip_length = 0.01, colour = 'black') +
+  geom_signif(y_position = 0.24, xmin = 1, xmax = 4, annotation = "n.s.", tip_length = 0.01, colour = 'black') +
+  #ggsave('figures/sperm_rates_mn.pdf', height = 3, width = 3) +
+  NULL
+
+rates_plot
+
+# after Alison Wright...
+# For each genomic category, mean dN and mean dS were calculated as the sum of the number of substitutions across all contigs in a given category divided by the number of sites 
+# (dN = sum DN/sum N, dS = sum DS/sum S, where DN/S is an estimate of the number of nonsynonymous/synonymous substitutions and N/S is the number of nonsynonymous/synonymous sites). 
+
+sperm_rates2 %>% 
+  #mutate(subs = N + S) %>% 
+  group_by(gene_set) %>% 
+  summarise(n = n(),
+            d_N = mean(dN),
+            d_S = mean(dS),
+            omega = mean(d_N/dS),
+            se = sd(d_N/dS)/sqrt(n)) %>% 
+  ggplot(aes(x = gene_set, y = omega, colour = gene_set)) +
+  geom_hline(yintercept = mean(one_ratio$dN.dS), lty = 2) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = omega - se, ymax = omega + se), width = .5) +
+  scale_colour_manual(values = cbPalette) +
+  labs(x = 'Gene set', y = 'dN/dS') +
+  theme_bw() + 
+  theme(legend.position = '',
+        legend.title = element_blank(),
+        legend.background = element_blank()) +
+  geom_signif(y_position = 0.22, xmin = 1, xmax = 2, annotation = "***", tip_length = 0.01, colour = 'black') +
+  geom_signif(y_position = 0.23, xmin = 1, xmax = 3, annotation = "***", tip_length = 0.01, colour = 'black') +
+  geom_signif(y_position = 0.24, xmin = 1, xmax = 4, annotation = "n.s.", tip_length = 0.01, colour = 'black') +
+  NULL
+
+```
+
+# Compare experiments {.tabset}
+## Exp 1 vs. Exp 2
+```{r, fig.height=4, fig.width=4}
+# plot exp 1 abundance vs. exp 2 no halt (PBS) abundance
+one_v_two <- DmSP3 %>% 
+  filter(mn.one > 0, mn.two > 0) %>% 
+  dplyr::select(mn.one, mn.two) %>% 
+  # left_join(data.frame(Accession = glm_hn$genes,
+  #                      AveLogCPM = glm_hn$AveLogCPM) %>% 
+  #             dplyr::select(Accession = genes, AveLogCPM), by = 'Accession') %>% 
+  ggplot(aes(x = log2(mn.one), y = log2(mn.two))) + 
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  labs(x = 'Experiment 1', y = 'Experiment 2') +
+  theme_bw() + 
+  theme(legend.position = '') +
+  stat_cor(aes(label = paste(..r.label.., ..rr.label.., ..p.label.., sep = "~`,`~")), method = 'p') +
+  NULL
+
+one_v_two
+
+```
+
+## Exp 1 vs. Exp 3
+```{r, fig.height=4, fig.width=4}
+# plot exp 1 abundance vs. exp 3 abundance
+one_v_three <- DmSP3 %>% 
+  filter(mn.one > 0, mn.three > 0) %>% 
+  dplyr::select(mn.one, mn.three) %>% 
+  #left_join(lm_salt.tTags.table %>% dplyr::select(Accession = genes, logCPM), by = 'Accession') %>% 
+  ggplot(aes(x = log2(mn.one), y = log2(mn.three))) + 
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  labs(x = 'Experiment 1', y = 'Experiment 3') +
+  theme_bw() + 
+  theme(legend.position = '') +
+  stat_cor(aes(label = paste(..r.label.., ..rr.label.., ..p.label.., sep = "~`,`~")), method = 'p') +
+  NULL
+
+one_v_three
+
+```
+
+## Exp 2 vs. Exp 3
+```{r, fig.height=4, fig.width=4}
+# plot exp 2 abundance vs. exp 3 abundance
+two_v_three <- DmSP3 %>% 
+  filter(mn.two > 0, mn.three > 0) %>% 
+  dplyr::select(mn.two, mn.three) %>% 
+  # data.frame(Accession = glm_hn$genes,
+  #          AveLogCPM = glm_hn$AveLogCPM) %>% 
+  #             dplyr::select(Accession = genes, AveLogCPM) %>% 
+  # left_join(lm_salt.tTags.table %>% dplyr::select(Accession = genes, logCPM), by = 'Accession') %>% 
+  ggplot(aes(x = log2(mn.two), y = log2(mn.three))) + 
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  labs(x = 'Experiment 2', y = 'Experiment 3') +
+  theme_bw() + 
+  theme(legend.position = '') +
+  stat_cor(aes(label = paste(..r.label.., ..rr.label.., ..p.label.., sep = "~`,`~")), method = 'p') +
+  NULL
+
+two_v_three
+
+```
+
+# Make combined plots {.tabset}
+
+## Representation/numbers
+```{r}
+#pdf('figures/ID_plot.pdf', height = 5, width = 9)
+gridExtra::grid.arrange(#cum_plot, 
+                        DmSP_overlap,
+                        omim_plot, ncol = 2
+                        # layout_matrix = rbind(c(1, 1, 1, 1, 2, 2),
+                        #                       c(1, 1, 1, 1, 2, 2),
+                        #                       c(1, 1, 1, 1, 3, 3),
+                        #                       c(1, 1, 1, 1, 3, 3))
+                        )
+#dev.off()
+
+```
+
+## Correlation between experiemnts
+```{r, fig.height=3.5, fig.width=10}
+#pdf('figures/corr_plot.pdf', height = 4, width = 12)
+gridExtra::grid.arrange(one_v_two, one_v_three, two_v_three, ncol = 3)
+#dev.off()
+
+```
+
+## Ribosome plot
+```{r}
+#pdf('figures/rib_combined.pdf', height = 6, width = 9)
+gridExtra::grid.arrange(rib_plot,
+                        rib_br_sp,
+                        ribo_abun,
+                        layout_matrix = rbind(c(3, 1, 1),
+                                              c(2, 1, 1)))
+#dev.off()
+
+```
+
+## Chromosomal comparisons
+```{r}
+#pdf('figures/chm_combined.pdf', height = 5, width = 12)
+gridExtra::grid.arrange(grobs = list(ggplotGrob(chm_plot),
+                                     ggplotGrob(axy_plot)),
+                        layout_matrix = rbind(c(1, 1, 1, 2, 2),
+                                              c(1, 1, 1, 2, 2)))
+#dev.off()
+
+```
+
+## Evolutionary dynamics plot
+```{r}
+#pdf('figures/evo_combined.pdf', height = 5, width = 12)
+gridExtra::grid.arrange(grobs = list(ggplotGrob(age_plot),
+                                     ggplotGrob(rates_plot)),
+                        layout_matrix = rbind(c(1, 1, 1, 2, 2),
+                                              c(1, 1, 1, 2, 2)))
+#dev.off()
+
+```
+
+## Sfp plot
+```{r, fig.height=4, fig.width=10}
+#pdf('figures/sfp_combined.pdf', height = 4, width = 12)
+gridExtra::grid.arrange(sfp_abun, 
+                        #sfp_euler, 
+                        pbst_volcano + theme(legend.position = ''), 
+                        salt_ma + theme(legend.position = ''),
+                        ncol = 3)
+#dev.off()
+
+```
