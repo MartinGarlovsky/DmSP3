@@ -310,7 +310,7 @@ DmSP3 <- tibble(
 #   #write_csv('output/DmSP_which_proteome.csv')
 
 # write FBgn to file for GO analysis
-#DmSP3 %>% dplyr::select(FBgn) %>% write_csv('output/GO_lists/DmSP3_3177.csv')
+#DmSP3 %>% dplyr::select(FBgn) %>% write_csv('output/GO_lists/DmSP3_3176.csv')
 
 # number identified by two or more unique peptides in a single experiment
 #DmSP3 %>% filter(comb.peps == 'confident') %>% dim
@@ -477,7 +477,7 @@ chm_plot <- chm_dist %>%
         legend.text = element_text(size = 10),
         strip.text.y = element_text(face = "italic")) +
   geom_text(aes(label = sigLabel), 
-            size = 5, colour = "black") +
+            size = 10, colour = "black") +
   geom_text(aes(y = -0.05, label = paste0(obs.genes, '/', exp.genes)), 
             size = 5, colour = "black") +
   #ggsave(filename = 'figures/chm_dist.pdf', width = 4, height = 3) +
@@ -574,7 +574,7 @@ age_plot <- age_dist %>%
         legend.text = element_text(size = 10),
         strip.text.y = element_text(face = "italic")) +
   geom_text(aes(label = sigLabel), 
-            size = 5, colour = "black") +
+            size = 10, colour = "black") +
   geom_text(aes(y = -0.05, label = paste0(obs.genes, '/', exp.genes)), 
             size = 5, colour = "black") +
   #ggsave(filename = 'figures/age_dist.pdf', width = 4, height = 3) +
@@ -1871,13 +1871,6 @@ pbst_volcano
 
 
 # # write to file for GO
-# pbst_low %>% filter(Sfp == 'Sperm.only') #%>% write_csv('output/pbst_low_spermonly.csv')
-# lrt.pbst_v_rest.tTags %>% filter(Sfp != 'SFP.high') #%>% write_csv('output/pbst_low_notSFP.csv')
-# 
-# lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == 'SFP.high' & lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] %>% dim
-# 
-# lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp != 'SFP.high' & lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] #%>% write_csv('output/GO_lists/pbst_low_noSFP.csv')
-# 
 # lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] #%>% write_csv('output/GO_lists/pbst_low.csv')
 
 ```
@@ -1897,7 +1890,7 @@ lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FD
 
 #### Sfps depleted after PBST treatment
 ```{r}
-lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == 'SFP.high' & lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] %>% #write_csv('output/PBST_Sfp_depleted.csv')
+lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == 'SFP.high' & lrt.pbst_v_rest.tTags$logFC > 1 & lrt.pbst_v_rest.tTags$FDR < 0.05, ] %>% #write_csv('output/GO_lists/PBST_Sfp_depleted.csv')
   dplyr::select(FBgn, Name = NAME, Symbol = SYMBOL, Chromosome = LOCATION_ARM) %>% 
   arrange(Symbol) %>% 
   my_data_table()
@@ -1906,7 +1899,7 @@ lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == 'SFP.high' & lrt.pbst_v_rest.
 
 #### Sfps remaining after PBST treatment
 ```{r}
-lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == 'SFP.high' & lrt.pbst_v_rest.tTags$FDR > 0.05, ] %>% #write_csv('output/PBST_Sfp_remaining.csv')
+lrt.pbst_v_rest.tTags[lrt.pbst_v_rest.tTags$Sfp == 'SFP.high' & lrt.pbst_v_rest.tTags$FDR > 0.05, ] %>% #write_csv('output/GO_lists/PBST_Sfp_remaining.csv')
   dplyr::select(FBgn, Name = NAME, Symbol = SYMBOL, Chromosome = LOCATION_ARM) %>% 
   arrange(Symbol) %>% 
   my_data_table()
@@ -2793,9 +2786,9 @@ rates_plot <- sperm_rates2 %>%
         legend.title = element_blank(),
         legend.background = element_blank()) + 
   geom_text(aes(y = 0.05, label = N), size = 5, colour = "black") +
-  geom_signif(y_position = 0.22, xmin = 1, xmax = 2, annotation = "***", tip_length = 0.01, colour = 'black') +
-  geom_signif(y_position = 0.23, xmin = 1, xmax = 3, annotation = "***", tip_length = 0.01, colour = 'black') +
-  geom_signif(y_position = 0.24, xmin = 1, xmax = 4, annotation = "n.s.", tip_length = 0.01, colour = 'black') +
+  geom_signif(y_position = 0.205, xmin = 1, xmax = 2, annotation = "***", tip_length = 0.01, colour = 'black') +
+  geom_signif(y_position = 0.215, xmin = 1, xmax = 3, annotation = "***", tip_length = 0.01, colour = 'black') +
+  geom_signif(y_position = 0.225, xmin = 1, xmax = 4, annotation = "n.s.", tip_length = 0.01, colour = 'black') +
   #ggsave('figures/sperm_rates_mn.pdf', height = 3, width = 3) +
   NULL
 
