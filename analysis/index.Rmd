@@ -8,4 +8,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-Click [here](https://martingarlovsky.github.io/DmSP3/) to view the html report for this project (created using the [workflowr](https://github.com/jdblischak/workflowr) package).
+Statistical analysis to accompany Garlovsky, M. D., Sandler, J., and Karr, T. L., 'Functional diversity and evolutionary dynamics of the *Drosophila melanogaster* sperm proteome'. Data can be found on [Dryad](https://datadryad.org/stash) and via the [ProteomeXchange](link). 
+
+### [1. Statistical analysis](statistical_analysis.html)
