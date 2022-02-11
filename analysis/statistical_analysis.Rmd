@@ -2471,6 +2471,7 @@ scaled_dat %>%
   theme(legend.position = '') +
   #ggsave('figures/cor_prot_expr.pdf', height = 3.5, width = 12) +
   NULL
+
 ```
 
 #### Diagnostic plots {.tabset}
@@ -2556,7 +2557,7 @@ cor_prot_expr <- scaled_dat %>%
         axis.title.x = element_blank()) +
   geom_text(data = all_cor,
              aes(x = 2, y = -1, 
-                 label = paste0('rho = ', round(estimate, 3), 
+                 label = paste0('beta = ', round(estimate, 3), 
                                 '\nR^2 = ', round(r.squared, 3), 
                                 '\np ', p.value)),
              hjust = 'left', vjust = 1, size = 3) + 
@@ -2617,7 +2618,7 @@ Sfp_prot_expr <- scaled_dat %>%
   theme(legend.position = '') +
   geom_text(data = sfp_cor,
              aes(x = 2, y = -1, 
-                 label = paste0('rho = ', round(estimate, 3), 
+                 label = paste0('beta = ', round(estimate, 3), 
                                 '\nR^2 = ', round(r.squared, 3), 
                                 '\np ', p.value)),
              hjust = 'left', vjust = 1, size = 3) + 
@@ -2643,7 +2644,7 @@ scaled_dat %>%
   theme(legend.position = 'bottom') +
   geom_text(data = sfp_cor %>% filter(Tissue == 'Accessory glands' | Tissue == 'Testis'),
              aes(x = c(1.5, 3, -1, 0.5), y = c(-1.25, -1.25, 3, 3), 
-                 label = paste0('rho = ', round(estimate, 3), 
+                 label = paste0('beta = ', round(estimate, 3), 
                                 '\nR^2 = ', round(r.squared, 3), 
                                 '\np = ', p.value)),
              hjust = 'left', vjust = 1, size = 4, show.legend = FALSE) + 
