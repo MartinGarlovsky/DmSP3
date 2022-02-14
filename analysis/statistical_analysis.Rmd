@@ -972,10 +972,10 @@ We calculated $\chi^2$ statistics with the null expectation that each tissue or 
 #                     DmSP3 = all_rib %>% filter(sp_prot != 'Other') %>% pull(FBgn),
 #                     Brain = all_rib %>% filter(FBgn %in% li_brain$FBgn) %>% pull(FBgn))))
 
-rib_br_sp <- plot(euler(c('Ribosomes' = 169,
-                          'Ribosomes&Brain' = 15,
-                          'Ribosomes&DmSP3' = 19,
-                          'Ribosomes&Brain&DmSP3' = 64)),
+rib_br_sp <- plot(euler(c('Ribosomal\nproteins' = 169,
+                          'Ribosomal\nproteins&Brain' = 15,
+                          'Ribosomal\nproteins&DmSP3' = 19,
+                          'Ribosomal\nproteins&Brain&DmSP3' = 64)),
                   quantities = TRUE,
                   fills = list(fill = c(NA, RColorBrewer::brewer.pal(name = 'RdBu', n = 4)[4:3]), 
                                alpha = 1))
@@ -1143,7 +1143,7 @@ We tested for differences in abundance between proteins on the sex vs. autosomes
 comb_abun <- DmSP_comb %>% 
   drop_na(grand.mean) %>% 
   dplyr::select(FBgn, NAME, SYMBOL, LOCATION_ARM, Sfp, grand.mean) %>% 
-  mutate(ribosome = if_else(FBgn %in% all_rib$FBgn, 'Ribosome', 'Other'),
+  mutate(ribosome = if_else(FBgn %in% all_rib$FBgn, 'RPs', 'Other'),
         # relabel chromosomes
          Chromosome = case_when(
            LOCATION_ARM %in% c('2L', '2R', '3L', '3R', '4', 'X', 'Y') ~ LOCATION_ARM,
