@@ -417,7 +417,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-02-11
+<strong>Last updated:</strong> 2022-02-14
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -508,16 +508,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3treed06f130d6d21179ab43b6887faecede3c9dc0da1targetblankd06f130a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/MartinGarlovsky/DmSP3/tree/d06f130d6d21179ab43b6887faecede3c9dc0da1" target="_blank">d06f130</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3tree17b55af9ecfeba879ad08eb7e91fe403905e614btargetblank17b55afa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/MartinGarlovsky/DmSP3/tree/17b55af9ecfeba879ad08eb7e91fe403905e614b" target="_blank">17b55af</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3treed06f130d6d21179ab43b6887faecede3c9dc0da1targetblankd06f130a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3tree17b55af9ecfeba879ad08eb7e91fe403905e614btargetblank17b55afa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/MartinGarlovsky/DmSP3/tree/d06f130d6d21179ab43b6887faecede3c9dc0da1" target="_blank">d06f130</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/MartinGarlovsky/DmSP3/tree/17b55af9ecfeba879ad08eb7e91fe403905e614b" target="_blank">17b55af</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -582,6 +582,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/17b55af9ecfeba879ad08eb7e91fe403905e614b/analysis/statistical_analysis.Rmd" target="_blank">17b55af</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-14
+</td>
+<td>
+tweak ribosome figure
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/MartinGarlovsky/DmSP3/4a4bd8f97f605425f27f2270dbafced18db7d9cb/docs/statistical_analysis.html" target="_blank">4a4bd8f</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2439,10 +2473,10 @@ rib_plot &lt;- rib.test %&gt;%
 #                     DmSP3 = all_rib %&gt;% filter(sp_prot != &#39;Other&#39;) %&gt;% pull(FBgn),
 #                     Brain = all_rib %&gt;% filter(FBgn %in% li_brain$FBgn) %&gt;% pull(FBgn))))
 
-rib_br_sp &lt;- plot(euler(c(&#39;Ribosomes&#39; = 169,
-                          &#39;Ribosomes&amp;Brain&#39; = 15,
-                          &#39;Ribosomes&amp;DmSP3&#39; = 19,
-                          &#39;Ribosomes&amp;Brain&amp;DmSP3&#39; = 64)),
+rib_br_sp &lt;- plot(euler(c(&#39;Ribosomal\nproteins&#39; = 169,
+                          &#39;Ribosomal\nproteins&amp;Brain&#39; = 15,
+                          &#39;Ribosomal\nproteins&amp;DmSP3&#39; = 19,
+                          &#39;Ribosomal\nproteins&amp;Brain&amp;DmSP3&#39; = 64)),
                   quantities = TRUE,
                   fills = list(fill = c(NA, RColorBrewer::brewer.pal(name = &#39;RdBu&#39;, n = 4)[4:3]), 
                                alpha = 1))
@@ -3337,7 +3371,7 @@ NA
 <pre class="r"><code>comb_abun &lt;- DmSP_comb %&gt;% 
   drop_na(grand.mean) %&gt;% 
   dplyr::select(FBgn, NAME, SYMBOL, LOCATION_ARM, Sfp, grand.mean) %&gt;% 
-  mutate(ribosome = if_else(FBgn %in% all_rib$FBgn, &#39;Ribosome&#39;, &#39;Other&#39;),
+  mutate(ribosome = if_else(FBgn %in% all_rib$FBgn, &#39;RPs&#39;, &#39;Other&#39;),
         # relabel chromosomes
          Chromosome = case_when(
            LOCATION_ARM %in% c(&#39;2L&#39;, &#39;2R&#39;, &#39;3L&#39;, &#39;3R&#39;, &#39;4&#39;, &#39;X&#39;, &#39;Y&#39;) ~ LOCATION_ARM,
@@ -6819,6 +6853,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/4a4bd8f97f605425f27f2270dbafced18db7d9cb/docs/figure/statistical_analysis.Rmd/unnamed-chunk-81-1.png" target="_blank">4a4bd8f</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-11
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-81-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -7196,6 +7241,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/4a4bd8f97f605425f27f2270dbafced18db7d9cb/docs/figure/statistical_analysis.Rmd/unnamed-chunk-82-2.png" target="_blank">4a4bd8f</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-11
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-82-2.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -7256,6 +7312,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/4a4bd8f97f605425f27f2270dbafced18db7d9cb/docs/figure/statistical_analysis.Rmd/unnamed-chunk-83-1.png" target="_blank">4a4bd8f</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-11
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-83-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -7303,6 +7370,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/4a4bd8f97f605425f27f2270dbafced18db7d9cb/docs/figure/statistical_analysis.Rmd/unnamed-chunk-84-1.png" target="_blank">4a4bd8f</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-11
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-84-1.png" target="_blank">5b13fbc</a>
