@@ -15,8 +15,8 @@
 
 <title>Statistical analysis</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -38,30 +38,29 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="site_libs/datatables-binding-0.18/datatables.js"></script>
-<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
-<link href="site_libs/dt-ext-scroller-1.10.20/css/scroller.dataTables.min.css" rel="stylesheet" />
-<script src="site_libs/dt-ext-scroller-1.10.20/js/dataTables.scroller.min.js"></script>
-<script src="site_libs/pdfmake-1.10.20/pdfmake.js"></script>
-<script src="site_libs/pdfmake-1.10.20/vfs_fonts.js"></script>
-<link href="site_libs/dt-ext-buttons-1.10.20/css/buttons.dataTables.min.css" rel="stylesheet" />
-<script src="site_libs/dt-ext-buttons-1.10.20/js/dataTables.buttons.min.js"></script>
-<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.flash.min.js"></script>
-<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.html5.min.js"></script>
-<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.colVis.min.js"></script>
-<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.print.min.js"></script>
-<link href="site_libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="site_libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/dt-ext-scroller-1.11.3/css/scroller.dataTables.min.css" rel="stylesheet" />
+<script src="site_libs/dt-ext-scroller-1.11.3/js/dataTables.scroller.min.js"></script>
+<script src="site_libs/pdfmake-1.11.3/pdfmake.js"></script>
+<script src="site_libs/pdfmake-1.11.3/vfs_fonts.js"></script>
+<link href="site_libs/dt-ext-buttons-1.11.3/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="site_libs/dt-ext-buttons-1.11.3/js/dataTables.buttons.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.11.3/js/buttons.html5.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.11.3/js/buttons.colVis.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.11.3/js/buttons.print.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
-<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
 <style type="text/css">
 div.section {
@@ -98,6 +97,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -118,6 +118,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -346,7 +349,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -381,7 +384,7 @@ div.tocify {
 <div id="header">
 
 <div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
@@ -399,7 +402,9 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -408,7 +413,9 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -417,17 +424,27 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-02-14
+<strong>Last updated:</strong> 2022-06-14
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
 </p>
 <p>
-<strong>Knit directory:</strong> <code>DmSP3/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<strong>Knit directory:</strong> <code>DmSP3/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
 <p>
-This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -436,91 +453,138 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220210code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220210)</code> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220210code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220210)</code> </a>
 </p>
 </div>
-<div id="strongSeedstrongcodesetseed20220210code" class="panel-collapse collapse">
+<div id="strongSeedstrongcodesetseed20220210code"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20220210)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+<p>The command <code>set.seed(20220210)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
 </p>
 </div>
-<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
 </p>
 </div>
 <div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3tree17b55af9ecfeba879ad08eb7e91fe403905e614btargetblank17b55afa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/MartinGarlovsky/DmSP3/tree/17b55af9ecfeba879ad08eb7e91fe403905e614b" target="_blank">17b55af</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3treefd513dbb745342f512a905bc8e19bef98da01f02targetblankfd513dba">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/MartinGarlovsky/DmSP3/tree/fd513dbb745342f512a905bc8e19bef98da01f02" target="_blank">fd513db</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3tree17b55af9ecfeba879ad08eb7e91fe403905e614btargetblank17b55afa" class="panel-collapse collapse">
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomMartinGarlovskyDmSP3treefd513dbb745342f512a905bc8e19bef98da01f02targetblankfd513dba"
+class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/MartinGarlovsky/DmSP3/tree/17b55af9ecfeba879ad08eb7e91fe403905e614b" target="_blank">17b55af</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version
+<a href="https://github.com/MartinGarlovsky/DmSP3/tree/fd513dbb745342f512a905bc8e19bef98da01f02" target="_blank">fd513db</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
 </p>
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
 </p>
 <pre><code>
 Ignored files:
@@ -534,6 +598,8 @@ Ignored files:
 
 Untracked files:
     Untracked:  README.html
+    Untracked:  data/Individual_runs/
+    Untracked:  data/McCullough2022/
     Untracked:  figures/
     Untracked:  output/DmSP_ribosomes.csv
     Untracked:  output/DmSP_which_proteome.csv
@@ -545,9 +611,14 @@ Untracked files:
     Untracked:  output/Ylinked_DmSP3.csv
     Untracked:  output/paralog_switches.csv
 
+Unstaged changes:
+    Modified:   README.md
+
 </code></pre>
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
 </p>
 </div>
 </div>
@@ -558,7 +629,12 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/statistical_analysis.Rmd</code>) and HTML (<code>docs/statistical_analysis.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/statistical_analysis.Rmd</code>)
+and HTML (<code>docs/statistical_analysis.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -582,6 +658,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/fd513dbb745342f512a905bc8e19bef98da01f02/analysis/statistical_analysis.Rmd" target="_blank">fd513db</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-06-14
+</td>
+<td>
+revisions
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/MartinGarlovsky/DmSP3/71b1474399993457ec92761c8034da75b94a2a8d/docs/statistical_analysis.html" target="_blank">71b1474</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -789,23 +899,32 @@ my_data_table &lt;- function(df){
 <div id="load-data" class="section level3">
 <h3>Load data</h3>
 <ul>
-<li><p>Files downloaded from <a href="http://flybase.org/">FlyBase.org</a>:</p>
+<li><p>Files downloaded from <a
+href="http://flybase.org/">FlyBase.org</a>:</p>
 <ul>
 <li>Genes to Transcript to Protein IDs</li>
-<li>Gene names and gene symbols, GO terms, chromosomal location (<code>LOCATION_ARM</code>)</li>
-<li><a href="https://flybase.org/reports/FBgg0000130.html">All 168 ribosomal proteins, including paralogs</a></li>
+<li>Gene names and gene symbols, GO terms, chromosomal location
+(<code>LOCATION_ARM</code>)</li>
+<li><a href="https://flybase.org/reports/FBgg0000130.html">All 168
+ribosomal proteins, including paralogs</a></li>
 </ul></li>
-<li><p>List of all putative Sfps identified by <a href="https://royalsocietypublishing.org/doi/10.1098/rstb.2020.0072">Wigby et al. (2020). <em>Phil. trans. B</em></a></p></li>
+<li><p>List of all putative Sfps identified by <a
+href="https://royalsocietypublishing.org/doi/10.1098/rstb.2020.0072">Wigby
+et al. (2020). <em>Phil. trans. B</em></a></p></li>
 <li><p>Previous <em>D. melanogaster</em> sperm proteomes:</p>
 <ul>
 <li><a href="http://www.nature.com/articles/ng1915">DmSP1</a></li>
-<li><a href="http://www.sciencedirect.com/science/article/pii/S1874391910002538">DmSP2</a>, comprising 1108 proteins, combined with the DmSP1</li>
+<li><a
+href="http://www.sciencedirect.com/science/article/pii/S1874391910002538">DmSP2</a>,
+comprising 1108 proteins, combined with the DmSP1</li>
 </ul></li>
 <li><p>New data generated:</p>
 <ul>
 <li>Experiment 1: All identified proteins and abundance data</li>
-<li>Experiment 2: Abundance data for proteins from ‘NoHalt’, ‘Halt’ controls or ‘PBST’ treatment</li>
-<li>Experiment 3: Abundance data for proteins from ‘PBS’ control or ‘NaCl’ treatment</li>
+<li>Experiment 2: Abundance data for proteins from ‘NoHalt’, ‘Halt’
+controls or ‘PBST’ treatment</li>
+<li>Experiment 3: Abundance data for proteins from ‘PBS’ control or
+‘NaCl’ treatment</li>
 </ul></li>
 </ul>
 <pre class="r"><code># gene conversion table from FlyBase.org
@@ -855,7 +974,11 @@ salt_dat &lt;- read.csv(&#39;data/040721_PBS_NaCl_1PeptideLFQ.csv&#39;,
 </div>
 <div id="overlap-between-new-datasets" class="section level3">
 <h3>Overlap between new datasets</h3>
-<p>We performed three LC-MS experiments on purified sperm samples. For experiment 1, we combine the IDs from two algorithms (i) identifying proteins and (ii) from protein quantitation. We then combine all IDs across the three experiments to compile a complete list of all proteins IDd in the current study.</p>
+<p>We performed three LC-MS experiments on purified sperm samples. For
+experiment 1, we combine the IDs from two algorithms (i) identifying
+proteins and (ii) from protein quantitation. We then combine all IDs
+across the three experiments to compile a complete list of all proteins
+IDd in the current study.</p>
 <pre class="r"><code>### Additional abundance data 
 # Data processed for identification was processed separately for quantification. Differences in algorithms results in a slight disparity in the number of protein identifications. 
 
@@ -927,12 +1050,16 @@ MartinGarlovsky
 DmSPIII.2 &lt;- data.frame(FBgn = unique(
   c(DmSP_exp1$FBgn, PBST_dat$FBgn, salt_dat$FBgn))) %&gt;%
   separate_rows(FBgn) %&gt;% 
+  drop_na(FBgn) %&gt;% 
   left_join(flybase_results %&gt;% dplyr::select(FBgn, SYMBOL)) %&gt;% 
   distinct(FBgn, .keep_all = TRUE)</code></pre>
 </div>
-<div id="overlap-between-dmsp-1--2-and--3" class="section level2 tabset">
+<div id="overlap-between-dmsp-1--2-and--3"
+class="section level2 tabset">
 <h2 class="tabset">Overlap between DmSP-1, -2, and -3</h2>
-<p>Here we look at the overlap between proteins IDd in the current study (n = 2563) with the previous releases of the DmSP (n = 1108. The current study increases the number of identified proteins significantly.</p>
+<p>Here we look at the overlap between proteins IDd in the current study
+(n = 2562) with the previous releases of the DmSP (n = 1108. The current
+study increases the number of identified proteins significantly.</p>
 <div id="dmsp1-vs.-dmsp2-vs.-dmsp3" class="section level3">
 <h3>DmSP1 vs. DmSP2 vs. DmSP3</h3>
 <pre class="r"><code># upset plot to get numbers in each group
@@ -943,7 +1070,7 @@ listInput &lt;- list(DmSP.1 = DmSPI$FBgn,
 #upset(fromList(listInput), order.by = &#39;degree&#39;)
 
 # Eulerr diagram
-DmSP_overlap &lt;- plot(euler(c(&#39;DmSP1&#39; = 68, &quot;DmSP2&quot; = 538, &quot;Current Study&quot; = 2069, 
+DmSP_overlap &lt;- plot(euler(c(&#39;DmSP1&#39; = 68, &quot;DmSP2&quot; = 538, &quot;Current Study&quot; = 2068, 
                              &#39;DmSP1&amp;DmSP2&#39; = 8, 
                              &#39;DmSP1&amp;Current Study&#39; = 84, 
                              &#39;DmSP2&amp;Current Study&#39; = 229,
@@ -1018,7 +1145,14 @@ only3 &lt;- intersect_dat %&gt;% filter(DmSP.1 == 0, DmSP.2 == 0, DmSP.3 == 1)</
 </div>
 <div id="cumulative-number-idd" class="section level3">
 <h3>Cumulative number ID’d</h3>
-<p>Here we combine the list of all proteins identified in the current study with the DmSP2 to compile the DmSP3. We calculated average abundances across experiments, excluding the PBST treatment values, which had a significant effect on the abundance of a large number of proteins (<a href="#PBST">see below</a>). We also create our ‘high-confidence’ DmSP3, excluding proteins identified by fewer than 2 unique peptides or identified in fewer than 2 biological replicates across all experiments.</p>
+<p>Here we combine the list of all proteins identified in the current
+study with the DmSP2 to compile the DmSP3. We calculated average
+abundances across experiments, excluding the PBST treatment values,
+which had a significant effect on the abundance of a large number of
+proteins (<a href="#PBST">see below</a>). We also create our
+‘high-confidence’ DmSP3, excluding proteins identified by fewer than 2
+unique peptides or identified in fewer than 2 biological replicates
+across all experiments.</p>
 <pre class="r"><code># new column names for abundance data
 exp_names &lt;- c(&#39;REP1.1&#39;,    &#39;REP1.2&#39;,   &#39;REP1.3&#39;,   
                &#39;Halt1&#39;, &#39;Halt2&#39;, &#39;Halt3&#39;,   
@@ -1190,7 +1324,8 @@ MartinGarlovsky
 </div>
 <div id="coefficient-of-variation" class="section level3">
 <h3>Coefficient of variation</h3>
-<p>For each experiment we calculate the coefficient of variation across replicates (log10 protein abundance).</p>
+<p>For each experiment we calculate the coefficient of variation across
+replicates (log10 protein abundance).</p>
 <pre class="r"><code>cv &lt;- function(x) sd(x, na.rm = TRUE)/mean(x, na.rm = TRUE)
 
 # get all experiments
@@ -1212,26 +1347,19 @@ CV_dat &lt;- DmSP3 %&gt;%
                                grepl(&#39;NaCl&#39;, name) ~ &#39;exp3.1&#39;,
                                TRUE ~ &#39;exp3.2&#39;))
 
-# calculate medians
-CV_dat %&gt;% 
-  group_by(FBgn, experiment) %&gt;% 
-  summarise(CV = cv(log_val)) %&gt;% 
-  bind_rows(data.frame(FBgn = DmSP3$FBgn,
-                       experiment = &#39;All&#39;,
-                       CV = allexp)) %&gt;%
-  group_by(experiment) %&gt;%
-  summarise(N = n(),
-            md = median(CV, na.rm = TRUE),
-            sd = sd(CV, na.rm = TRUE))</code></pre>
-<pre># A tibble: 4 × 4
-  experiment       N     md     sd
-  <chr>        <int>  <dbl>  <dbl>
-1 All           3176 0.0641 0.0335
-2 Experiment 1  3176 0.0183 0.0274
-3 Experiment 2  3176 0.0541 0.0350
-4 Experiment 3  3176 0.0326 0.0286
-</pre>
-<pre class="r"><code>CV_plot &lt;- CV_dat %&gt;% 
+# # calculate medians
+# CV_dat %&gt;% 
+#   group_by(FBgn, experiment) %&gt;% 
+#   summarise(CV = cv(log_val)) %&gt;% 
+#   bind_rows(data.frame(FBgn = DmSP3$FBgn,
+#                        experiment = &#39;All&#39;,
+#                        CV = allexp)) %&gt;%
+#   group_by(experiment) %&gt;%
+#   summarise(N = n(),
+#             md = median(CV, na.rm = TRUE),
+#             sd = sd(CV, na.rm = TRUE))
+  
+CV_plot &lt;- CV_dat %&gt;% 
   group_by(FBgn, experiment) %&gt;% 
   summarise(CV = cv(log_val)) %&gt;% 
   ggplot(aes(x = experiment, y = CV, fill = experiment)) + 
@@ -1292,12 +1420,21 @@ MartinGarlovsky
   mutate(across(3, ~round(.x, 1))) %&gt;% 
   my_data_table()</code></pre>
 <div id="htmlwidget-97c7c9d9f0f86d49b030" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-97c7c9d9f0f86d49b030">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0003884","FBgn0003889","FBgn0259795","FBgn0003885","FBgn0033868","FBgn0035915","FBgn0052064","FBgn0045770","FBgn0039071","FBgn0034132","FBgn0041102","FBgn0031545","FBgn0037862","FBgn0038373","FBgn0002865","FBgn0035240","FBgn0025111","FBgn0069354","FBgn0052351","FBgn0012036"],["alpha-Tubulin at 84B","beta-Tubulin at 85D","loopin-1","alpha-Tubulin at 84D","Sperm-Leucylaminopeptidase 7","Sperm-Leucylaminopeptidase 1","Sperm-Leucylaminopeptidase 4","Sperm-Leucylaminopeptidase 3","big bubble 8","Sperm-Leucylaminopeptidase 8","ocnus","CG3213","Mitochondrial aconitase 2","CG4546","Male-specific RNA 98Ca","CG33791","Adenine nucleotide translocase 2","Porin2","Sperm-Leucylaminopeptidase 2","Aldehyde dehydrogenase"],[100,100,99.9,99.9,99.8,99.8,99.7,99.7,99.6,99.6,99.5,99.5,99.5,99.4,99.4,99.3,99.3,99.2,99.2,99.1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Ranked abundance (%)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-97c7c9d9f0f86d49b030">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0003884","FBgn0003889","FBgn0259795","FBgn0003885","FBgn0033868","FBgn0035915","FBgn0052064","FBgn0045770","FBgn0039071","FBgn0034132","FBgn0041102","FBgn0031545","FBgn0037862","FBgn0038373","FBgn0002865","FBgn0035240","FBgn0025111","FBgn0069354","FBgn0052351","FBgn0012036"],["alpha-Tubulin at 84B","beta-Tubulin at 85D","loopin-1","alpha-Tubulin at 84D","Sperm-Leucylaminopeptidase 7","Sperm-Leucylaminopeptidase 1","Sperm-Leucylaminopeptidase 4","Sperm-Leucylaminopeptidase 3","big bubble 8","Sperm-Leucylaminopeptidase 8","ocnus","CG3213","Mitochondrial aconitase 2","CG4546","Male-specific RNA 98Ca","CG33791","Adenine nucleotide translocase 2","Porin2","Sperm-Leucylaminopeptidase 2","Aldehyde dehydrogenase"],[100,100,99.9,99.9,99.8,99.8,99.7,99.7,99.6,99.6,99.5,99.5,99.5,99.4,99.4,99.3,99.3,99.2,99.2,99.1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Ranked abundance (%)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="chromosomal-distribution" class="section level1 tabset">
 <h1 class="tabset">Chromosomal distribution</h1>
-<p>We retrieved chromosomal location of all genes in the genome from <a href="http://flybase.org/">FlyBase.org</a> (n = 13957) and summarised the total number of genes on each chromosome. We then counted the observed number of sperm genes (n = 3176) on each chromosome, and calculated the expected number based on the total number of sperm proteins identified. Finally, we calculated <span class="math inline">\(\chi^2\)</span> statistics for each chromosome and the associated p-values. We excluded the Y chromosome due to the small numbers of proteins. We used the Bejamini-Hochberg false discovery rate procedure to correct for multiple testing.</p>
+<p>We retrieved chromosomal location of all genes in the genome from <a
+href="http://flybase.org/">FlyBase.org</a> (n = 13957) and summarised
+the total number of genes on each chromosome. We then counted the
+observed number of sperm genes (n = 3176) on each chromosome, and
+calculated the expected number based on the total number of sperm
+proteins identified. Finally, we calculated <span
+class="math inline">\(\chi^2\)</span> statistics for each chromosome and
+the associated p-values. We excluded the Y chromosome due to the small
+numbers of proteins. We used the Bejamini-Hochberg false discovery rate
+procedure to correct for multiple testing.</p>
 <pre class="r"><code># Total number of genes on each chromosome - to work out &#39;expected&#39;
 TotalGeneNumber &lt;- 
   # here I parsed the ~22k proteins from the Dmel uniprot proteome and submitted to FlyBase.org
@@ -1362,7 +1499,8 @@ chm_plot &lt;- chm_dist %&gt;%
   NULL</code></pre>
 <div id="plot" class="section level2">
 <h2>Plot</h2>
-<p>The X and 3R chromosomes have significantly fewer sperm genes than expected with a FDR cut-off &lt; 0.05.</p>
+<p>The X and 3R chromosomes have significantly fewer sperm genes than
+expected with a FDR cut-off &lt; 0.05.</p>
 <pre class="r"><code>chm_plot</code></pre>
 <p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-9-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>
@@ -1416,7 +1554,8 @@ MartinGarlovsky
 </div>
 <div id="y-linked-genes" class="section level2">
 <h2>Y-linked genes</h2>
-<p>We identified 9 Y chromosome genes. All above the DmSP3 average abundance:</p>
+<p>We identified 9 Y chromosome genes. All above the DmSP3 average
+abundance:</p>
 <pre class="r"><code>DmSP3 %&gt;%
   filter(LOCATION_ARM == &#39;Y&#39;) %&gt;% 
   distinct(FBgn, .keep_all = TRUE) %&gt;% 
@@ -1524,7 +1663,7 @@ FBgn0046697
 Ppr-Y
 </td>
 <td style="text-align:right;">
-78.3
+78.4
 </td>
 </tr>
 <tr>
@@ -1535,7 +1674,7 @@ FBgn0046698
 Protein phosphatase 1, Y-linked 2
 </td>
 <td style="text-align:right;">
-65.2
+65.3
 </td>
 </tr>
 </tbody>
@@ -1544,7 +1683,15 @@ Protein phosphatase 1, Y-linked 2
 </div>
 <div id="gene-age" class="section level1">
 <h1>Gene age</h1>
-<p>As with chromosomal distribution, we calculated the observed and expected number of genes in each age class (retrieved from <a href="http://gentree.ioz.ac.cn/index.php" class="uri">http://gentree.ioz.ac.cn/index.php</a> and recoded as in <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/evo.14297">Patlar et al. (2021). <em>Evolution</em></a>), calculated <span class="math inline">\(\chi^2\)</span> statistics and the associated p-values, and used the Bejamini-Hochberg false discovery rate procedure to correct for multiple testing.</p>
+<p>As with chromosomal distribution, we calculated the observed and
+expected number of genes in each age class (retrieved from <a
+href="http://gentree.ioz.ac.cn/index.php"
+class="uri">http://gentree.ioz.ac.cn/index.php</a> and recoded as in <a
+href="https://onlinelibrary.wiley.com/doi/abs/10.1111/evo.14297">Patlar
+et al. (2021). <em>Evolution</em></a>), calculated <span
+class="math inline">\(\chi^2\)</span> statistics and the associated
+p-values, and used the Bejamini-Hochberg false discovery rate procedure
+to correct for multiple testing.</p>
 <pre class="r"><code>gene_age &lt;- read.csv(&#39;data/dm6_ver78_age.csv&#39;) %&gt;% 
   left_join(read.delim(&#39;data/FlyBase/uniprot2FlyBase_chrm.txt&#39;), 
             by = c(&#39;FBgn&#39; = &#39;X.SUBMITTED.ID&#39;)) %&gt;% 
@@ -1883,7 +2030,9 @@ Unc-115b
 </div>
 <div id="omim" class="section level1 tabset">
 <h1 class="tabset">OMIM</h1>
-<p>We used the precomputed list of human disease orthologs from <a href="http://flybase.org/">FlyBase.org</a> to retrieve <a href="omim.org">OMIM</a> hits for proteins in the DmSP3.</p>
+<p>We used the precomputed list of human disease orthologs from <a
+href="http://flybase.org/">FlyBase.org</a> to retrieve <a
+href="omim.org">OMIM</a> hits for proteins in the DmSP3.</p>
 <pre class="r"><code>OMIM &lt;- read.csv(&#39;data/FlyBase/DmSP3_OMIM.csv&#39;, na.strings = c(&#39;&#39;)) %&gt;%
   dplyr::rename(FBgn = X..Dmel_gene_ID)
 
@@ -2303,7 +2452,15 @@ n_ids &lt;- top_IDs %&gt;%
 </div>
 <div id="ribosomal-proteins" class="section level1">
 <h1>Ribosomal proteins</h1>
-<p>We downloaded the 169 <em>D. melanogaster</em> ribosomal proteins curated by <a href="https://flybase.org/reports/FBgg0000130">FlyBase.org</a> to compare the number, abundance, and distribution of ribosomal proteins found in the DmSP3. We also searched for other recent proteomics studies from other tissues or cell types in <em>D. melanogaster</em> and downloaded the supplementary materials containing the full lists of proteins to extract the ribosomal proteins identified in each study to compare to the DmSP3.</p>
+<p>We downloaded the 169 <em>D. melanogaster</em> ribosomal proteins
+curated by <a
+href="https://flybase.org/reports/FBgg0000130">FlyBase.org</a> to
+compare the number, abundance, and distribution of ribosomal proteins
+found in the DmSP3. We also searched for other recent proteomics studies
+from other tissues or cell types in <em>D. melanogaster</em> and
+downloaded the supplementary materials containing the full lists of
+proteins to extract the ribosomal proteins identified in each study to
+compare to the DmSP3.</p>
 <pre class="r"><code># rename the ribosomal data set and add data on presence in the sperm proteome and chromosomal location
 all_rib &lt;- Dm_ribosomes %&gt;%
   # label genes based on presence in sperm proteome
@@ -2453,7 +2610,7 @@ rib_plot &lt;- rib.test %&gt;%
   scale_fill_brewer(palette = &#39;RdBu&#39;, direction = -1) +
   scale_x_discrete(labels = c(&#39;CYT_LARGE&#39; = &#39;Cyt. large&#39;, &#39;CYT_SMALL&#39; = &#39;Cyt. small&#39;,
                               &#39;MIT_LARGE&#39; = &#39;Mt. large&#39;,  &#39;MIT_SMALL&#39; = &#39;Mt. small&#39;)) +
-  labs(x = &quot;Class&quot;, y = &quot;obs. no. genes&quot;) +
+  labs(x = &quot;Class&quot;, y = &quot;obs. no. proteins&quot;) +
   theme_bw() +
   theme(legend.position = &#39;bottom&#39;,
         legend.title = element_blank()) +
@@ -2467,7 +2624,11 @@ rib_plot &lt;- rib.test %&gt;%
   NULL</code></pre>
 <div id="compare-tissuecell-types" class="section level2">
 <h2>Compare tissue/cell types</h2>
-<p>We calculated <span class="math inline">\(\chi^2\)</span> statistics with the null expectation that each tissue or cell type would have complete representation of all 168 ribosomal proteins. We also tested whether the overlap between ribosomal proteins in brain and sperm was greater than expected using Fisher’s exact test.</p>
+<p>We calculated <span class="math inline">\(\chi^2\)</span> statistics
+with the null expectation that each tissue or cell type would have
+complete representation of all 168 ribosomal proteins. We also tested
+whether the overlap between ribosomal proteins in brain and sperm was
+greater than expected using Fisher’s exact test.</p>
 <pre class="r"><code>## overlap
 # upset(fromList(list(Ribosomes = all_rib %&gt;% pull(FBgn),
 #                     DmSP3 = all_rib %&gt;% filter(sp_prot != &#39;Other&#39;) %&gt;% pull(FBgn),
@@ -2507,6 +2668,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/71b1474399993457ec92761c8034da75b94a2a8d/docs/figure/statistical_analysis.Rmd/unnamed-chunk-20-1.png" target="_blank">71b1474</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-20-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -2525,7 +2697,8 @@ MartinGarlovsky
 </div>
 <div id="paralog-switching" class="section level2">
 <h2>Paralog switching</h2>
-<p>There are 93 cytoplasmic ribosomal proteins on FlyBase.org, including 13 paralogs (for 80 per protein).</p>
+<p>There are 93 cytoplasmic ribosomal proteins on FlyBase.org, including
+13 paralogs (for 80 per protein).</p>
 <pre class="r"><code>paralogs &lt;- read.csv(&#39;data/FlyBase/FlyBase_Ribosome_Paralogs.csv&#39;) %&gt;% 
   dplyr::select(-c(Location, Strand, Paralog_Location:DIOPT_score))
 
@@ -3365,9 +3538,17 @@ NA
 </tbody>
 </table>
 </div>
-<div id="abundance-of-proteins-in-the-dmsp3" class="section level2 tabset">
+<div id="abundance-of-proteins-in-the-dmsp3"
+class="section level2 tabset">
 <h2 class="tabset">Abundance of proteins in the DmSP3</h2>
-<p>We tested for differences in abundance between proteins on the sex vs. autosomes, and those identified as ribosomal proteins, or putative Sfps, compared the the remaining sperm proteome using the Kruskal-Wallace rank sum test followed by pairwise Wilcoxon rank sum tests corrected for multiple testing using the Benjamini-Hochberg procedure. We used the grand mean abundance and used the filtered dataset where a protein must be identified by 2 or more unique peptides or in 2 or more biological replicates</p>
+<p>We tested for differences in abundance between proteins on the sex
+vs. autosomes, and those identified as ribosomal proteins, or putative
+Sfps, compared the the remaining sperm proteome using the
+Kruskal-Wallace rank sum test followed by pairwise Wilcoxon rank sum
+tests corrected for multiple testing using the Benjamini-Hochberg
+procedure. We used the grand mean abundance and used the filtered
+dataset where a protein must be identified by 2 or more unique peptides
+or in 2 or more biological replicates</p>
 <pre class="r"><code>comb_abun &lt;- DmSP_comb %&gt;% 
   drop_na(grand.mean) %&gt;% 
   dplyr::select(FBgn, NAME, SYMBOL, LOCATION_ARM, Sfp, grand.mean) %&gt;% 
@@ -3385,7 +3566,11 @@ NA
 <h3>Ribosomes</h3>
 <pre class="r"><code># KW test
 rib_kw &lt;- broom::tidy(kruskal.test(grand.mean ~ as.factor(ribosome), data = comb_abun))</code></pre>
-<p>We compared the abundance of 70 ribosomal proteins to the remaining 1918 other sperm proteins. There was no significant difference in the abundance of ribosomal proteins compared to the remaining sperm proteins (Kruskal-Wallis rank sum test, <span class="math inline">\(\chi^2\)</span> = 0.063, p = 0.803).</p>
+<p>We compared the abundance of 70 ribosomal proteins to the remaining
+1918 other sperm proteins. There was no significant difference in the
+abundance of ribosomal proteins compared to the remaining sperm proteins
+(Kruskal-Wallis rank sum test, <span
+class="math inline">\(\chi^2\)</span> = 0.063, p = 0.803).</p>
 <pre class="r"><code>ribo_abun &lt;- comb_abun %&gt;% 
   ggplot(aes(x = ribosome, y = log2(grand.mean), fill = ribosome)) +
   stat_halfeye() +
@@ -3436,6 +3621,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/71b1474399993457ec92761c8034da75b94a2a8d/docs/figure/statistical_analysis.Rmd/unnamed-chunk-24-1.png" target="_blank">71b1474</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-24-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
@@ -3458,7 +3654,10 @@ axy &lt;- comb_abun %&gt;% filter(Chm %in% c(&#39;X&#39;, &#39;Y&#39;, &#39;A&#3
 # KW test
 sex_kw &lt;- kruskal.test(grand.mean ~ as.factor(Chm), data = axy)
 sex_wilcox &lt;- broom::tidy(pairwise.wilcox.test(axy$grand.mean, axy$Chm, p.adjust.method = &quot;BH&quot;))</code></pre>
-<p>There was a significant difference in the abundance of proteins encoded on the X- or Y- chromosome and autosomes (Kruskal-Wallis rank sum test, <span class="math inline">\(\chi^2\)</span> = 19, p &lt; 0.001).</p>
+<p>There was a significant difference in the abundance of proteins
+encoded on the X- or Y- chromosome and autosomes (Kruskal-Wallis rank
+sum test, <span class="math inline">\(\chi^2\)</span> = 19, p &lt;
+0.001).</p>
 <pre class="r"><code>axy_plot &lt;- axy %&gt;% 
   mutate(Chm = fct_relevel(Chm, &#39;X&#39;, &#39;A&#39;, &#39;Y&#39;)) %&gt;% 
   ggplot(aes(x = Chm, y = log2(grand.mean), fill = Chm)) +
@@ -3529,9 +3728,14 @@ MartinGarlovsky
 </div>
 <div id="seminal-fluid-proteins-in-the-dmsp3" class="section level1">
 <h1>Seminal fluid proteins in the DmSP3</h1>
-<p>We identified a considerable number of putative seminal fluid proteins (Sfps) in the DmSP3.</p>
-<div id="overlap-between-the-dmsp3-n-3176-and-putative-sfps-described-in-wigby-et-al.-2020-as-high-confidence-sfps-or-low-confidencetransferred-sfps." class="section level4">
-<h4>Overlap between the DmSP3 (n = 3176) and putative Sfps described in Wigby et al. (2020) as ‘high confidence’ Sfps, or ‘low confidence/transferred Sfps’.</h4>
+<p>We identified a considerable number of putative seminal fluid
+proteins (Sfps) in the DmSP3.</p>
+<div
+id="overlap-between-the-dmsp3-n-3176-and-putative-sfps-described-in-wigby-et-al.-2020-as-high-confidence-sfps-or-low-confidencetransferred-sfps."
+class="section level4">
+<h4>Overlap between the DmSP3 (n = 3176) and putative Sfps described in
+Wigby et al. (2020) as ‘high confidence’ Sfps, or ‘low
+confidence/transferred Sfps’.</h4>
 <pre class="r"><code># upset(fromList(list(Sfps = wigbySFP$FBgn,
 #                     Sfps.conf = wigbySFP$FBgn[wigbySFP$category == &#39;highconf&#39;],
 #                     DmSP3 = DmSP3$FBgn)))
@@ -3587,7 +3791,10 @@ MartinGarlovsky
 <pre class="r"><code>#dev.off()</code></pre>
 <pre class="r"><code># # Kruskal-Wallis test
 sfp_kw &lt;- broom::tidy(kruskal.test(grand.mean ~ as.factor(Sfp), data = comb_abun))</code></pre>
-<p>We found no significant difference in the abundance between ‘high confidence’ Sfps, ‘low confidence/transferred’ Sfps, or other proteins found in the DmSP3 (Kruskal-Wallis rank sum test, <span class="math inline">\(\chi^2\)</span> = 4.277, p = 0.118).</p>
+<p>We found no significant difference in the abundance between ‘high
+confidence’ Sfps, ‘low confidence/transferred’ Sfps, or other proteins
+found in the DmSP3 (Kruskal-Wallis rank sum test, <span
+class="math inline">\(\chi^2\)</span> = 4.277, p = 0.118).</p>
 <pre class="r"><code># sfp vs. other
 sfp_abun &lt;- comb_abun %&gt;% 
   ggplot(aes(x = Sfp, y = log2(grand.mean), fill = Sfp)) +
@@ -3665,11 +3872,19 @@ MartinGarlovsky
   arrange(desc(`Ranked abundance (%)`)) %&gt;% 
   my_data_table()</code></pre>
 <div id="htmlwidget-d1fd0327dbd6172359b8" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d1fd0327dbd6172359b8">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0003885","FBgn0011559","FBgn0265264","FBgn0051872","FBgn0030362","FBgn0022355","FBgn0037879","FBgn0002855","FBgn0004181","FBgn0250841","FBgn0034229","FBgn0032868","FBgn0050104","FBgn0030828","FBgn0286818","FBgn0054051","FBgn0260745","FBgn0053126","FBgn0040097","FBgn0037888","FBgn0026415","FBgn0001218","FBgn0264815","FBgn0043825","FBgn0028986","FBgn0037038","FBgn0011694","FBgn0028987","FBgn0261055","FBgn0034152","FBgn0003748","FBgn0259964","FBgn0020414","FBgn0034417","FBgn0036072","FBgn0250847","FBgn0016123","FBgn0259952","FBgn0259975","FBgn0036969","FBgn0040098","FBgn0039562","FBgn0034753","FBgn0015586"],["alpha-Tubulin at 84D","Accessory gland protein 36DE","CG17097","CG31872","regucalcin","Transferrin 1","SCP-containing protein C","Accessory gland protein 26Aa","Ejaculatory bulb protein","CG17242","CG4847","CG17472","Ecto-5'-nucleotidase 2","CG5162","Protein disulfide isomerase","CG34051","midline fasciclin","Neural Lazarillo","lectin-30A","SCP-containing protein B","Imaginal disc growth factor 4","Heat shock 70-kDa protein cognate 3","Phosphodiesterase 1c","CG18284","Serpin 38F","CG11037","Ejaculatory bulb protein II","Serpin 28F","Seminal fluid protein 26Ad","Accessory gland protein 53C14a","Trehalase","Seminal fluid protein 33A3","Imaginal disc growth factor 3","CG15117","CG6628","CG14034","Alkaline phosphatase 4","Seminal fluid protein 24Bb","Seminal fluid protein 87B","Serpin 77Bb","lectin-29Ca","Glycoprotein 93","CG2852","Accessory gland protein 76A"],["3R","2L","2L","2L","X","X","3R","2L","2R","2L","2R","2L","2R","X","3L","2L","3R","2L","2L","3R","X","X","2L","2L","2L","3L","2R","2L","2L","2R","2R","2L","2L","2R","3L","2L","3R","2L","3R","3L","2L","3R","2R","3L"],[99.8,97.8,94.7,90.1,89.7,87.3,84.6,84,83,79.3,78.9,73.9,72.5,70.6,69.2,69.1,68.3,67.3,66.9,66.8,66.6,66.5,65.5,64.6,64.6,64.4,64,63.9,63.6,63.6,63.4,62.8,62.3,61.6,61.1,60,58.9,58.9,57.7,55.3,54.4,52.2,51.9,50.4]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Chromosome<\/th>\n      <th>Ranked abundance (%)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-d1fd0327dbd6172359b8">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0003885","FBgn0011559","FBgn0265264","FBgn0051872","FBgn0030362","FBgn0022355","FBgn0037879","FBgn0002855","FBgn0004181","FBgn0250841","FBgn0034229","FBgn0032868","FBgn0050104","FBgn0030828","FBgn0286818","FBgn0054051","FBgn0260745","FBgn0053126","FBgn0040097","FBgn0037888","FBgn0026415","FBgn0001218","FBgn0264815","FBgn0043825","FBgn0028986","FBgn0037038","FBgn0011694","FBgn0028987","FBgn0261055","FBgn0034152","FBgn0003748","FBgn0259964","FBgn0020414","FBgn0034417","FBgn0036072","FBgn0250847","FBgn0016123","FBgn0259952","FBgn0259975","FBgn0036969","FBgn0040098","FBgn0039562","FBgn0034753","FBgn0015586"],["alpha-Tubulin at 84D","Accessory gland protein 36DE","CG17097","CG31872","regucalcin","Transferrin 1","SCP-containing protein C","Accessory gland protein 26Aa","Ejaculatory bulb protein","CG17242","CG4847","CG17472","Ecto-5'-nucleotidase 2","CG5162","Protein disulfide isomerase","CG34051","midline fasciclin","Neural Lazarillo","lectin-30A","SCP-containing protein B","Imaginal disc growth factor 4","Heat shock 70-kDa protein cognate 3","Phosphodiesterase 1c","CG18284","Serpin 38F","CG11037","Ejaculatory bulb protein II","Serpin 28F","Seminal fluid protein 26Ad","Accessory gland protein 53C14a","Trehalase","Seminal fluid protein 33A3","Imaginal disc growth factor 3","CG15117","CG6628","CG14034","Alkaline phosphatase 4","Seminal fluid protein 24Bb","Seminal fluid protein 87B","Serpin 77Bb","lectin-29Ca","Glycoprotein 93","CG2852","Accessory gland protein 76A"],["3R","2L","2L","2L","X","X","3R","2L","2R","2L","2R","2L","2R","X","3L","2L","3R","2L","2L","3R","X","X","2L","2L","2L","3L","2R","2L","2L","2R","2R","2L","2L","2R","3L","2L","3R","2L","3R","3L","2L","3R","2R","3L"],[99.8,97.8,94.7,90.1,89.7,87.3,84.6,84,83,79.3,78.9,73.9,72.5,70.6,69.2,69.1,68.3,67.3,66.9,66.8,66.6,66.5,65.5,64.6,64.6,64.4,64,63.9,63.6,63.6,63.4,62.8,62.3,61.6,61.1,60,58.9,58.9,57.7,55.3,54.4,52.2,51.9,50.4]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Chromosome<\/th>\n      <th>Ranked abundance (%)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
-<div id="experiment-2---pbst-treatment-pbst" class="section level2 tabset">
+<div id="experiment-2---pbst-treatment-pbst"
+class="section level2 tabset">
 <h2 class="tabset">Experiment 2 - PBST treatment {#PBST}</h2>
-<p>In experiment 2 we washed sperm samples with PBS and Halt protease inhibitor (‘Halt’ treatment), PBS only (‘NoHalt’ treatment), or PBS containing Triton X detergent (‘PBST’ treatment) to denature the cell plasma membrane. We then performed pairswise differential abundance analysis between each treatment using <code>edgeR</code>. Few proteins were differentially abundant between the ‘Halt’ and ‘NoHalt’ controls. Subsequently, we performed differential abundance analysis between both controls compared to the ‘PBST’ treatment.</p>
+<p>In experiment 2 we washed sperm samples with PBS and Halt protease
+inhibitor (‘Halt’ treatment), PBS only (‘NoHalt’ treatment), or PBS
+containing Triton X detergent (‘PBST’ treatment) to denature the cell
+plasma membrane. We then performed pairswise differential abundance
+analysis between each treatment using <code>edgeR</code>. Few proteins
+were differentially abundant between the ‘Halt’ and ‘NoHalt’ controls.
+Subsequently, we performed differential abundance analysis between both
+controls compared to the ‘PBST’ treatment.</p>
 <pre class="r"><code>pbst_dat &lt;- PBST_dat %&gt;% 
   mutate(Sfp = case_when(FBgn %in% wigbySFP$FBgn[wigbySFP$category == &#39;highconf&#39;] ~ &#39;SFP.high&#39;,
                          FBgn %in% wigbySFP$FBgn ~ &#39;SFP.low&#39;,
@@ -3700,7 +3915,8 @@ pbst_dat2 &lt;- pbst_dat %&gt;%
 #                     PBST = pbst_dat2$Accession[pbst_dat2$mn_PBST != 0])))</code></pre>
 <div id="pairwise-analysis" class="section level3 tabset">
 <h3 class="tabset">Pairwise analysis</h3>
-<p>Here, we performed pairwise analyses between each treatment. We filtered proteins present in fewer than 7 out of 9 replicates.</p>
+<p>Here, we performed pairwise analyses between each treatment. We
+filtered proteins present in fewer than 7 out of 9 replicates.</p>
 <pre class="r"><code># make object for protein abundance data
 expr_pbst &lt;- pbst_dat2[, 9:17]
 
@@ -3972,15 +4188,15 @@ MartinGarlovsky
 </div>
 <div id="mds-plot" class="section level4 tabset">
 <h4 class="tabset">MDS plot</h4>
-<pre class="r"><code>mdsObj &lt;- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))$cmdscale.out
-
-mdsObj &lt;- as.data.frame(as.matrix(mdsObj)) %&gt;% 
-  rownames_to_column() %&gt;% 
-  mutate(condition = str_sub(rowname, 1, 2)) %&gt;% 
-  dplyr::rename(dim1 = V1, dim2 = V2, dim3 = V3)</code></pre>
+<pre class="r"><code>mdsObj12 &lt;- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,2))
+mdsObj13 &lt;- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))
+mdsObj23 &lt;- plotMDS(dgeList_pbst, plot = F, dim.plot = c(2,3))</code></pre>
 <div id="dim.1-vs.-dim.-2" class="section level5">
 <h5>Dim.1 vs. Dim. 2</h5>
-<pre class="r"><code>mdsObj %&gt;% 
+<pre class="r"><code>data.frame(sample.info = rownames(mdsObj12$distance.matrix.squared),
+           dim1 = mdsObj12$x,
+           dim2 = mdsObj12$y) %&gt;% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %&gt;% 
   ggplot(aes(x = dim1, y = dim2, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs(x = &quot;Dimension 1&quot;, y = &quot;Dimension 2&quot;) +
@@ -4034,7 +4250,10 @@ MartinGarlovsky
 </div>
 <div id="dim.1-vs.-dim.-3" class="section level5">
 <h5>Dim.1 vs. Dim. 3</h5>
-<pre class="r"><code>mdsObj %&gt;% 
+<pre class="r"><code>data.frame(sample.info = rownames(mdsObj13$distance.matrix.squared),
+           dim1 = mdsObj13$x,
+           dim3 = mdsObj13$y) %&gt;% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %&gt;% 
   ggplot(aes(x = dim1, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = &quot;Dimension 1&quot;, y = &quot;Dimension 3&quot;) +
@@ -4088,7 +4307,10 @@ MartinGarlovsky
 </div>
 <div id="dim.2-vs.-dim.-3" class="section level5">
 <h5>Dim.2 vs. Dim. 3</h5>
-<pre class="r"><code>mdsObj %&gt;% 
+<pre class="r"><code>data.frame(sample.info = rownames(mdsObj23$distance.matrix.squared),
+           dim2 = mdsObj23$x,
+           dim3 = mdsObj23$y) %&gt;% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %&gt;% 
   ggplot(aes(x = dim2, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = &quot;Dimension 2&quot;, y = &quot;Dimension 3&quot;) +
@@ -4141,7 +4363,8 @@ MartinGarlovsky
 </div>
 </div>
 </div>
-<div id="perform-differential-abundance-analysis" class="section level4">
+<div id="perform-differential-abundance-analysis"
+class="section level4">
 <h4>Perform differential abundance analysis</h4>
 <pre class="r"><code># perform likelihood ratio tests
 lrt.hn &lt;- glmLRT(glm_hn, contrast = cont.hn[,&quot;H.v.N&quot;])
@@ -4199,7 +4422,7 @@ new.labs &lt;- c(hn = &quot;Halt vs. No Halt&quot;,
     point.padding = unit(0.3, &quot;lines&quot;),
     max.overlaps = 20
   ) +
-  #ggsave(&#39;figures/volcano_PBSTexp.pdf&#39;, height = 4, width = 10) +
+  #ggsave(&#39;figures/volcano_PBSTexp.pdf&#39;, height = 6, width = 16) +
   NULL</code></pre>
 <p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-43-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -4278,7 +4501,8 @@ pbst_absent &lt;- data.frame(genes = intersect(pbst_dat2$Accession[!keep.hp],
 # pbst_absent %&gt;% filter(Sfp == &#39;SFP.high&#39;)
 # pbst_absent %&gt;% filter(Sfp == &#39;SFP.low&#39;)</code></pre>
 </div>
-<div id="proteins-lower-in-abundance-in-pbst-vs.-nohalt" class="section level5">
+<div id="proteins-lower-in-abundance-in-pbst-vs.-nohalt"
+class="section level5">
 <h5>proteins lower in abundance in PBST vs. no/halt</h5>
 <pre class="r"><code>pbst_low &lt;- data.frame(genes = intersect(
   lm_hp.tTags.table$genes[lm_hp.tTags.table$logFC &gt; 0 &amp; lm_hp.tTags.table$FDR &lt; 0.05],
@@ -4346,7 +4570,10 @@ MartinGarlovsky
 </div>
 <div id="single-model" class="section level3 tabset">
 <h3 class="tabset">Single model</h3>
-<p>Here we test for differences in abundance between the PBST treatment vs. the average of both controls. We first exclude the 16 proteins which showed significant differences in abundance between ‘Halt’ and ‘NoHalt’.</p>
+<p>Here we test for differences in abundance between the PBST treatment
+vs. the average of both controls. We first exclude the 16 proteins which
+showed significant differences in abundance between ‘Halt’ and
+‘NoHalt’.</p>
 <pre class="r"><code># remove proteins differentially abundant between Halt/NoHalt
 expr_pbst2 &lt;- pbst_dat2 %&gt;% 
   filter(!Accession %in% lm_hn.tTags.table$genes[lm_hn.tTags.table$threshold == &#39;SD&#39;]) %&gt;% 
@@ -4477,15 +4704,15 @@ MartinGarlovsky
 </div>
 <div id="mds-plot-1" class="section level4 tabset">
 <h4 class="tabset">MDS plot</h4>
-<pre class="r"><code>mdsObj &lt;- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))$cmdscale.out
-
-mdsObj &lt;- as.data.frame(as.matrix(mdsObj)) %&gt;% 
-  rownames_to_column() %&gt;% 
-  mutate(condition = str_sub(rowname, 1, 2)) %&gt;% 
-  dplyr::rename(dim1 = V1, dim2 = V2, dim3 = V3)</code></pre>
+<pre class="r"><code>mdsObj12 &lt;- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,2))
+mdsObj13 &lt;- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))
+mdsObj23 &lt;- plotMDS(dgeList_pbst, plot = F, dim.plot = c(2,3))</code></pre>
 <div id="dim.1-vs.-dim.-2-1" class="section level5">
 <h5>Dim.1 vs. Dim. 2</h5>
-<pre class="r"><code>mdsObj %&gt;% 
+<pre class="r"><code>data.frame(sample.info = rownames(mdsObj12$distance.matrix.squared),
+           dim1 = mdsObj12$x,
+           dim2 = mdsObj12$y) %&gt;% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %&gt;% 
   ggplot(aes(x = dim1, y = dim2, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs(x = &quot;Dimension 1&quot;, y = &quot;Dimension 2&quot;) +
@@ -4539,7 +4766,10 @@ MartinGarlovsky
 </div>
 <div id="dim.1-vs.-dim.-3-1" class="section level5">
 <h5>Dim.1 vs. Dim. 3</h5>
-<pre class="r"><code>mdsObj %&gt;% 
+<pre class="r"><code>data.frame(sample.info = rownames(mdsObj13$distance.matrix.squared),
+           dim1 = mdsObj13$x,
+           dim3 = mdsObj13$y) %&gt;% 
+  mutate(condition = str_sub(sample.info, 1, 2))  %&gt;% 
   ggplot(aes(x = dim1, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = &quot;Dimension 1&quot;, y = &quot;Dimension 3&quot;) +
@@ -4593,7 +4823,10 @@ MartinGarlovsky
 </div>
 <div id="dim.2-vs.-dim.-3-1" class="section level5">
 <h5>Dim.2 vs. Dim. 3</h5>
-<pre class="r"><code>mdsObj %&gt;% 
+<pre class="r"><code>data.frame(sample.info = rownames(mdsObj23$distance.matrix.squared),
+           dim2 = mdsObj23$x,
+           dim3 = mdsObj23$y) %&gt;% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %&gt;% 
   ggplot(aes(x = dim2, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = &quot;Dimension 2&quot;, y = &quot;Dimension 3&quot;) +
@@ -4761,7 +4994,7 @@ MartinGarlovsky
   arrange(Name) %&gt;% 
   my_data_table()</code></pre>
 <div id="htmlwidget-7c5cc93b617cad5fb939" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7c5cc93b617cad5fb939">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0002855","FBgn0011559","FBgn0034153","FBgn0015586","FBgn0000044","FBgn0000042","FBgn0000047","FBgn0042138","FBgn0025111","FBgn0010548","FBgn0087002","FBgn0028646","FBgn0010217","FBgn0286508","FBgn0250788","FBgn0005585","FBgn0038395","FBgn0027552","FBgn0250847","FBgn0038685","FBgn0038656","FBgn0265271","FBgn0037942","FBgn0030283","FBgn0031108","FBgn0033446","FBgn0265264","FBgn0260453","FBgn0250841","FBgn0032868","FBgn0023537","FBgn0039674","FBgn0034753","FBgn0050103","FBgn0050491","FBgn0051195","FBgn0051482","FBgn0051659","FBgn0051680","FBgn0051693","FBgn0051872","FBgn0052081","FBgn0052832","FBgn0053303","FBgn0064119","FBgn0054051","FBgn0260766","FBgn0031407","FBgn0266448","FBgn0034229","FBgn0039371","FBgn0039358","FBgn0038326","FBgn0034914","FBgn0036186","FBgn0032314","FBgn0034432","FBgn0035567","FBgn0033734","FBgn0034479","FBgn0033679","FBgn0031784","FBgn0028513","FBgn0014141","FBgn0000299","FBgn0019830","FBgn0010434","FBgn0038194","FBgn0032833","FBgn0284248","FBgn0015623","FBgn0010019","FBgn0038797","FBgn0033248","FBgn0000454","FBgn0033663","FBgn0035909","FBgn0284245","FBgn0029176","FBgn0000559","FBgn0001942","FBgn0283427","FBgn0266451","FBgn0263199","FBgn0004868","FBgn0001114","FBgn0037970","FBgn0001098","FBgn0001125","FBgn0001142","FBgn0001149","FBgn0001128","FBgn0004507","FBgn0266064","FBgn0039562","FBgn0001218","FBgn0015245","FBgn0031728","FBgn0001233","FBgn0266599","FBgn0001220","FBgn0001196","FBgn0001200","FBgn0038233","FBgn0260466","FBgn0026415","FBgn0027108","FBgn0027291","FBgn0034405","FBgn0266449","FBgn0001258","FBgn0010397","FBgn0002526","FBgn0261800","FBgn0040098","FBgn0010482","FBgn0263594","FBgn0262559","FBgn0267366","FBgn0026409","FBgn0038662","FBgn0028479","FBgn0025352","FBgn0026061","FBgn0014863","FBgn0002789","FBgn0038294","FBgn0002921","FBgn0036316","FBgn0010352","FBgn0053126","FBgn0264975","FBgn0030724","FBgn0033268","FBgn0034277","FBgn0014868","FBgn0020513","FBgn0003149","FBgn0035438","FBgn0003076","FBgn0014869","FBgn0265297","FBgn0004363","FBgn0069354","FBgn0286818","FBgn0267385","FBgn0033814","FBgn0285937","FBgn0015790","FBgn0020255","FBgn0033906","FBgn0030362","FBgn0260442","FBgn0028697","FBgn0285950","FBgn0010078","FBgn0026372","FBgn0035422","FBgn0285949","FBgn0064225","FBgn0005593","FBgn0000100","FBgn0010412","FBgn0011284","FBgn0039757","FBgn0010408","FBgn0021906","FBgn0028569","FBgn0037298","FBgn0086906","FBgn0037888","FBgn0259952","FBgn0028987","FBgn0028986","FBgn0037239","FBgn0030026","FBgn0003360","FBgn0028560","FBgn0284408","FBgn0033644","FBgn0027560","FBgn0004117","FBgn0011726","FBgn0031757","FBgn0040259","FBgn0053519","FBgn0004169","FBgn0022097","FBgn0016075","FBgn0004397","FBgn0283471","FBgn0040064","FBgn0005391","FBgn0265991","FBgn0052311",null,null,null],["Accessory gland protein 26Aa","Accessory gland protein 36DE","Accessory gland protein 53C14b","Accessory gland protein 76A","Actin 57B","Actin 5C","Actin 88F","Acyl-protein thioesterase 1","Adenine nucleotide translocase 2","Aldehyde dehydrogenase type III","apolipophorin","aralar1","ATP synthase, beta subunit","beta Hydroxy acid dehydrogenase 1","beta Spectrin","Calreticulin","CG10407","CG10863","CG14034","CG14282","CG14294","CG14717","CG14721","CG15198","CG15459","CG1648","CG17097","CG17140","CG17242","CG17472","CG17896","CG1907","CG2852","CG30103","CG30491","CG31195","CG31482","CG31659","CG31680","CG31693","CG31872","CG32081","CG32832","CG33303","CG33934","CG34051","CG42564","CG4270","CG45078","CG4847","CG4960","CG5028","CG5044","CG5554","CG6071","CG7309","CG7461","CG7514","CG8520","CG8654","CG8888","CG9222","CG9254","cheerio","Collagen type IV alpha 1","congested-like trachea","coracle","Cyp6d5","Cytochrome c oxidase subunit 4","Cytochrome c proximal","Cytochrome P450 reductase","Cytochrome P450-4g1","Dicarboxylate carrier 2","Dicarboxylate carrier 3","Dipeptidase B","Endoplasmic reticulum p60","ergic53","eukaryotic translation elongation factor 1 alpha 1","eukaryotic translation elongation factor 1 gamma","eukaryotic translation elongation factor 2","eukaryotic translation initiation factor 4A","Fatty acid synthase 1","fau","Galactokinase","GDP dissociation inhibitor","Glutactin","Glutamate Carrier 2","Glutamate dehydrogenase","Glutamate oxaloacetate transaminase 2","Glutamine synthetase 1","Glutathione S transferase D1","Glycerol-3-phosphate dehydrogenase 1","Glycogen phosphorylase","Glycogen synthase","Glycoprotein 93","Heat shock 70-kDa protein cognate 3","Heat shock protein 60A","Heat shock protein 60C","Heat shock protein 83","Heat shock protein cognate 4","Heat shock protein cognate 5","Histone H2A","Histone H4","HTRA2-related serine protease","I'm not dead yet 2","Imaginal disc growth factor 4","Innexin 2","Isocitrate dehydrogenase 3a","Juvenile hormone epoxide hydrolase 2","Kruppel homolog 2","Lactate dehydrogenase","Lamin C","Laminin A","LanB1","lectin-29Ca","lethal (2) 01289","lost","Malate dehydrogenase 2","milkah","Mitochondrial phosphate carrier protein 2","Mitochondrial pyruvate carrier","Mitochondrial trifunctional protein alpha subunit","Mitochondrial trifunctional protein beta subunit","Multiple inositol polyphosphate phosphatase 1","Muscle LIM protein at 84B","Muscle protein 20","Myofilin","Na pump alpha subunit","nebulosa","Neural conserved at 73EF","Neural Lazarillo","Neuroglian","Nipsnap","Odorant-binding protein 44a","Oligosaccharide transferase Delta subunit","Oligosaccharyltransferase 48kD subunit","PAICS bifunctional enzyme","Paramyosin","PHGPx","Phosphoglucose mutase 1","Phosphoglyceromutase 78","poly(A) binding protein","porin","Porin2","Protein disulfide isomerase","Pyruvate kinase","Quiescin sulfhydryl oxidase 1","Rab1","Rab11","Ran","Receptor expression enhancing protein B","regucalcin","rhea","Ribosomal protein L15","Ribosomal protein L19","Ribosomal protein L23","Ribosomal protein L23A","Ribosomal protein L28","Ribosomal protein L31","Ribosomal protein L5","Ribosomal protein L7","Ribosomal protein LP0","Ribosomal protein S19a","Ribosomal protein S4","Ribosomal protein S7","Ribosomal protein S9","Rieske iron-sulfur protein","robl37BC","Saccheropin dehydrogenase 1","sallimus","SCP-containing protein B","Seminal fluid protein 24Bb","Serpin 28F","Serpin 38F","Sideroflexin 1/3","sniffer","stress-sensitive B","sugar transporter 4","terribly reduced optic lobes","Trehalose transporter 1-2","Trehalose-6-phosphate synthase 1","Tropomyosin 2","twinstar","Ucp4C","UDP-glycosyltransferase family 302 member C1","Unc-89","upheld","Vacuolar H[+] ATPase 36kD subunit 1","viking","Vinculin","wings up A","yippee interacting protein 2","Yolk protein 2","Z band alternatively spliced PDZ-motif protein 52","zormin",null,null,null],["P10333","X2J8Y6","Q6GUR9","Q9VVW1","P53501","P10987","P83967","C0PDF4","O62526","A0A0B4KEL0","Q9V496","Q9VA73","Q05825","Q9VXI1","M9PF16","Q53YH3","Q9VEZ6","Q9Y112","Q0E8T1","Q9VDZ2","Q8T975","Q9VGJ4","A0A0B4KFS3","Q9VZ12","Q9VR92","A1Z7Z4","E2QCS7","Q9VKP4","Q9VQA3","Q9VIL5","Q7KW39","Q9VAJ9","Q9W227","A1ZAU0","Q7JUS1","Q8IN49","Q9VI35","Q1ECA7","Q8INU9","Q7KRS1","Q9VKT1","Q8IQF3","Q8INZ7","Q76NQ0","E1JIQ7","Q6IH48","Q9VI17","Q7KU14","C0HK94","Q7K5N8","Q9VBM3","A8JRC1","Q86BP1","A0A0B4LHC9","Q9VTL4","Q7KTF1","A1ZBJ2","Q9VZ94","Q7K4T8","Q7K3M6","Q7K3N4","Q8T4D4","Q9VJW8","A0A0B4KHN1","P08120","Q9VQG4","Q9V8R9","Q9VFP1","Q9VIQ8","P84029","M9PCQ1","Q9V3S0","Q9VDM3","A1Z787","Q9VFQ9","Q3YMU0","Q9V3A8","P08736","Q9NJH0","P13060","Q02748","Q9VQL7","C0HK95","Q95U34","Q9VLB7","P33438","Q8INJ3","P54385","Q9VQ61","E1JHQ1","P20432","P13706","A4UZZ4","Q9VFC8","Q9VAY2","P29844","O02649","Q9VMN5","M9PBL3","P11147","P29845","P84051","P84040","A0A0B4KG52","Q9VDQ0","X2JEB6","E1JJF3","Q9VWH4","Q7KB18","X2J4W8","B5RJQ0","Q03427","Q00174","P11046","Q9VLM0","Q0E9N2","Q9VN21","Q9VEB1","Q9VAZ1","Q0E8E8","Q7KSC4","Q9V397","Q9W1H8","Q9VV72","Q24400","P14318","Q9VFC7","P13607","Q9VU17","A8JNU6","Q8SXR1","M9NEZ5","Q9VXK0","Q7K084","Q7K110","Q24319","Q9I7S8","A4V1N8","Q9VZQ8","Q9VUY9","Q9VAN7","P21187","Q94920","Q9VKP2","P54399","O62619","Q7JQR3","O18332","O18335","A4V4A5","A1Z9M2","Q9VYR1","Q9VSL8","O17445","P36241","P48159","Q9W0A8","Q9VZS5","Q9V597","Q9W5R8","X2J5G6","P19889","P39018","P41042","Q9VA91","C6SUW3","Q9VQ29","Q9VJ18","Q9VN86","M9PBJ0","Q8T3W8","B4ZJ91","Q9VLQ7","Q9VII7","Q9VN13","Q9W3H4","Q26365","Q7K2U8","M9NDL5","Q8MKK4","Q9Y119","A0A0B4KHJ9","P45594","Q9VMK1","Q9VGT3","A8DYP0","M9NH07","Q9V7D2","Q9VMV5","O46037","M9PJQ5","Q9VL70","X2JB25","A0A0B4LGL0","M9PBJ1","P18091-3","Q99323-1","P19351-11"],["High conf. Sfp","High conf. Sfp","High conf. Sfp","High conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","High conf. Sfp","Low conf. Sfp","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","High conf. Sfp","High conf. Sfp","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","High conf. Sfp","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","High conf. Sfp","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Low conf. Sfp","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","High conf. Sfp","Sperm","Sperm","Low conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Low conf. Sfp","Low conf. Sfp","Low conf. Sfp","Low conf. Sfp","High conf. Sfp","Low conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Low conf. Sfp","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","High conf. Sfp","High conf. Sfp","High conf. Sfp","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm"],["2L","2L","2R","3L","2R","X","3R","3L","X","2R","4","3R","4","X","X","3R","3R","3L","2L","3R","3R","3R","3R","X","X","2R","2L","2L","2L","2L","X","3R","2R","2R","2R","3R","3R","2L","2L","2L","2L","3L","2L","2L","3R","2L","3R","2L","3R","2R","3R","3R","3R","2R","3L","2L","2R","3L","2R","2R","2R","2L","2L","3R","2L","2L","2R","3R","2L","2L","2L","X","3R","2R","3R","2R","3L","2R","3R","2L","2L","2L","3R","3L","2L","2L","3R","3R","2L","2L","3R","2L","2L","3R","3R","X","X","2L","3L","3R","2R","-","-","3R","3R","X","X","X","2R","2L","3L","2R","3L","2L","2L","2R","3R","3R","3R","3L","3R","2L","2R","3L","3R","2R","3R","3R","3L","3L","2L","X","X","2R","2R","X","X","3L","3L","3L","3R","2R","2L","2L","3L","3R","2R","3R","3R","X","2R","X","3L","3L","2R","2R","3L","3L","2R","2L","2L","3L","X","3L","3R","3L","2L","2L","3R","3L","3R","2L","2L","2L","3R","X","X","2R","X","2R","2L","3R","2R","2L","3R","2R","X","2R","2L","X","X","2L","X","2R","3L",null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>genes<\/th>\n      <th>Sfp<\/th>\n      <th>Chromosome<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-7c5cc93b617cad5fb939">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0002855","FBgn0011559","FBgn0034153","FBgn0015586","FBgn0000044","FBgn0000042","FBgn0000047","FBgn0042138","FBgn0025111","FBgn0010548","FBgn0087002","FBgn0028646","FBgn0010217","FBgn0286508","FBgn0250788","FBgn0005585","FBgn0038395","FBgn0027552","FBgn0250847","FBgn0038685","FBgn0038656","FBgn0265271","FBgn0037942","FBgn0030283","FBgn0031108","FBgn0033446","FBgn0265264","FBgn0260453","FBgn0250841","FBgn0032868","FBgn0023537","FBgn0039674","FBgn0034753","FBgn0050103","FBgn0050491","FBgn0051195","FBgn0051482","FBgn0051659","FBgn0051680","FBgn0051693","FBgn0051872","FBgn0052081","FBgn0052832","FBgn0053303","FBgn0064119","FBgn0054051","FBgn0260766","FBgn0031407","FBgn0266448","FBgn0034229","FBgn0039371","FBgn0039358","FBgn0038326","FBgn0034914","FBgn0036186","FBgn0032314","FBgn0034432","FBgn0035567","FBgn0033734","FBgn0034479","FBgn0033679","FBgn0031784","FBgn0028513","FBgn0014141","FBgn0000299","FBgn0019830","FBgn0010434","FBgn0038194","FBgn0032833","FBgn0284248","FBgn0015623","FBgn0010019","FBgn0038797","FBgn0033248","FBgn0000454","FBgn0033663","FBgn0035909","FBgn0284245","FBgn0029176","FBgn0000559","FBgn0001942","FBgn0283427","FBgn0266451","FBgn0263199","FBgn0004868","FBgn0001114","FBgn0037970","FBgn0001098","FBgn0001125","FBgn0001142","FBgn0001149","FBgn0001128","FBgn0004507","FBgn0266064","FBgn0039562","FBgn0001218","FBgn0015245","FBgn0031728","FBgn0001233","FBgn0266599","FBgn0001220","FBgn0001196","FBgn0001200","FBgn0038233","FBgn0260466","FBgn0026415","FBgn0027108","FBgn0027291","FBgn0034405","FBgn0266449","FBgn0001258","FBgn0010397","FBgn0002526","FBgn0261800","FBgn0040098","FBgn0010482","FBgn0263594","FBgn0262559","FBgn0267366","FBgn0026409","FBgn0038662","FBgn0028479","FBgn0025352","FBgn0026061","FBgn0014863","FBgn0002789","FBgn0038294","FBgn0002921","FBgn0036316","FBgn0010352","FBgn0053126","FBgn0264975","FBgn0030724","FBgn0033268","FBgn0034277","FBgn0014868","FBgn0020513","FBgn0003149","FBgn0035438","FBgn0003076","FBgn0014869","FBgn0265297","FBgn0004363","FBgn0069354","FBgn0286818","FBgn0267385","FBgn0033814","FBgn0285937","FBgn0015790","FBgn0020255","FBgn0033906","FBgn0030362","FBgn0260442","FBgn0028697","FBgn0285950","FBgn0010078","FBgn0026372","FBgn0035422","FBgn0285949","FBgn0064225","FBgn0005593","FBgn0000100","FBgn0010412","FBgn0011284","FBgn0039757","FBgn0010408","FBgn0021906","FBgn0028569","FBgn0037298","FBgn0086906","FBgn0037888","FBgn0259952","FBgn0028987","FBgn0028986","FBgn0037239","FBgn0030026","FBgn0003360","FBgn0028560","FBgn0284408","FBgn0033644","FBgn0027560","FBgn0004117","FBgn0011726","FBgn0031757","FBgn0040259","FBgn0053519","FBgn0004169","FBgn0022097","FBgn0016075","FBgn0004397","FBgn0283471","FBgn0040064","FBgn0005391","FBgn0265991","FBgn0052311",null,null,null],["Accessory gland protein 26Aa","Accessory gland protein 36DE","Accessory gland protein 53C14b","Accessory gland protein 76A","Actin 57B","Actin 5C","Actin 88F","Acyl-protein thioesterase 1","Adenine nucleotide translocase 2","Aldehyde dehydrogenase type III","apolipophorin","aralar1","ATP synthase, beta subunit","beta Hydroxy acid dehydrogenase 1","beta Spectrin","Calreticulin","CG10407","CG10863","CG14034","CG14282","CG14294","CG14717","CG14721","CG15198","CG15459","CG1648","CG17097","CG17140","CG17242","CG17472","CG17896","CG1907","CG2852","CG30103","CG30491","CG31195","CG31482","CG31659","CG31680","CG31693","CG31872","CG32081","CG32832","CG33303","CG33934","CG34051","CG42564","CG4270","CG45078","CG4847","CG4960","CG5028","CG5044","CG5554","CG6071","CG7309","CG7461","CG7514","CG8520","CG8654","CG8888","CG9222","CG9254","cheerio","Collagen type IV alpha 1","congested-like trachea","coracle","Cyp6d5","Cytochrome c oxidase subunit 4","Cytochrome c proximal","Cytochrome P450 reductase","Cytochrome P450-4g1","Dicarboxylate carrier 2","Dicarboxylate carrier 3","Dipeptidase B","Endoplasmic reticulum p60","ergic53","eukaryotic translation elongation factor 1 alpha 1","eukaryotic translation elongation factor 1 gamma","eukaryotic translation elongation factor 2","eukaryotic translation initiation factor 4A","Fatty acid synthase 1","fau","Galactokinase","GDP dissociation inhibitor","Glutactin","Glutamate Carrier 2","Glutamate dehydrogenase","Glutamate oxaloacetate transaminase 2","Glutamine synthetase 1","Glutathione S transferase D1","Glycerol-3-phosphate dehydrogenase 1","Glycogen phosphorylase","Glycogen synthase","Glycoprotein 93","Heat shock 70-kDa protein cognate 3","Heat shock protein 60A","Heat shock protein 60C","Heat shock protein 83","Heat shock protein cognate 4","Heat shock protein cognate 5","Histone H2A","Histone H4","HTRA2-related serine protease","I'm not dead yet 2","Imaginal disc growth factor 4","Innexin 2","Isocitrate dehydrogenase 3a","Juvenile hormone epoxide hydrolase 2","Kruppel homolog 2","Lactate dehydrogenase","Lamin C","Laminin A","LanB1","lectin-29Ca","lethal (2) 01289","lost","Malate dehydrogenase 2","milkah","Mitochondrial phosphate carrier protein 2","Mitochondrial pyruvate carrier","Mitochondrial trifunctional protein alpha subunit","Mitochondrial trifunctional protein beta subunit","Multiple inositol polyphosphate phosphatase 1","Muscle LIM protein at 84B","Muscle protein 20","Myofilin","Na pump alpha subunit","nebulosa","Neural conserved at 73EF","Neural Lazarillo","Neuroglian","Nipsnap","Odorant-binding protein 44a","Oligosaccharide transferase Delta subunit","Oligosaccharyltransferase 48kD subunit","PAICS bifunctional enzyme","Paramyosin","PHGPx","Phosphoglucose mutase 1","Phosphoglyceromutase 78","poly(A) binding protein","porin","Porin2","Protein disulfide isomerase","Pyruvate kinase","Quiescin sulfhydryl oxidase 1","Rab1","Rab11","Ran","Receptor expression enhancing protein B","regucalcin","rhea","Ribosomal protein L15","Ribosomal protein L19","Ribosomal protein L23","Ribosomal protein L23A","Ribosomal protein L28","Ribosomal protein L31","Ribosomal protein L5","Ribosomal protein L7","Ribosomal protein LP0","Ribosomal protein S19a","Ribosomal protein S4","Ribosomal protein S7","Ribosomal protein S9","Rieske iron-sulfur protein","robl37BC","Saccheropin dehydrogenase 1","sallimus","SCP-containing protein B","Seminal fluid protein 24Bb","Serpin 28F","Serpin 38F","Sideroflexin 1/3","sniffer","stress-sensitive B","sugar transporter 4","terribly reduced optic lobes","Trehalose transporter 1-2","Trehalose-6-phosphate synthase 1","Tropomyosin 2","twinstar","Ucp4C","UDP-glycosyltransferase family 302 member C1","Unc-89","upheld","Vacuolar H[+] ATPase 36kD subunit 1","viking","Vinculin","wings up A","yippee interacting protein 2","Yolk protein 2","Z band alternatively spliced PDZ-motif protein 52","zormin",null,null,null],["P10333","X2J8Y6","Q6GUR9","Q9VVW1","P53501","P10987","P83967","C0PDF4","O62526","A0A0B4KEL0","Q9V496","Q9VA73","Q05825","Q9VXI1","M9PF16","Q53YH3","Q9VEZ6","Q9Y112","Q0E8T1","Q9VDZ2","Q8T975","Q9VGJ4","A0A0B4KFS3","Q9VZ12","Q9VR92","A1Z7Z4","E2QCS7","Q9VKP4","Q9VQA3","Q9VIL5","Q7KW39","Q9VAJ9","Q9W227","A1ZAU0","Q7JUS1","Q8IN49","Q9VI35","Q1ECA7","Q8INU9","Q7KRS1","Q9VKT1","Q8IQF3","Q8INZ7","Q76NQ0","E1JIQ7","Q6IH48","Q9VI17","Q7KU14","C0HK94","Q7K5N8","Q9VBM3","A8JRC1","Q86BP1","A0A0B4LHC9","Q9VTL4","Q7KTF1","A1ZBJ2","Q9VZ94","Q7K4T8","Q7K3M6","Q7K3N4","Q8T4D4","Q9VJW8","A0A0B4KHN1","P08120","Q9VQG4","Q9V8R9","Q9VFP1","Q9VIQ8","P84029","M9PCQ1","Q9V3S0","Q9VDM3","A1Z787","Q9VFQ9","Q3YMU0","Q9V3A8","P08736","Q9NJH0","P13060","Q02748","Q9VQL7","C0HK95","Q95U34","Q9VLB7","P33438","Q8INJ3","P54385","Q9VQ61","E1JHQ1","P20432","P13706","A4UZZ4","Q9VFC8","Q9VAY2","P29844","O02649","Q9VMN5","M9PBL3","P11147","P29845","P84051","P84040","A0A0B4KG52","Q9VDQ0","X2JEB6","E1JJF3","Q9VWH4","Q7KB18","X2J4W8","B5RJQ0","Q03427","Q00174","P11046","Q9VLM0","Q0E9N2","Q9VN21","Q9VEB1","Q9VAZ1","Q0E8E8","Q7KSC4","Q9V397","Q9W1H8","Q9VV72","Q24400","P14318","Q9VFC7","P13607","Q9VU17","A8JNU6","Q8SXR1","M9NEZ5","Q9VXK0","Q7K084","Q7K110","Q24319","Q9I7S8","A4V1N8","Q9VZQ8","Q9VUY9","Q9VAN7","P21187","Q94920","Q9VKP2","P54399","O62619","Q7JQR3","O18332","O18335","A4V4A5","A1Z9M2","Q9VYR1","Q9VSL8","O17445","P36241","P48159","Q9W0A8","Q9VZS5","Q9V597","Q9W5R8","X2J5G6","P19889","P39018","P41042","Q9VA91","C6SUW3","Q9VQ29","Q9VJ18","Q9VN86","M9PBJ0","Q8T3W8","B4ZJ91","Q9VLQ7","Q9VII7","Q9VN13","Q9W3H4","Q26365","Q7K2U8","M9NDL5","Q8MKK4","Q9Y119","A0A0B4KHJ9","P45594","Q9VMK1","Q9VGT3","A8DYP0","M9NH07","Q9V7D2","Q9VMV5","O46037","M9PJQ5","Q9VL70","X2JB25","A0A0B4LGL0","M9PBJ1","P18091-3","Q99323-1","P19351-11"],["High conf. Sfp","High conf. Sfp","High conf. Sfp","High conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","High conf. Sfp","Low conf. Sfp","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","High conf. Sfp","High conf. Sfp","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","High conf. Sfp","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","High conf. Sfp","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Low conf. Sfp","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","High conf. Sfp","Sperm","Sperm","Low conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Low conf. Sfp","Low conf. Sfp","Low conf. Sfp","Low conf. Sfp","High conf. Sfp","Low conf. Sfp","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Low conf. Sfp","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","High conf. Sfp","High conf. Sfp","High conf. Sfp","High conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Sperm","Low conf. Sfp","Sperm","Sperm","Sperm","Sperm"],["2L","2L","2R","3L","2R","X","3R","3L","X","2R","4","3R","4","X","X","3R","3R","3L","2L","3R","3R","3R","3R","X","X","2R","2L","2L","2L","2L","X","3R","2R","2R","2R","3R","3R","2L","2L","2L","2L","3L","2L","2L","3R","2L","3R","2L","3R","2R","3R","3R","3R","2R","3L","2L","2R","3L","2R","2R","2R","2L","2L","3R","2L","2L","2R","3R","2L","2L","2L","X","3R","2R","3R","2R","3L","2R","3R","2L","2L","2L","3R","3L","2L","2L","3R","3R","2L","2L","3R","2L","2L","3R","3R","X","X","2L","3L","3R","2R","-","-","3R","3R","X","X","X","2R","2L","3L","2R","3L","2L","2L","2R","3R","3R","3R","3L","3R","2L","2R","3L","3R","2R","3R","3R","3L","3L","2L","X","X","2R","2R","X","X","3L","3L","3L","3R","2R","2L","2L","3L","3R","2R","3R","3R","X","2R","X","3L","3L","2R","2R","3L","3L","2R","2L","2L","3L","X","3L","3R","3L","2L","2L","3R","3L","3R","2L","2L","2L","3R","X","X","2R","X","2R","2L","3R","2R","2L","3R","2R","X","2R","2L","X","X","2L","X","2R","3L",null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>genes<\/th>\n      <th>Sfp<\/th>\n      <th>Chromosome<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="sfps-depleted-after-pbst-treatment" class="section level4">
 <h4>Sfps depleted after PBST treatment</h4>
@@ -4770,7 +5003,7 @@ MartinGarlovsky
   arrange(Symbol) %&gt;% 
   my_data_table()</code></pre>
 <div id="htmlwidget-879ac2b5147c82bbbbbd" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-879ac2b5147c82bbbbbd">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0002855","FBgn0011559","FBgn0034153","FBgn0015586","FBgn0005585","FBgn0250847","FBgn0265264","FBgn0250841","FBgn0032868","FBgn0034753","FBgn0051659","FBgn0051680","FBgn0051872","FBgn0054051","FBgn0260766","FBgn0034229","FBgn0036186","FBgn0039562","FBgn0001218","FBgn0026415","FBgn0040098","FBgn0053126","FBgn0034277","FBgn0286818","FBgn0030362","FBgn0037888","FBgn0259952","FBgn0028987","FBgn0028986"],["Accessory gland protein 26Aa","Accessory gland protein 36DE","Accessory gland protein 53C14b","Accessory gland protein 76A","Calreticulin","CG14034","CG17097","CG17242","CG17472","CG2852","CG31659","CG31680","CG31872","CG34051","CG42564","CG4847","CG6071","Glycoprotein 93","Heat shock 70-kDa protein cognate 3","Imaginal disc growth factor 4","lectin-29Ca","Neural Lazarillo","Oligosaccharide transferase Delta subunit","Protein disulfide isomerase","regucalcin","SCP-containing protein B","Seminal fluid protein 24Bb","Serpin 28F","Serpin 38F"],["Acp26Aa","Acp36DE","Acp53C14b","Acp76A","Calr","CG14034","CG17097","CG17242","CG17472","CG2852","CG31659","CG31680","CG31872","CG34051","CG42564","CG4847","CG6071","Gp93","Hsc70-3","Idgf4","lectin-29Ca","NLaz","OstDelta","Pdi","regucalcin","scpr-B","Sfp24Bb","Spn28F","Spn38F"],["2L","2L","2R","3L","3R","2L","2L","2L","2L","2R","2L","2L","2L","2L","3R","2R","3L","3R","X","X","2L","2L","2R","3L","X","3R","2L","2L","2L"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Symbol<\/th>\n      <th>Chromosome<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-879ac2b5147c82bbbbbd">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0002855","FBgn0011559","FBgn0034153","FBgn0015586","FBgn0005585","FBgn0250847","FBgn0265264","FBgn0250841","FBgn0032868","FBgn0034753","FBgn0051659","FBgn0051680","FBgn0051872","FBgn0054051","FBgn0260766","FBgn0034229","FBgn0036186","FBgn0039562","FBgn0001218","FBgn0026415","FBgn0040098","FBgn0053126","FBgn0034277","FBgn0286818","FBgn0030362","FBgn0037888","FBgn0259952","FBgn0028987","FBgn0028986"],["Accessory gland protein 26Aa","Accessory gland protein 36DE","Accessory gland protein 53C14b","Accessory gland protein 76A","Calreticulin","CG14034","CG17097","CG17242","CG17472","CG2852","CG31659","CG31680","CG31872","CG34051","CG42564","CG4847","CG6071","Glycoprotein 93","Heat shock 70-kDa protein cognate 3","Imaginal disc growth factor 4","lectin-29Ca","Neural Lazarillo","Oligosaccharide transferase Delta subunit","Protein disulfide isomerase","regucalcin","SCP-containing protein B","Seminal fluid protein 24Bb","Serpin 28F","Serpin 38F"],["Acp26Aa","Acp36DE","Acp53C14b","Acp76A","Calr","CG14034","CG17097","CG17242","CG17472","CG2852","CG31659","CG31680","CG31872","CG34051","CG42564","CG4847","CG6071","Gp93","Hsc70-3","Idgf4","lectin-29Ca","NLaz","OstDelta","Pdi","regucalcin","scpr-B","Sfp24Bb","Spn28F","Spn38F"],["2L","2L","2R","3L","3R","2L","2L","2L","2L","2R","2L","2L","2L","2L","3R","2R","3L","3R","X","X","2L","2L","2R","3L","X","3R","2L","2L","2L"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Symbol<\/th>\n      <th>Chromosome<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="sfps-remaining-after-pbst-treatment" class="section level4">
 <h4>Sfps remaining after PBST treatment</h4>
@@ -4779,13 +5012,17 @@ MartinGarlovsky
   arrange(Symbol) %&gt;% 
   my_data_table()</code></pre>
 <div id="htmlwidget-ee329062ce30c37f180d" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ee329062ce30c37f180d">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0003885","FBgn0004181","FBgn0011694","FBgn0020414","FBgn0260745","FBgn0050104","FBgn0264815","FBgn0261055","FBgn0259975","FBgn0052203","FBgn0036969","FBgn0036970","FBgn0034709","FBgn0003748"],["alpha-Tubulin at 84D","Ejaculatory bulb protein","Ejaculatory bulb protein II","Imaginal disc growth factor 3","midline fasciclin","Ecto-5'-nucleotidase 2","Phosphodiesterase 1c","Seminal fluid protein 26Ad","Seminal fluid protein 87B","Serpin 75F","Serpin 77Bb","Serpin 77Bc","Secreted Wg-interacting molecule","Trehalase"],["alphaTub84D","Ebp","EbpII","Idgf3","mfas","NT5E-2","Pde1c","Sfp26Ad","Sfp87B","Spn75F","Spn77Bb","Spn77Bc","Swim","Treh"],["3R","2R","2R","2L","3R","2R","2L","2L","3R","3L","3L","3L","2R","2R"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Symbol<\/th>\n      <th>Chromosome<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-ee329062ce30c37f180d">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0003885","FBgn0004181","FBgn0011694","FBgn0020414","FBgn0260745","FBgn0050104","FBgn0264815","FBgn0261055","FBgn0259975","FBgn0052203","FBgn0036969","FBgn0036970","FBgn0034709","FBgn0003748"],["alpha-Tubulin at 84D","Ejaculatory bulb protein","Ejaculatory bulb protein II","Imaginal disc growth factor 3","midline fasciclin","Ecto-5'-nucleotidase 2","Phosphodiesterase 1c","Seminal fluid protein 26Ad","Seminal fluid protein 87B","Serpin 75F","Serpin 77Bb","Serpin 77Bc","Secreted Wg-interacting molecule","Trehalase"],["alphaTub84D","Ebp","EbpII","Idgf3","mfas","NT5E-2","Pde1c","Sfp26Ad","Sfp87B","Spn75F","Spn77Bb","Spn77Bc","Swim","Treh"],["3R","2R","2R","2L","3R","2R","2L","2L","3R","3L","3L","3L","2R","2R"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Symbol<\/th>\n      <th>Chromosome<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
 <div id="experiment-3---salt-wash" class="section level2 tabset">
 <h2 class="tabset">Experiment 3 - salt wash</h2>
-<p>Here we washed sperm samples with high molar NaCl or PBS (control). We performed LC-MS analysis for 4 biological replicates of each treatment, with 2 technical replicates each. We first summed technical replicates. We then filtered proteins present in fewer than 5 out of 8 replicates total.</p>
+<p>Here we washed sperm samples with high molar NaCl or PBS (control).
+We performed LC-MS analysis for 4 biological replicates of each
+treatment, with 2 technical replicates each. We first summed technical
+replicates. We then filtered proteins present in fewer than 5 out of 8
+replicates total.</p>
 <pre class="r"><code>salt_dat2 &lt;- salt_dat %&gt;% 
   dplyr::select(FBgn, Accession, Gene.Symbol, UniqueP = X..Unique.Peptides,
                 contains(&#39;Abundance..F&#39;)) %&gt;% 
@@ -4895,15 +5132,15 @@ MartinGarlovsky
 </div>
 <div id="mds-plot-2" class="section level3 tabset">
 <h3 class="tabset">MDS plot</h3>
-<pre class="r"><code>mdsObj &lt;- plotMDS(dgeList_salt, plot = F, dim.plot = c(1,3))$cmdscale.out
-
-mdsObj &lt;- as.data.frame(as.matrix(mdsObj)) %&gt;% 
-  rownames_to_column() %&gt;% 
-  mutate(condition = str_sub(rowname, 1, 2)) %&gt;% 
-  dplyr::rename(dim1 = V1, dim2 = V2, dim3 = V3)</code></pre>
+<pre class="r"><code>mdsObj12 &lt;- plotMDS(dgeList_salt, plot = F, dim.plot = c(1,2))
+mdsObj13 &lt;- plotMDS(dgeList_salt, plot = F, dim.plot = c(1,3))
+mdsObj23 &lt;- plotMDS(dgeList_salt, plot = F, dim.plot = c(2,3))</code></pre>
 <div id="dim.1-vs.-dim.-2-2" class="section level4">
 <h4>Dim.1 vs. Dim. 2</h4>
-<pre class="r"><code>mdsObj %&gt;% 
+<pre class="r"><code>data.frame(sample.info = rownames(mdsObj12$distance.matrix.squared),
+           dim1 = mdsObj12$x,
+           dim2 = mdsObj12$y) %&gt;% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %&gt;% 
   ggplot(aes(x = dim1, y = dim2, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs(x = &quot;Dimension 1&quot;, y = &quot;Dimension 2&quot;) +
@@ -4957,7 +5194,10 @@ MartinGarlovsky
 </div>
 <div id="dim.1-vs.-dim.-3-2" class="section level4">
 <h4>Dim.1 vs. Dim. 3</h4>
-<pre class="r"><code>mdsObj %&gt;% 
+<pre class="r"><code>data.frame(sample.info = rownames(mdsObj13$distance.matrix.squared),
+           dim1 = mdsObj13$x,
+           dim3 = mdsObj13$y) %&gt;% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %&gt;% 
   ggplot(aes(x = dim1, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = &quot;Dimension 1&quot;, y = &quot;Dimension 3&quot;) +
@@ -5011,7 +5251,10 @@ MartinGarlovsky
 </div>
 <div id="dim.2-vs.-dim.-3-2" class="section level4">
 <h4>Dim.2 vs. Dim. 3</h4>
-<pre class="r"><code>mdsObj %&gt;% 
+<pre class="r"><code>data.frame(sample.info = rownames(mdsObj23$distance.matrix.squared),
+           dim2 = mdsObj23$x,
+           dim3 = mdsObj23$y) %&gt;% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %&gt;% 
   ggplot(aes(x = dim2, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = &quot;Dimension 2&quot;, y = &quot;Dimension 3&quot;) +
@@ -5074,6 +5317,7 @@ lm_salt.tTags.table &lt;- topTags(lrt.salt, n = NULL) %&gt;% as.data.frame() %&g
   left_join(salt_dat2,
             by = c(&#39;genes&#39; = &#39;Accession&#39;)) %&gt;% 
   mutate(bin = ntile(logCPM, 10))
+
 lm_salt.tTags.table %&gt;% filter(threshold != &#39;SD&#39;) %&gt;% 
   ggplot(aes(x = logFC, y = -log10(PValue))) +
   geom_point(alpha = .1) +
@@ -5218,24 +5462,28 @@ MartinGarlovsky
 </div>
 <div id="refined-sfp-list" class="section level1 tabset">
 <h1 class="tabset">Refined Sfp list</h1>
-<p>Proteins that show no difference in abundance between treatments - i.e. proteins that putatively should be defined as sperm proteins rather than Sfps.</p>
-<div id="high-confidence-sfps-remaining-after-pbst-wash" class="section level2">
+<p>Proteins that show no difference in abundance between treatments -
+i.e. proteins that putatively should be defined as sperm proteins rather
+than Sfps.</p>
+<div id="high-confidence-sfps-remaining-after-pbst-wash"
+class="section level2">
 <h2>High confidence Sfps remaining after PBST wash</h2>
 <pre class="r"><code>lrt.pbst_v_rest.tTags %&gt;% filter(threshold != &#39;SD&#39; &amp; Sfp == &#39;SFP.high&#39;) %&gt;% 
   dplyr::select(FBgn, Name = NAME, Chromosome = LOCATION_ARM, Abundance = logCPM) %&gt;% 
   mutate(across(4, ~round(.x, 2))) %&gt;% 
   my_data_table()</code></pre>
 <div id="htmlwidget-e6b3d5c3cda8cdc28426" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e6b3d5c3cda8cdc28426">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0011694","FBgn0261055","FBgn0004181","FBgn0003885","FBgn0260745","FBgn0036970","FBgn0036969","FBgn0259975","FBgn0034709","FBgn0264815","FBgn0020414","FBgn0050104","FBgn0052203","FBgn0003748"],["Ejaculatory bulb protein II","Seminal fluid protein 26Ad","Ejaculatory bulb protein","alpha-Tubulin at 84D","midline fasciclin","Serpin 77Bc","Serpin 77Bb","Seminal fluid protein 87B","Secreted Wg-interacting molecule","Phosphodiesterase 1c","Imaginal disc growth factor 3","Ecto-5'-nucleotidase 2","Serpin 75F","Trehalase"],["2R","2L","2R","3R","3R","3L","3L","3R","2R","2L","2L","2R","3L","2R"],[5.5,3.72,8.25,16.24,5.66,5.24,2.47,4.05,3.78,5.31,6.77,7.02,1.74,3.61]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Chromosome<\/th>\n      <th>Abundance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-e6b3d5c3cda8cdc28426">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0011694","FBgn0261055","FBgn0004181","FBgn0003885","FBgn0260745","FBgn0036970","FBgn0036969","FBgn0259975","FBgn0034709","FBgn0264815","FBgn0020414","FBgn0050104","FBgn0052203","FBgn0003748"],["Ejaculatory bulb protein II","Seminal fluid protein 26Ad","Ejaculatory bulb protein","alpha-Tubulin at 84D","midline fasciclin","Serpin 77Bc","Serpin 77Bb","Seminal fluid protein 87B","Secreted Wg-interacting molecule","Phosphodiesterase 1c","Imaginal disc growth factor 3","Ecto-5'-nucleotidase 2","Serpin 75F","Trehalase"],["2R","2L","2R","3R","3R","3L","3L","3R","2R","2L","2L","2R","3L","2R"],[5.5,3.72,8.25,16.24,5.66,5.24,2.47,4.05,3.78,5.31,6.77,7.02,1.74,3.61]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Name<\/th>\n      <th>Chromosome<\/th>\n      <th>Abundance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
-<div id="high-confidence-sfps-remaining-after-salt-wash" class="section level2">
+<div id="high-confidence-sfps-remaining-after-salt-wash"
+class="section level2">
 <h2>High confidence Sfps remaining after salt wash</h2>
 <pre class="r"><code>lm_salt.tTags.table %&gt;% filter(threshold != &#39;SD&#39; &amp; Sfp == &#39;SFP.high&#39;) %&gt;% 
   dplyr::select(FBgn, Symbol = Gene.Symbol, Abundance = logCPM) %&gt;% 
   mutate(across(3, ~round(.x, 2))) %&gt;% 
   my_data_table()</code></pre>
 <div id="htmlwidget-e295b598a035716f6e44" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e295b598a035716f6e44">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0034152","FBgn0260745","FBgn0038067","FBgn0054051","FBgn0030362","FBgn0001218","FBgn0032868","FBgn0011559","FBgn0026415","FBgn0036186","FBgn0037879","FBgn0051680","FBgn0034753","FBgn0005585","FBgn0023529","FBgn0000592","FBgn0039562","FBgn0051872","FBgn0034277","FBgn0053126","FBgn0022355","FBgn0050104","FBgn0260766","FBgn0038069","FBgn0265264","FBgn0052203","FBgn0054033","FBgn0259975","FBgn0264815","FBgn0003748","FBgn0040093","FBgn0040092","FBgn0032774","FBgn0040097","FBgn0002855","FBgn0032122","FBgn0259952","FBgn0040098","FBgn0261058","FBgn0036969","FBgn0034417","FBgn0028986","FBgn0265267","FBgn0028987","FBgn0003885","FBgn0034229","FBgn0083141","FBgn0250847","FBgn0030828","FBgn0033875","FBgn0051659","FBgn0083938","FBgn0051198","FBgn0043530","FBgn0250841","FBgn0004181","FBgn0037038","FBgn0250835","FBgn0015584","FBgn0011694","FBgn0083966","FBgn0050488","FBgn0034153","FBgn0043825","FBgn0261055"],["Acp53C14a","mfas","CG11598","CG34051","regucalcin","Hsc70-3","CG17472","Acp36DE","Idgf4","CG6071","scpr-C","CG31680","CG2852","Crc; Calr","CG2918","Est-6","Gp93","CG31872","CG6370; OstDelta","NLaz","Tsf1","CG30104; NT5E-2","CG42564","CG11608","CG17097","Spn75F","CG34033","Sfp87B","Pde1c","Treh","lectin-46Ca","lectin-46Cb","CG17549","lectin-30A","Acp26Aa","CG31883","Sfp24Bb","lectin-29Ca","Sfp38D","Spn77Bb","CG15117","Spn3; Spn38F","CG18258","Spn2; Spn28F","alphaTub84D","CG4847","Spn28B; Spn7","CG14034","CG5162","CG6357","CG31659","BG642163","CG31198","Obp51a","CG17242","Peb; Ebp","CG11037","CG15394","Acp53Ea","PebII; EbpII","CG34130","CG30488; antr","Acp53C14b","CG18284","Sfp26Ad"],[4.97,5.63,1.89,5.46,8.74,4.86,6.27,12,5.16,2.1,7.69,1.13,2.95,1.99,-0.13,2.58,2.05,9.33,1.29,5.31,8.65,5.45,2.44,0.98,10.81,1.78,-0.12,4.13,4.99,4.97,1.59,1.55,1.19,5.22,8.1,-1.38,3.47,3.33,1.63,4.18,4.7,4.97,2.97,4.84,16.21,7.11,-0.47,4.6,5.89,2.52,3.14,2.1,0.97,3.01,7.24,7.68,4.32,-0.88,2.85,5,2.33,1.87,2.91,5.17,5.08]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Symbol<\/th>\n      <th>Abundance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-e295b598a035716f6e44">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0034152","FBgn0260745","FBgn0038067","FBgn0054051","FBgn0030362","FBgn0001218","FBgn0032868","FBgn0011559","FBgn0026415","FBgn0036186","FBgn0037879","FBgn0051680","FBgn0034753","FBgn0005585","FBgn0023529","FBgn0000592","FBgn0039562","FBgn0051872","FBgn0034277","FBgn0053126","FBgn0022355","FBgn0050104","FBgn0260766","FBgn0038069","FBgn0265264","FBgn0052203","FBgn0054033","FBgn0259975","FBgn0264815","FBgn0003748","FBgn0040093","FBgn0040092","FBgn0032774","FBgn0040097","FBgn0002855","FBgn0032122","FBgn0259952","FBgn0040098","FBgn0261058","FBgn0036969","FBgn0034417","FBgn0028986","FBgn0265267","FBgn0028987","FBgn0003885","FBgn0034229","FBgn0083141","FBgn0250847","FBgn0030828","FBgn0033875","FBgn0051659","FBgn0083938","FBgn0051198","FBgn0043530","FBgn0250841","FBgn0004181","FBgn0037038","FBgn0250835","FBgn0015584","FBgn0011694","FBgn0083966","FBgn0050488","FBgn0034153","FBgn0043825","FBgn0261055"],["Acp53C14a","mfas","CG11598","CG34051","regucalcin","Hsc70-3","CG17472","Acp36DE","Idgf4","CG6071","scpr-C","CG31680","CG2852","Crc; Calr","CG2918","Est-6","Gp93","CG31872","CG6370; OstDelta","NLaz","Tsf1","CG30104; NT5E-2","CG42564","CG11608","CG17097","Spn75F","CG34033","Sfp87B","Pde1c","Treh","lectin-46Ca","lectin-46Cb","CG17549","lectin-30A","Acp26Aa","CG31883","Sfp24Bb","lectin-29Ca","Sfp38D","Spn77Bb","CG15117","Spn3; Spn38F","CG18258","Spn2; Spn28F","alphaTub84D","CG4847","Spn28B; Spn7","CG14034","CG5162","CG6357","CG31659","BG642163","CG31198","Obp51a","CG17242","Peb; Ebp","CG11037","CG15394","Acp53Ea","PebII; EbpII","CG34130","CG30488; antr","Acp53C14b","CG18284","Sfp26Ad"],[4.97,5.63,1.89,5.46,8.74,4.86,6.27,12,5.16,2.1,7.69,1.13,2.95,1.99,-0.13,2.58,2.05,9.33,1.29,5.31,8.65,5.45,2.44,0.98,10.81,1.78,-0.12,4.13,4.99,4.97,1.59,1.55,1.19,5.22,8.1,-1.38,3.47,3.33,1.63,4.18,4.7,4.97,2.97,4.84,16.21,7.11,-0.47,4.6,5.89,2.52,3.14,2.1,0.97,3.01,7.24,7.68,4.32,-0.88,2.85,5,2.33,1.87,2.91,5.17,5.08]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Symbol<\/th>\n      <th>Abundance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="overlap" class="section level2">
 <h2>Overlap</h2>
@@ -5290,7 +5538,8 @@ MartinGarlovsky
   mutate(NAME = if_else(NAME == &#39;-&#39;, ANNOTATION_SYMBOL, NAME),
          Abundance = log2(grand.mean))</code></pre>
 </div>
-<div id="sfps-remaining-after-salt-or-detergent-treatment" class="section level2">
+<div id="sfps-remaining-after-salt-or-detergent-treatment"
+class="section level2">
 <h2>Sfps remaining after salt or detergent treatment</h2>
 <pre class="r"><code>remaining_sfp %&gt;% 
   dplyr::select(FBgn, Symbol = NAME, Chromosome = LOCATION_ARM, Abundance) %&gt;% 
@@ -5298,12 +5547,19 @@ MartinGarlovsky
   arrange(desc(Abundance)) %&gt;% 
   my_data_table()</code></pre>
 <div id="htmlwidget-fa553e9aa2ed17c2a950" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-fa553e9aa2ed17c2a950">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0003885","FBgn0011559","FBgn0265264","FBgn0051872","FBgn0030362","FBgn0022355","FBgn0037879","FBgn0002855","FBgn0004181","FBgn0250841","FBgn0034229","FBgn0032868","FBgn0050104","FBgn0030828","FBgn0054051","FBgn0260745","FBgn0053126","FBgn0040097","FBgn0001218","FBgn0026415","FBgn0264815","FBgn0028986","FBgn0043825","FBgn0037038","FBgn0011694","FBgn0028987","FBgn0034152","FBgn0261055","FBgn0003748","FBgn0020414","FBgn0034417","FBgn0250847","FBgn0259952","FBgn0259975","FBgn0036969","FBgn0040098","FBgn0039562","FBgn0034753","FBgn0000592","FBgn0034153","FBgn0051659","FBgn0033875","FBgn0265267","FBgn0260766","FBgn0043530","FBgn0015584","FBgn0005585","FBgn0036186","FBgn0038067","FBgn0034277","FBgn0034709","FBgn0083966","FBgn0036970","FBgn0052203","FBgn0083938","FBgn0040092","FBgn0050488","FBgn0040093","FBgn0083141","FBgn0261058","FBgn0051198","FBgn0032774","FBgn0051680","FBgn0038069","FBgn0023529","FBgn0054033","FBgn0250835","FBgn0032122"],["alpha-Tubulin at 84D","Accessory gland protein 36DE","CG17097","CG31872","regucalcin","Transferrin 1","SCP-containing protein C","Accessory gland protein 26Aa","Ejaculatory bulb protein","CG17242","CG4847","CG17472","Ecto-5'-nucleotidase 2","CG5162","CG34051","midline fasciclin","Neural Lazarillo","lectin-30A","Heat shock 70-kDa protein cognate 3","Imaginal disc growth factor 4","Phosphodiesterase 1c","Serpin 38F","CG18284","CG11037","Ejaculatory bulb protein II","Serpin 28F","Accessory gland protein 53C14a","Seminal fluid protein 26Ad","Trehalase","Imaginal disc growth factor 3","CG15117","CG14034","Seminal fluid protein 24Bb","Seminal fluid protein 87B","Serpin 77Bb","lectin-29Ca","Glycoprotein 93","CG2852","Esterase 6","Accessory gland protein 53C14b","CG31659","CG6357","CG18258","CG42564","Odorant-binding protein 51a","Accessory gland protein 53Ea","Calreticulin","CG6071","CG11598","Oligosaccharide transferase Delta subunit","Secreted Wg-interacting molecule","CG34130","Serpin 77Bc","Serpin 75F","BG642163","lectin-46Cb","antares","lectin-46Ca","Serpin 28B","Seminal fluid protein 38D","CG31198","CG17549","CG31680","CG11608","CG2918","CG34033","CG15394","CG31883"],["3R","2L","2L","2L","X","X","3R","2L","2R","2L","2R","2L","2R","X","2L","3R","2L","2L","X","X","2L","2L","2L","3L","2R","2L","2R","2L","2R","2L","2R","2L","2L","3R","3L","2L","3R","2R","3L","2R","2L","2R","X","3R","2R","2R","3R","3L","3R","2R","2R","3R","3L","3L","2L","2R","2R","2R","2L","2L","3R","2L","2L","3R","X","2R","2L","2L"],[35.19,30.87,29.62,28.17,28.06,27.54,27.01,26.9,26.67,26.03,25.92,25.16,24.93,24.7,24.54,24.46,24.3,24.25,24.22,24.22,24.09,24,23.97,23.95,23.91,23.9,23.86,23.85,23.82,23.65,23.55,23.34,23.24,23.09,22.84,22.76,22.55,22.51,22.33,22.15,22.11,22.01,21.98,21.94,21.93,21.89,21.78,21.37,21.31,21.29,21.27,21.24,21.2,21.17,21.03,21.02,21.02,20.97,20.94,20.93,20.75,20.66,20.37,20.32,19.45,19.26,18.82,17.97]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Symbol<\/th>\n      <th>Chromosome<\/th>\n      <th>Abundance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-fa553e9aa2ed17c2a950">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0003885","FBgn0011559","FBgn0265264","FBgn0051872","FBgn0030362","FBgn0022355","FBgn0037879","FBgn0002855","FBgn0004181","FBgn0250841","FBgn0034229","FBgn0032868","FBgn0050104","FBgn0030828","FBgn0054051","FBgn0260745","FBgn0053126","FBgn0040097","FBgn0001218","FBgn0026415","FBgn0264815","FBgn0028986","FBgn0043825","FBgn0037038","FBgn0011694","FBgn0028987","FBgn0034152","FBgn0261055","FBgn0003748","FBgn0020414","FBgn0034417","FBgn0250847","FBgn0259952","FBgn0259975","FBgn0036969","FBgn0040098","FBgn0039562","FBgn0034753","FBgn0000592","FBgn0034153","FBgn0051659","FBgn0033875","FBgn0265267","FBgn0260766","FBgn0043530","FBgn0015584","FBgn0005585","FBgn0036186","FBgn0038067","FBgn0034277","FBgn0034709","FBgn0083966","FBgn0036970","FBgn0052203","FBgn0083938","FBgn0040092","FBgn0050488","FBgn0040093","FBgn0083141","FBgn0261058","FBgn0051198","FBgn0032774","FBgn0051680","FBgn0038069","FBgn0023529","FBgn0054033","FBgn0250835","FBgn0032122"],["alpha-Tubulin at 84D","Accessory gland protein 36DE","CG17097","CG31872","regucalcin","Transferrin 1","SCP-containing protein C","Accessory gland protein 26Aa","Ejaculatory bulb protein","CG17242","CG4847","CG17472","Ecto-5'-nucleotidase 2","CG5162","CG34051","midline fasciclin","Neural Lazarillo","lectin-30A","Heat shock 70-kDa protein cognate 3","Imaginal disc growth factor 4","Phosphodiesterase 1c","Serpin 38F","CG18284","CG11037","Ejaculatory bulb protein II","Serpin 28F","Accessory gland protein 53C14a","Seminal fluid protein 26Ad","Trehalase","Imaginal disc growth factor 3","CG15117","CG14034","Seminal fluid protein 24Bb","Seminal fluid protein 87B","Serpin 77Bb","lectin-29Ca","Glycoprotein 93","CG2852","Esterase 6","Accessory gland protein 53C14b","CG31659","CG6357","CG18258","CG42564","Odorant-binding protein 51a","Accessory gland protein 53Ea","Calreticulin","CG6071","CG11598","Oligosaccharide transferase Delta subunit","Secreted Wg-interacting molecule","CG34130","Serpin 77Bc","Serpin 75F","BG642163","lectin-46Cb","antares","lectin-46Ca","Serpin 28B","Seminal fluid protein 38D","CG31198","CG17549","CG31680","CG11608","CG2918","CG34033","CG15394","CG31883"],["3R","2L","2L","2L","X","X","3R","2L","2R","2L","2R","2L","2R","X","2L","3R","2L","2L","X","X","2L","2L","2L","3L","2R","2L","2R","2L","2R","2L","2R","2L","2L","3R","3L","2L","3R","2R","3L","2R","2L","2R","X","3R","2R","2R","3R","3L","3R","2R","2R","3R","3L","3L","2L","2R","2R","2R","2L","2L","3R","2L","2L","3R","X","2R","2L","2L"],[35.19,30.87,29.62,28.17,28.06,27.54,27.01,26.9,26.67,26.03,25.92,25.16,24.93,24.7,24.54,24.46,24.3,24.25,24.22,24.22,24.09,24,23.97,23.95,23.91,23.9,23.86,23.85,23.82,23.65,23.55,23.34,23.24,23.09,22.84,22.76,22.55,22.51,22.33,22.15,22.11,22.01,21.98,21.94,21.93,21.89,21.78,21.37,21.31,21.29,21.27,21.24,21.2,21.17,21.03,21.02,21.02,20.97,20.94,20.93,20.75,20.66,20.37,20.32,19.45,19.26,18.82,17.97]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>Symbol<\/th>\n      <th>Chromosome<\/th>\n      <th>Abundance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="flyatlas2-comparisons" class="section level1">
 <h1>FlyAtlas2 comparisons</h1>
-<p>We downloaded gene expression data from <a href="https://flyatlas.gla.ac.uk/FlyAtlas2/index.html">FlyAtlas2</a> (FPKM; fragments per kilobase of transcript per million mapped reads) for accessory glands, testis, and carcass. We also included female expression data for the ovary. We filtered genes with log2(FPKM) less than 2. We classified Sfps remaining in the DmSP3 after salt or detergent treatment as ‘sperm associated Sfps’ (SAS), and the remaining Sfps as ‘Sfp’.</p>
+<p>We downloaded gene expression data from <a
+href="https://flyatlas.gla.ac.uk/FlyAtlas2/index.html">FlyAtlas2</a>
+(FPKM; fragments per kilobase of transcript per million mapped reads)
+for accessory glands, testis, and carcass. We also included female
+expression data for the ovary. We filtered genes with log2(FPKM) less
+than 2. We classified Sfps remaining in the DmSP3 after salt or
+detergent treatment as ‘sperm associated Sfps’ (SAS), and the remaining
+Sfps as ‘Sfp’.</p>
 <pre class="r"><code>flyatlas2_names &lt;- c(&#39;Tissue&#39;,  
                      &#39;FPKM.m&#39;,  &#39;SD.m&#39;, &#39;Enrichment.m&#39;, 
                      &#39;FPKM.f&#39;,  &#39;SD.f&#39;, &#39;Enrichment.f&#39;, 
@@ -5743,7 +5999,8 @@ SAS
   kable_styling(full_width = FALSE)</code></pre>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Kruskal-Wallace rank sum tests for difference in expression between tissues
+Kruskal-Wallace rank sum tests for difference in expression between
+tissues
 </caption>
 <thead>
 <tr>
@@ -6091,7 +6348,8 @@ Ovary
 </tbody>
 </table>
 </div>
-<div id="compare-gene-expression-between-accessory-glands-and-testis" class="section level2">
+<div id="compare-gene-expression-between-accessory-glands-and-testis"
+class="section level2">
 <h2>Compare gene expression between accessory glands and testis</h2>
 <pre class="r"><code>flyatlas2 %&gt;%
   filter(Tissue == &#39;Accessory glands&#39; | Tissue == &#39;Testis&#39;) %&gt;%
@@ -6143,8 +6401,11 @@ MartinGarlovsky
 </div>
 </div>
 </div>
-<div id="sperm-associated-sfps-with-higher-expression-in-testis-than-accessory-glands." class="section level2">
-<h2>‘Sperm associated Sfps’ with higher expression in testis than accessory glands.</h2>
+<div
+id="sperm-associated-sfps-with-higher-expression-in-testis-than-accessory-glands."
+class="section level2">
+<h2>‘Sperm associated Sfps’ with higher expression in testis than
+accessory glands.</h2>
 <pre class="r"><code>flyatlas2 %&gt;%
   filter(Tissue == &#39;Accessory glands&#39; | Tissue == &#39;Testis&#39;) %&gt;%
   dplyr::select(Tissue, FBgn, lfpkm, Sfp, NAME) %&gt;%
@@ -6154,9 +6415,10 @@ MartinGarlovsky
   mutate(across(3:4, ~round(.x, 2))) %&gt;% 
   my_data_table()</code></pre>
 <div id="htmlwidget-8ab8e8f1da190735b877" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8ab8e8f1da190735b877">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0020414","FBgn0022355","FBgn0026415","FBgn0033875","FBgn0037879","FBgn0050104","FBgn0264815"],["Imaginal disc growth factor 3","Transferrin 1","Imaginal disc growth factor 4","-","SCP-containing protein C","Ecto-5'-nucleotidase 2","Phosphodiesterase 1c"],[5.12,3.28,4.14,5.82,1.31,5.25,2.34],[6.58,6.08,5.53,6.14,9.56,6.16,2.64]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>NAME<\/th>\n      <th>Accessory glands<\/th>\n      <th>Testis<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":[2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-8ab8e8f1da190735b877">{"x":{"filter":"none","vertical":false,"extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["FBgn0020414","FBgn0022355","FBgn0026415","FBgn0033875","FBgn0037879","FBgn0050104","FBgn0264815"],["Imaginal disc growth factor 3","Transferrin 1","Imaginal disc growth factor 4","-","SCP-containing protein C","Ecto-5'-nucleotidase 2","Phosphodiesterase 1c"],[5.12,3.28,4.14,5.82,1.31,5.25,2.34],[6.58,6.08,5.53,6.14,9.56,6.16,2.64]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>FBgn<\/th>\n      <th>NAME<\/th>\n      <th>Accessory glands<\/th>\n      <th>Testis<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":400,"scrollCollapse":true,"buttons":["csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Dpseudo_respiration"}],"pageLength":50,"columnDefs":[{"className":"dt-right","targets":[2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
-<div id="abundance-of-proteins-with-higher-expression-in-the-testis" class="section level2">
+<div id="abundance-of-proteins-with-higher-expression-in-the-testis"
+class="section level2">
 <h2>Abundance of proteins with higher expression in the testis</h2>
 <pre class="r"><code>testis_expr &lt;- c(flyatlas2 %&gt;%
   filter(Tissue == &#39;Accessory glands&#39; | Tissue == &#39;Testis&#39;) %&gt;%
@@ -6400,9 +6662,14 @@ MartinGarlovsky
 </div>
 <pre class="r"><code>#dev.off()</code></pre>
 </div>
-<div id="protein-abundance---gene-expression-correlations" class="section level2 tabset">
+<div id="protein-abundance---gene-expression-correlations"
+class="section level2 tabset">
 <h2 class="tabset">Protein abundance - gene expression correlations</h2>
-<p>We tested whether protein abundance from out datasets correlated with gene expression for (i) all proteins/genes and (ii) only sperm associated Sfps (SAS) or remaining Sfps. We scaled expression and abundance data to have mean 0 and unit variance and fit linear regressions separately for each tissue type.</p>
+<p>We tested whether protein abundance from out datasets correlated with
+gene expression for (i) all proteins/genes and (ii) only sperm
+associated Sfps (SAS) or remaining Sfps. We scaled expression and
+abundance data to have mean 0 and unit variance and fit linear
+regressions separately for each tissue type.</p>
 <div id="all-proteins" class="section level3 tabset">
 <h3 class="tabset">All proteins</h3>
 <pre class="r"><code>scaled_dat &lt;- flyatlas2 %&gt;% 
@@ -7400,83 +7667,40 @@ MartinGarlovsky
 </div>
 </div>
 </div>
-<div id="evolutionary-rates" class="section level1 tabset">
-<h1 class="tabset">Evolutionary rates</h1>
-<p>Here we import the results of an evolutionary rates analysis from <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">PAML</a> generated using a custom pipeline <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/mec.13113">Wright et al. (2015) <em>Molecular Ecology</em></a>. We downloaded coding sequence (CDS) files for <em>D. melanogaster</em>, <em>D. sechellia</em>, <em>D. simulans</em>, and <em>D. yakuba</em>, and the protein coding sequence for <em>D. melanogaster</em> from <a href="https://www.ensembl.org/index.html">Ensembl</a>. We then identified the longest isoform of each gene and found reciprocal 1:1 orthologs. We aligned orthologs using <a href="https://www.ebi.ac.uk/research/goldman/software/prank">PRANK</a> and masked poorly aligned reads using <a href="https://journals.sagepub.com/doi/10.4137/EBO.S18193">SWAMP</a>. We then calculated the ratio of nonsynoymous nucleotide substitutions (dN) to synonymous nucleotide substitutions (dS) for each gene using the one ratio test in CODEML (model 0). Finally, we filtered genes with dS &lt; 2 and S*dS &lt;= 1.</p>
-<pre class="r"><code>one_ratio &lt;- read.csv(&#39;output/PAML/oneRatio_SWAMP_nofilter.csv&#39;) %&gt;% 
-  # filter dS &lt; 2...
-  filter(dS &lt; 2) %&gt;% 
-  # filter S x dS &lt;= 1
-  filter(S.dS &gt;= 1) %&gt;% 
-  # get FBgn from FBtr
-  left_join(gene2tran2prot, by = &#39;FBtr&#39;) %&gt;%
-  # get chromosome
-  left_join(flybase_results %&gt;% dplyr::select(FBgn, LOCATION_ARM, SYMBOL), 
-            by = c(&#39;FBgn&#39;)) %&gt;% 
-  # get the FBgn to convert to gene names
-  #write_csv(&#39;data/one_ratio_wFBgn.csv&#39;) %&gt;% 
-  distinct(FBgn, .keep_all = TRUE) %&gt;% 
-  mutate(sperm_protein = case_when(FBgn %in% DmSP3$FBgn ~ &#39;Sperm&#39;, TRUE ~ &#39;Non-sperm&#39;),
-         x_linked = case_when(LOCATION_ARM == &#39;X&#39; ~ &#39;X-linked&#39;, TRUE ~ &#39;other&#39;),
-         y_linked = case_when(LOCATION_ARM == &#39;Y&#39; ~ &#39;Y-linked&#39;, TRUE ~ &#39;other&#39;), # non
-         Sfp = case_when(FBgn %in% SFPs$FBgn ~ &#39;Sfp&#39;, TRUE ~ &#39;other&#39;)) %&gt;% 
-  # bin evo rates - each bin contains same number of genes - higher bin = higher rate
-  mutate(bin = ntile(dN.dS, 10))</code></pre>
-<p>We compared <span class="math inline">\(\omega\)</span> between groups of genes found in the sperm proteome compared to ‘all’ genes in the genome (n = 11457). Each group represents an independent set of genes such that ‘Sfps’ found in the sperm proteome are only in SpermP. Likewise, X_link are not included in SpermP, etc. The dashed line represents the genome average dN/dS.</p>
-<pre class="r"><code># Mann-Whitney U tests - sperm proteins vs. other in genome
-# all proteins
-wilcox.test(one_ratio$dN.dS[one_ratio$sperm_protein == &#39;Sperm&#39;], 
-            one_ratio$dN.dS[one_ratio$sperm_protein == &#39;Non-sperm&#39;])</code></pre>
-<pre>
-    Wilcoxon rank sum test with continuity correction
-
-data:  one_ratio$dN.dS[one_ratio$sperm_protein == "Sperm"] and one_ratio$dN.dS[one_ratio$sperm_protein == "Non-sperm"]
-W = 9676362, p-value < 2.2e-16
-alternative hypothesis: true location shift is not equal to 0
-</pre>
-<pre class="r"><code># sfps
-wilcox.test(one_ratio$dN.dS[one_ratio$Sfp == &#39;Sfp&#39; &amp; one_ratio$sperm_protein == &#39;Non-sperm&#39;], 
-            one_ratio$dN.dS[one_ratio$Sfp == &#39;Sfp&#39; &amp; one_ratio$sperm_protein == &#39;Sperm&#39;])</code></pre>
-<pre>
-    Wilcoxon rank sum test with continuity correction
-
-data:  one_ratio$dN.dS[one_ratio$Sfp == "Sfp" & one_ratio$sperm_protein == "Non-sperm"] and one_ratio$dN.dS[one_ratio$Sfp == "Sfp" & one_ratio$sperm_protein == "Sperm"]
-W = 4294.5, p-value = 0.2319
-alternative hypothesis: true location shift is not equal to 0
-</pre>
-<pre class="r"><code># x-linked
-wilcox.test(one_ratio$dN.dS[one_ratio$x_linked == &#39;X-linked&#39; &amp; one_ratio$sperm_protein == &#39;Non-sperm&#39;], 
-            one_ratio$dN.dS[one_ratio$x_linked == &#39;X-linked&#39; &amp; one_ratio$sperm_protein == &#39;Sperm&#39;])</code></pre>
-<pre>
-    Wilcoxon rank sum test with continuity correction
-
-data:  one_ratio$dN.dS[one_ratio$x_linked == "X-linked" & one_ratio$sperm_protein == "Non-sperm"] and one_ratio$dN.dS[one_ratio$x_linked == "X-linked" & one_ratio$sperm_protein == "Sperm"]
-W = 230625, p-value = 2.424e-06
-alternative hypothesis: true location shift is not equal to 0
-</pre>
-<div id="sperm-proteins-vs.-other" class="section level2">
-<h2>Sperm proteins vs. other</h2>
-<pre class="r"><code># boxplots
-bind_rows(one_ratio %&gt;% mutate(gene_set = &#39;Sfp&#39;) %&gt;% filter(Sfp == &#39;Sfp&#39;),
-          one_ratio %&gt;% mutate(gene_set = &#39;X-linked&#39;) %&gt;% filter(x_linked == &#39;X-linked&#39;),
-          one_ratio %&gt;% mutate(gene_set = &#39;All&#39;)) %&gt;% 
-  ggplot(aes(x = gene_set, y = dN.dS, fill = sperm_protein)) +
-  geom_boxplot(notch = TRUE, outlier.shape = 1) +
-  theme_bw() +
-  scale_fill_manual(values = cbPalette[-1]) +
-  labs(x = &#39;Gene set&#39;, y = &#39;dN/dS&#39;) +
-  theme(legend.position = &#39;bottom&#39;,#c(0.8, 0.9),
-        legend.title = element_blank(),
-        legend.background = element_blank()) +
-    guides(fill = guide_legend(label.position = &quot;left&quot;, label.hjust = 1)) +
-  geom_signif(
-    y_position = rep(1.6, 3),
-    xmin = c(0.8, 1.8, 2.8),
-    xmax = c(1.2, 2.2, 3.2),
-    annotation = c(&quot;***&quot;, &quot;n.s.&quot;, &quot;***&quot;), tip_length = 0.01) +
-  #ggsave(&#39;figures/sperm_rates_all.vs.all.pdf&#39;, height = 4.5, width = 4) +
-  NULL</code></pre>
-<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-87-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div id="overlap-with-mccullough-et-al.-2022"
+class="section level1 tabset">
+<h1 class="tabset">Overlap with McCullough et al. 2022</h1>
+<p>Another study recently investigated the presence of seminal fluid
+proteins associated with sperm in the seminal vesicles prior to
+ejaculation. Here we use Table S2 from McCullough et al. 2022 which
+details the ‘canonical sperm proteome’ (Dataset S2) consisting of 1409
+proteins. We first compare the overlap between these 1409 proteins with
+the DmSP3 (n = 3176). McCullough et al. also identified 67 Sfps (defined
+by Wigby et al. 2020) associated with sperm dissected from the seminal
+vesicles. However, they exclude 5 of these proteins (alphaTub84D,
+CG42807, CG43074, CG43090, and Drs; see supplementary Table S1 in
+McCullough et al. 2022). Consistent with their results, we analyse the
+overlap between the remaining 62 Sfps with those we identified in the
+DmSP3.</p>
+<pre class="r"><code># load the data
+mccullough_dat &lt;- read_xlsx(&#39;data/McCullough2022/pnas.2119899119.sd02.xlsx&#39;) %&gt;% 
+  dplyr::select(1:7) %&gt;% 
+  left_join(read_xlsx(&#39;data/McCullough2022/pnas.2119899119.sd05.xlsx&#39;) %&gt;% 
+              dplyr::select(1, 5:6) %&gt;% 
+              mutate(mn_bursa = rowMeans(dplyr::select(., 2:3), na.rm = TRUE)) %&gt;% 
+              dplyr::select(1, 4))</code></pre>
+<div id="dmsp3-to-mccullough-et-al.-canonical-sperm-proteome"
+class="section level2">
+<h2>DmSP3 to McCullough et al. ‘canonical sperm proteome’</h2>
+<pre class="r"><code>upset(fromList(list(DmSP3 = DmSP3$FBgn,
+                    McCul = mccullough_dat$FBgn)))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-86-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dmsp3-sfps-to-mccullough-et-al.-sfps" class="section level2">
+<h2>DmSP3 Sfps to McCullough et al. Sfps</h2>
+<pre class="r"><code>upset(fromList(list(DmSP3 = DmSP3$FBgn[DmSP3$Sfp == &#39;SFP.high&#39;],
+                    McCul = mccullough_dat$FBgn[mccullough_dat$SFP == &#39;1&#39;])))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-87-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-87-1">
 Past versions of unnamed-chunk-87-1.png
@@ -7502,6 +7726,314 @@ Date
 <tr>
 <td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-87-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="dmsp3-ribosomes-to-mccullough-et-al.-sfps"
+class="section level2">
+<h2>DmSP3 ribosomes to McCullough et al. Sfps</h2>
+<pre class="r"><code>upset(fromList(list(DmSP3 = all_rib$FBgn[all_rib$sp_prot != &#39;Other&#39;],
+                    McCul = mccullough_dat$FBgn)))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-88-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-88-1">
+Past versions of unnamed-chunk-88-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-88-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-88-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-88-1.png" target="_blank">5b13fbc</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="evolutionary-rates" class="section level1 tabset">
+<h1 class="tabset">Evolutionary rates</h1>
+<p>Here we import the results of an evolutionary rates analysis from <a
+href="http://abacus.gene.ucl.ac.uk/software/paml.html">PAML</a>
+generated using a custom pipeline <a
+href="https://onlinelibrary.wiley.com/doi/abs/10.1111/mec.13113">Wright
+et al. (2015) <em>Molecular Ecology</em></a>. We downloaded coding
+sequence (CDS) files for <em>D. melanogaster</em>, <em>D.
+sechellia</em>, <em>D. simulans</em>, and <em>D. yakuba</em>, and the
+protein coding sequence for <em>D. melanogaster</em> from <a
+href="https://www.ensembl.org/index.html">Ensembl</a>. We then
+identified the longest isoform of each gene and found reciprocal 1:1
+orthologs. We aligned orthologs using <a
+href="https://www.ebi.ac.uk/research/goldman/software/prank">PRANK</a>
+and masked poorly aligned reads using <a
+href="https://journals.sagepub.com/doi/10.4137/EBO.S18193">SWAMP</a>. We
+then calculated the ratio of nonsynoymous nucleotide substitutions (dN)
+to synonymous nucleotide substitutions (dS) for each gene using the one
+ratio test in CODEML (model 0). Finally, we filtered genes with dS &lt;
+2 and S*dS &lt;= 1.</p>
+<pre class="r"><code>one_ratio &lt;- read.csv(&#39;output/PAML/oneRatio_SWAMP_nofilter.csv&#39;) %&gt;% 
+  # filter dS &lt; 2...
+  filter(dS &lt; 2) %&gt;% 
+  # filter S x dS &lt;= 1
+  filter(S.dS &gt;= 1) %&gt;% 
+  # get FBgn from FBtr
+  left_join(gene2tran2prot, by = &#39;FBtr&#39;) %&gt;%
+  # get chromosome
+  left_join(flybase_results %&gt;% dplyr::select(FBgn, LOCATION_ARM, SYMBOL), 
+            by = c(&#39;FBgn&#39;)) %&gt;% 
+  # get the FBgn to convert to gene names
+  #write_csv(&#39;data/one_ratio_wFBgn.csv&#39;) %&gt;% 
+  distinct(FBgn, .keep_all = TRUE) %&gt;% 
+  mutate(sperm_protein = case_when(FBgn %in% DmSP3$FBgn ~ &#39;Sperm&#39;, TRUE ~ &#39;Non-sperm&#39;),
+         x_linked = case_when(LOCATION_ARM == &#39;X&#39; ~ &#39;X-linked&#39;, TRUE ~ &#39;other&#39;),
+         y_linked = case_when(LOCATION_ARM == &#39;Y&#39; ~ &#39;Y-linked&#39;, TRUE ~ &#39;other&#39;), # non
+         Sfp = case_when(FBgn %in% SFPs$FBgn ~ &#39;Sfp&#39;, TRUE ~ &#39;other&#39;)) %&gt;% 
+  # bin evo rates - each bin contains same number of genes - higher bin = higher rate
+  mutate(bin = ntile(dN.dS, 10))</code></pre>
+<pre class="r"><code>par(mfrow = c(2,2))
+hist(one_ratio$dN.dS, breaks = 200, 
+     main = &#39;All genes, n = 11417&#39;,
+     xlab = &#39;dN/dS&#39;)
+hist(one_ratio$dN.dS[one_ratio$sperm_protein == &#39;Sperm&#39;], breaks = 200, 
+     main = &#39;DmSP3, n = 2570&#39;,
+     xlab = &#39;dN/dS&#39;)
+hist(log(one_ratio$dN.dS), breaks = 200, 
+     main = &#39;All genes, n = 11417&#39;,
+     xlab = &#39;log(dN/dS)&#39;)
+hist(log(one_ratio$dN.dS[one_ratio$sperm_protein == &#39;Sperm&#39;]), breaks = 200, 
+     main = &#39;DmSP3, n = 2570&#39;,
+     xlab = &#39;log(dN/dS)&#39;)</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-90-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-90-1">
+Past versions of unnamed-chunk-90-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-90-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-90-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-90-1.png" target="_blank">5b13fbc</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>par(mfrow = c(1,1))</code></pre>
+<p>Histograms showing the distribution of dN/dS values for all genes
+(left) and genes found in the DmSP3 (right) on original scale (top) and
+log-transformed (bottom).</p>
+<p>We compared <span class="math inline">\(\omega\)</span> between
+groups of genes found in the sperm proteome compared to ‘all’ genes in
+the genome (n = 11457). Each group represents an independent set of
+genes such that ‘Sfps’ found in the sperm proteome are only in SpermP.
+Likewise, X_link are not included in SpermP, etc. The dashed line
+represents the genome average dN/dS.</p>
+<div id="sperm-proteins-vs.-other" class="section level2">
+<h2>Sperm proteins vs. other</h2>
+<pre class="r"><code># Mann-Whitney U tests - sperm proteins vs. other in genome
+bind_rows(broom::tidy(wilcox.test(one_ratio$dN.dS[one_ratio$sperm_protein == &#39;Sperm&#39;], 
+            one_ratio$dN.dS[one_ratio$sperm_protein == &#39;Non-sperm&#39;])),
+          broom::tidy(wilcox.test(one_ratio$dN.dS[one_ratio$Sfp == &#39;Sfp&#39; &amp; one_ratio$sperm_protein == &#39;Non-sperm&#39;], 
+            one_ratio$dN.dS[one_ratio$Sfp == &#39;Sfp&#39; &amp; one_ratio$sperm_protein == &#39;Sperm&#39;])),
+          broom::tidy(wilcox.test(one_ratio$dN.dS[one_ratio$x_linked == &#39;X-linked&#39; &amp; one_ratio$sperm_protein == &#39;Non-sperm&#39;], 
+            one_ratio$dN.dS[one_ratio$x_linked == &#39;X-linked&#39; &amp; one_ratio$sperm_protein == &#39;Sperm&#39;]))) %&gt;% 
+  mutate(`Gene set` = c(&#39;All proteins&#39;, &#39;Sfps&#39;, &#39;X-linked&#39;),
+         p.value = ifelse(p.value &lt; 0.001, &#39;&lt; 0.001&#39;, round(p.value, 3))) %&gt;% 
+  dplyr::select(`Gene set`, Statistic = statistic, p.value) %&gt;% 
+  kable(digits = 3, 
+        caption = &#39;Wilcoxon rank sum test with continuity correction testing difference in evolutionary rates between genes found in the DmSP compared to the remaining genome for each set of genes&#39;) %&gt;% 
+  kable_styling(full_width = FALSE)</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Wilcoxon rank sum test with continuity correction testing difference in
+evolutionary rates between genes found in the DmSP compared to the
+remaining genome for each set of genes
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Gene set
+</th>
+<th style="text-align:right;">
+Statistic
+</th>
+<th style="text-align:left;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+All proteins
+</td>
+<td style="text-align:right;">
+9676362.5
+</td>
+<td style="text-align:left;">
+&lt; 0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sfps
+</td>
+<td style="text-align:right;">
+4294.5
+</td>
+<td style="text-align:left;">
+0.232
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+X-linked
+</td>
+<td style="text-align:right;">
+230625.0
+</td>
+<td style="text-align:left;">
+&lt; 0.001
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># boxplots
+bind_rows(one_ratio %&gt;% mutate(gene_set = &#39;Sfp&#39;) %&gt;% filter(Sfp == &#39;Sfp&#39;),
+          one_ratio %&gt;% mutate(gene_set = &#39;X-linked&#39;) %&gt;% filter(x_linked == &#39;X-linked&#39;),
+          one_ratio %&gt;% mutate(gene_set = &#39;All&#39;)) %&gt;% 
+  ggplot(aes(x = gene_set, y = dN.dS, fill = sperm_protein)) +
+  geom_boxplot(notch = TRUE, outlier.shape = 1) +
+  theme_bw() +
+  scale_colour_manual(values = cbPalette[-1]) +
+  scale_fill_manual(values = cbPalette[-1]) +
+  labs(x = &#39;Gene set&#39;, y = &#39;dN/dS&#39;) +
+  theme(legend.position = &#39;bottom&#39;,#c(0.8, 0.9),
+        legend.title = element_blank(),
+        legend.background = element_blank()) +
+    guides(fill = guide_legend(label.position = &quot;left&quot;, label.hjust = 1)) +
+  geom_signif(
+    y_position = rep(1.6, 3),
+    xmin = c(0.8, 1.8, 2.8),
+    xmax = c(1.2, 2.2, 3.2),
+    annotation = c(&quot;***&quot;, &quot;n.s.&quot;, &quot;***&quot;), tip_length = 0.01) +
+  #ggsave(&#39;figures/sperm_rates_all.vs.all.pdf&#39;, height = 4.5, width = 4) +
+  NULL</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-91-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-91-1">
+Past versions of unnamed-chunk-91-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-91-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-91-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-91-1.png" target="_blank">5b13fbc</a>
 </td>
 <td>
 MartinGarlovsky
@@ -7545,7 +8077,8 @@ sperm_rates2 &lt;- bind_rows(sperm_rates %&gt;% mutate(gene_set = &#39;OMIM&#39;
   kable_styling(full_width = FALSE)</code></pre>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Wilcoxon rank sum test with continuity correction testing difference in evolutionary rates between each set of genes to the genome average
+Wilcoxon rank sum test with continuity correction testing difference in
+evolutionary rates between each set of genes to the genome average
 </caption>
 <thead>
 <tr>
@@ -7596,9 +8129,6 @@ X-linked
 </tr>
 </tbody>
 </table>
-</div>
-<div id="means-and-standard-errors" class="section level2">
-<h2>Means and standard errors</h2>
 <pre class="r"><code># means ± SE
 rates_plot &lt;- sperm_rates2 %&gt;% 
   group_by(gene_set) %&gt;% 
@@ -7623,207 +8153,6 @@ rates_plot &lt;- sperm_rates2 %&gt;%
   NULL
 
 rates_plot</code></pre>
-<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-89-1.png" width="384" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-89-1">
-Past versions of unnamed-chunk-89-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-89-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/MartinGarlovsky/DmSP3/blob/7fbba7e64859424b32b42bf9ab13fc9aba867002/docs/figure/statistical_analysis.Rmd/unnamed-chunk-89-1.png" target="_blank">7fbba7e</a>
-</td>
-<td>
-MartinGarlovsky
-</td>
-<td>
-2022-02-10
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-89-1.png" target="_blank">3ce1c47</a>
-</td>
-<td>
-MartinGarlovsky
-</td>
-<td>
-2022-02-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-<div id="compare-experiments" class="section level1 tabset">
-<h1 class="tabset">Compare experiments</h1>
-<div id="exp-1-vs.-exp-2" class="section level2">
-<h2>Exp 1 vs. Exp 2</h2>
-<pre class="r"><code># plot exp 1 abundance vs. exp 2 no halt (PBS) abundance
-one_v_two &lt;- DmSP3 %&gt;% 
-  filter(mn.one &gt; 0, mn.two &gt; 0) %&gt;% 
-  dplyr::select(mn.one, mn.two) %&gt;% 
-  ggplot(aes(x = log2(mn.one), y = log2(mn.two))) + 
-  geom_point() +
-  geom_smooth(method = &#39;lm&#39;) +
-  labs(x = &#39;Experiment 1&#39;, y = &#39;Experiment 2&#39;) +
-  theme_bw() + 
-  theme(legend.position = &#39;&#39;) +
-  stat_cor(aes(label = paste(..r.label.., ..rr.label.., ..p.label.., sep = &quot;~`,`~&quot;)), method = &#39;p&#39;) +
-  NULL
-
-one_v_two</code></pre>
-<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-90-1.png" width="384" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-90-1">
-Past versions of unnamed-chunk-90-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-90-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-90-1.png" target="_blank">3ce1c47</a>
-</td>
-<td>
-MartinGarlovsky
-</td>
-<td>
-2022-02-10
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-90-1.png" target="_blank">5b13fbc</a>
-</td>
-<td>
-MartinGarlovsky
-</td>
-<td>
-2022-02-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="exp-1-vs.-exp-3" class="section level2">
-<h2>Exp 1 vs. Exp 3</h2>
-<pre class="r"><code># plot exp 1 abundance vs. exp 3 abundance
-one_v_three &lt;- DmSP3 %&gt;% 
-  filter(mn.one &gt; 0, mn.three &gt; 0) %&gt;% 
-  dplyr::select(mn.one, mn.three) %&gt;% 
-  ggplot(aes(x = log2(mn.one), y = log2(mn.three))) + 
-  geom_point() +
-  geom_smooth(method = &#39;lm&#39;) +
-  labs(x = &#39;Experiment 1&#39;, y = &#39;Experiment 3&#39;) +
-  theme_bw() + 
-  theme(legend.position = &#39;&#39;) +
-  stat_cor(aes(label = paste(..r.label.., ..rr.label.., ..p.label.., sep = &quot;~`,`~&quot;)), method = &#39;p&#39;) +
-  NULL
-
-one_v_three</code></pre>
-<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-91-1.png" width="384" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-91-1">
-Past versions of unnamed-chunk-91-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-91-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-91-1.png" target="_blank">3ce1c47</a>
-</td>
-<td>
-MartinGarlovsky
-</td>
-<td>
-2022-02-10
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-91-1.png" target="_blank">5b13fbc</a>
-</td>
-<td>
-MartinGarlovsky
-</td>
-<td>
-2022-02-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="exp-2-vs.-exp-3" class="section level2">
-<h2>Exp 2 vs. Exp 3</h2>
-<pre class="r"><code># plot exp 2 abundance vs. exp 3 abundance
-two_v_three &lt;- DmSP3 %&gt;% 
-  filter(mn.two &gt; 0, mn.three &gt; 0) %&gt;% 
-  dplyr::select(mn.two, mn.three) %&gt;% 
-  ggplot(aes(x = log2(mn.two), y = log2(mn.three))) + 
-  geom_point() +
-  geom_smooth(method = &#39;lm&#39;) +
-  labs(x = &#39;Experiment 2&#39;, y = &#39;Experiment 3&#39;) +
-  theme_bw() + 
-  theme(legend.position = &#39;&#39;) +
-  stat_cor(aes(label = paste(..r.label.., ..rr.label.., ..p.label.., sep = &quot;~`,`~&quot;)), method = &#39;p&#39;) +
-  NULL
-
-two_v_three</code></pre>
 <p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-92-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-92-1">
@@ -7875,20 +8204,25 @@ MartinGarlovsky
 </div>
 </div>
 </div>
-<div id="make-combined-plots" class="section level1 tabset">
-<h1 class="tabset">Make combined plots</h1>
-<div id="representationnumbers" class="section level2">
-<h2>Representation/numbers</h2>
-<pre class="r"><code>#pdf(&#39;figures/ID_plot.pdf&#39;, height = 5, width = 9)
-gridExtra::grid.arrange(#cum_plot, 
-                        DmSP_overlap,
-                        omim_plot, ncol = 2
-                        # layout_matrix = rbind(c(1, 1, 1, 1, 2, 2),
-                        #                       c(1, 1, 1, 1, 2, 2),
-                        #                       c(1, 1, 1, 1, 3, 3),
-                        #                       c(1, 1, 1, 1, 3, 3))
-                        )</code></pre>
-<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-93-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="compare-experiments" class="section level1 tabset">
+<h1 class="tabset">Compare experiments</h1>
+<div id="exp-1-vs.-exp-2" class="section level2">
+<h2>Exp 1 vs. Exp 2</h2>
+<pre class="r"><code># plot exp 1 abundance vs. exp 2 no halt (PBS) abundance
+one_v_two &lt;- DmSP3 %&gt;% 
+  filter(mn.one &gt; 0, mn.two &gt; 0) %&gt;% 
+  dplyr::select(mn.one, mn.two) %&gt;% 
+  ggplot(aes(x = log2(mn.one), y = log2(mn.two))) + 
+  geom_point() +
+  geom_smooth(method = &#39;lm&#39;) +
+  labs(x = &#39;Experiment 1&#39;, y = &#39;Experiment 2&#39;) +
+  theme_bw() + 
+  theme(legend.position = &#39;&#39;) +
+  stat_cor(aes(label = paste(..r.label.., ..rr.label.., ..p.label.., sep = &quot;~`,`~&quot;)), method = &#39;p&#39;) +
+  NULL
+
+one_v_two</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-93-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-93-1">
 Past versions of unnamed-chunk-93-1.png
@@ -7937,13 +8271,24 @@ MartinGarlovsky
 </table>
 </div>
 </div>
-<pre class="r"><code>#dev.off()</code></pre>
 </div>
-<div id="correlation-between-experiemnts" class="section level2">
-<h2>Correlation between experiemnts</h2>
-<pre class="r"><code>#pdf(&#39;figures/corr_plot.pdf&#39;, height = 4, width = 12)
-gridExtra::grid.arrange(one_v_two, one_v_three, two_v_three, ncol = 3)</code></pre>
-<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-94-1.png" width="960" style="display: block; margin: auto;" /></p>
+<div id="exp-1-vs.-exp-3" class="section level2">
+<h2>Exp 1 vs. Exp 3</h2>
+<pre class="r"><code># plot exp 1 abundance vs. exp 3 abundance
+one_v_three &lt;- DmSP3 %&gt;% 
+  filter(mn.one &gt; 0, mn.three &gt; 0) %&gt;% 
+  dplyr::select(mn.one, mn.three) %&gt;% 
+  ggplot(aes(x = log2(mn.one), y = log2(mn.three))) + 
+  geom_point() +
+  geom_smooth(method = &#39;lm&#39;) +
+  labs(x = &#39;Experiment 1&#39;, y = &#39;Experiment 3&#39;) +
+  theme_bw() + 
+  theme(legend.position = &#39;&#39;) +
+  stat_cor(aes(label = paste(..r.label.., ..rr.label.., ..p.label.., sep = &quot;~`,`~&quot;)), method = &#39;p&#39;) +
+  NULL
+
+one_v_three</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-94-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-94-1">
 Past versions of unnamed-chunk-94-1.png
@@ -7992,17 +8337,24 @@ MartinGarlovsky
 </table>
 </div>
 </div>
-<pre class="r"><code>#dev.off()</code></pre>
 </div>
-<div id="ribosome-plot" class="section level2">
-<h2>Ribosome plot</h2>
-<pre class="r"><code>#pdf(&#39;figures/rib_combined.pdf&#39;, height = 6, width = 9)
-gridExtra::grid.arrange(rib_plot,
-                        rib_br_sp,
-                        ribo_abun,
-                        layout_matrix = rbind(c(3, 1, 1),
-                                              c(2, 1, 1)))</code></pre>
-<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-95-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="exp-2-vs.-exp-3" class="section level2">
+<h2>Exp 2 vs. Exp 3</h2>
+<pre class="r"><code># plot exp 2 abundance vs. exp 3 abundance
+two_v_three &lt;- DmSP3 %&gt;% 
+  filter(mn.two &gt; 0, mn.three &gt; 0) %&gt;% 
+  dplyr::select(mn.two, mn.three) %&gt;% 
+  ggplot(aes(x = log2(mn.two), y = log2(mn.three))) + 
+  geom_point() +
+  geom_smooth(method = &#39;lm&#39;) +
+  labs(x = &#39;Experiment 2&#39;, y = &#39;Experiment 3&#39;) +
+  theme_bw() + 
+  theme(legend.position = &#39;&#39;) +
+  stat_cor(aes(label = paste(..r.label.., ..rr.label.., ..p.label.., sep = &quot;~`,`~&quot;)), method = &#39;p&#39;) +
+  NULL
+
+two_v_three</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-95-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-95-1">
 Past versions of unnamed-chunk-95-1.png
@@ -8025,6 +8377,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/71b1474399993457ec92761c8034da75b94a2a8d/docs/figure/statistical_analysis.Rmd/unnamed-chunk-95-1.png" target="_blank">71b1474</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-95-1.png" target="_blank">3ce1c47</a>
@@ -8051,15 +8414,21 @@ MartinGarlovsky
 </table>
 </div>
 </div>
-<pre class="r"><code>#dev.off()</code></pre>
 </div>
-<div id="chromosomal-comparisons" class="section level2">
-<h2>Chromosomal comparisons</h2>
-<pre class="r"><code>#pdf(&#39;figures/chm_combined.pdf&#39;, height = 5, width = 12)
-gridExtra::grid.arrange(grobs = list(ggplotGrob(chm_plot),
-                                     ggplotGrob(axy_plot)),
-                        layout_matrix = rbind(c(1, 1, 1, 2, 2),
-                                              c(1, 1, 1, 2, 2)))</code></pre>
+</div>
+<div id="make-combined-plots" class="section level1 tabset">
+<h1 class="tabset">Make combined plots</h1>
+<div id="representationnumbers" class="section level2">
+<h2>Representation/numbers</h2>
+<pre class="r"><code>#pdf(&#39;figures/ID_plot.pdf&#39;, height = 5, width = 9)
+gridExtra::grid.arrange(#cum_plot, 
+                        DmSP_overlap,
+                        omim_plot, ncol = 2
+                        # layout_matrix = rbind(c(1, 1, 1, 1, 2, 2),
+                        #                       c(1, 1, 1, 1, 2, 2),
+                        #                       c(1, 1, 1, 1, 3, 3),
+                        #                       c(1, 1, 1, 1, 3, 3))
+                        )</code></pre>
 <p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-96-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-96-1">
@@ -8122,14 +8491,11 @@ MartinGarlovsky
 </div>
 <pre class="r"><code>#dev.off()</code></pre>
 </div>
-<div id="evolutionary-dynamics-plot" class="section level2">
-<h2>Evolutionary dynamics plot</h2>
-<pre class="r"><code>#pdf(&#39;figures/evo_combined.pdf&#39;, height = 5, width = 12)
-gridExtra::grid.arrange(grobs = list(ggplotGrob(age_plot),
-                                     ggplotGrob(rates_plot)),
-                        layout_matrix = rbind(c(1, 1, 1, 2, 2),
-                                              c(1, 1, 1, 2, 2)))</code></pre>
-<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-97-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="correlation-between-experiemnts" class="section level2">
+<h2>Correlation between experiemnts</h2>
+<pre class="r"><code>#pdf(&#39;figures/corr_plot.pdf&#39;, height = 4, width = 12)
+gridExtra::grid.arrange(one_v_two, one_v_three, two_v_three, ncol = 3)</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-97-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-97-1">
 Past versions of unnamed-chunk-97-1.png
@@ -8191,15 +8557,15 @@ MartinGarlovsky
 </div>
 <pre class="r"><code>#dev.off()</code></pre>
 </div>
-<div id="sfp-plot" class="section level2">
-<h2>Sfp plot</h2>
-<pre class="r"><code>#pdf(&#39;figures/sfp_combined.pdf&#39;, height = 4, width = 12)
-gridExtra::grid.arrange(sfp_abun, 
-                        #sfp_euler, 
-                        pbst_volcano + theme(legend.position = &#39;&#39;), 
-                        salt_ma + theme(legend.position = &#39;&#39;),
-                        ncol = 3)</code></pre>
-<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-98-1.png" width="960" style="display: block; margin: auto;" /></p>
+<div id="ribosome-plot" class="section level2">
+<h2>Ribosome plot</h2>
+<pre class="r"><code>#pdf(&#39;figures/rib_combined.pdf&#39;, height = 6, width = 9)
+gridExtra::grid.arrange(rib_plot,
+                        rib_br_sp,
+                        ribo_abun,
+                        layout_matrix = rbind(c(3, 1, 1),
+                                              c(2, 1, 1)))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-98-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-98-1">
 Past versions of unnamed-chunk-98-1.png
@@ -8249,21 +8615,371 @@ MartinGarlovsky
 </div>
 </div>
 <pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="chromosomal-comparisons" class="section level2">
+<h2>Chromosomal comparisons</h2>
+<pre class="r"><code>#pdf(&#39;figures/chm_combined.pdf&#39;, height = 5, width = 12)
+gridExtra::grid.arrange(grobs = list(ggplotGrob(chm_plot),
+                                     ggplotGrob(axy_plot)),
+                        layout_matrix = rbind(c(1, 1, 1, 2, 2),
+                                              c(1, 1, 1, 2, 2)))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-99-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-99-1">
+Past versions of unnamed-chunk-99-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-99-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/3ce1c47a48de012c7883d568131a50529ecd5316/docs/figure/statistical_analysis.Rmd/unnamed-chunk-99-1.png" target="_blank">3ce1c47</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/MartinGarlovsky/DmSP3/blob/5b13fbc15787c20e47ccf83bc223aacfeb9e6db7/docs/figure/statistical_analysis.Rmd/unnamed-chunk-99-1.png" target="_blank">5b13fbc</a>
+</td>
+<td>
+MartinGarlovsky
+</td>
+<td>
+2022-02-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="evolutionary-dynamics-plot" class="section level2">
+<h2>Evolutionary dynamics plot</h2>
+<pre class="r"><code>#pdf(&#39;figures/evo_combined.pdf&#39;, height = 5, width = 12)
+gridExtra::grid.arrange(grobs = list(ggplotGrob(age_plot),
+                                     ggplotGrob(rates_plot)),
+                        layout_matrix = rbind(c(1, 1, 1, 2, 2),
+                                              c(1, 1, 1, 2, 2)))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-100-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="sfp-plot" class="section level2">
+<h2>Sfp plot</h2>
+<pre class="r"><code>#pdf(&#39;figures/sfp_combined.pdf&#39;, height = 4, width = 12)
+gridExtra::grid.arrange(sfp_abun, 
+                        #sfp_euler, 
+                        pbst_volcano + theme(legend.position = &#39;&#39;), 
+                        salt_ma + theme(legend.position = &#39;&#39;),
+                        ncol = 3)</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-101-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+</div>
+<div id="number-of-psms-in-each-experiment" class="section level1">
+<h1>Number of PSMs in each experiment</h1>
+<pre class="r"><code>bind_rows(
+  DmSPintensity %&gt;% 
+  dplyr::select(FBgn, unique.one = `# Unique Peptides`, PSMs = `# PSMs`) %&gt;% 
+  summarise(PSMs = sum(PSMs)),
+  PBST_dat %&gt;% dplyr::select(FBgn, unique.two = `# Unique Peptides`, PSMs = `# PSMs`) %&gt;% 
+  summarise(PSMs = sum(PSMs)),
+  salt_dat %&gt;% dplyr::select(FBgn, unique.three = X..Unique.Peptides, PSMs = X..PSMs) %&gt;% 
+  summarise(PSMs = sum(PSMs))) %&gt;% 
+  mutate(Experiment = c(&#39;Experiment 1&#39;, &#39;Experiment 2&#39;, &#39;Experiment 3&#39;), .before = PSMs) %&gt;% 
+  kable(caption = &#39;Number of PSMs in each experiment&#39;) %&gt;% 
+  kable_styling(full_width = FALSE)</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Number of PSMs in each experiment
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Experiment
+</th>
+<th style="text-align:right;">
+PSMs
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Experiment 1
+</td>
+<td style="text-align:right;">
+106498
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Experiment 2
+</td>
+<td style="text-align:right;">
+91952
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Experiment 3
+</td>
+<td style="text-align:right;">
+197551
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="reviewer-requests" class="section level1">
+<h1>Reviewer requests</h1>
+<div id="compare-psms-for-replicates-within-experiments"
+class="section level2">
+<h2>Compare PSMs for replicates within experiments</h2>
+<p>We re-ran analysis in ProteomeDiscoverer to obtain replicate-specific
+information. We import the data for each run and calculate the
+correlation between PSMs between biological replicates within each
+treatment for each experiment.</p>
+<pre class="r"><code># import data
+temp = list.files(&#39;data/Individual_runs&#39;, recursive = TRUE, full.names = TRUE, pattern = &#39;*.xlsx$&#39;)
+myfiles = lapply(temp, read_excel)
+
+# update names
+names(myfiles) &lt;- gsub(&#39;data/Individual_runs/&#39;, &#39;&#39;, x = temp)
+names(myfiles) &lt;- gsub(&#39;.xlsx&#39;, &#39;&#39;, x = names(myfiles))
+names(myfiles) &lt;- gsub(&#39;KB_10MSE_0&#39;, &#39;REP&#39;, x = names(myfiles))
+
+# merge data
+all_dfs &lt;- plyr::ldply(myfiles) %&gt;% 
+  dplyr::select(.id, Accession, 9:16)
+
+# calculate PSMs for each biological replicate (summed across technical replicates)
+adf2 &lt;- all_dfs %&gt;% 
+  mutate(bio_rep = gsub(&#39;_.*&#39;, &#39;&#39;, x = .id)) %&gt;% 
+  group_by(Accession, bio_rep) %&gt;% 
+  summarise(PSMs = sum(`# PSMs`)) %&gt;% 
+  mutate(treatment = str_extract(bio_rep, &quot;^\\D+&quot;),
+         PSMs = log(PSMs + 1))
+
+# split data
+split.dat &lt;- split(adf2, adf2$treatment)
+
+# perform correlations between each bio replicate within each treatment
+map(split.dat, ~ group_by(., treatment) %&gt;%
+     pivot_wider(names_from = bio_rep, 
+                 values_from = PSMs,
+                 values_fill = 0) %&gt;% 
+      ungroup() %&gt;% 
+      dplyr::select(-c(1:2)) %&gt;% 
+      corrr::correlate() %&gt;% corrr::shave() %&gt;% corrr::stretch(.)) %&gt;% 
+  plyr::ldply(.) %&gt;% 
+  na.omit() %&gt;% summary</code></pre>
+<pre>     .id                 x                  y                   r         
+ Length:24          Length:24          Length:24          Min.   :0.6572  
+ Class :character   Class :character   Class :character   1st Qu.:0.8127  
+ Mode  :character   Mode  :character   Mode  :character   Median :0.8602  
+                                                          Mean   :0.8409  
+                                                          3rd Qu.:0.8846  
+                                                          Max.   :0.9263  
+</pre>
+</div>
+<div id="proteins-identified-per-replicate" class="section level2">
+<h2>Proteins identified per replicate</h2>
+<p>We calculate the number of proteins identified in each replicate
+using the replicate-specific ProteomeDiscoverer output.</p>
+</div>
+<div id="experiment-1" class="section level2">
+<h2>Experiment 1</h2>
+<pre class="r"><code># upset(fromList(list(Rep1 = unique(c(myfiles[[7]]$Accession,
+#                                     myfiles[[8]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[9]]$Accession,
+#                                     myfiles[[10]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[11]]$Accession,
+#                                     myfiles[[12]]$Accession)))))
+
+#pdf(&#39;figures/exp1_all_reps.pdf&#39;, height = 4, width = 4)
+plot(euler(c(&#39;Rep1&#39; = 243, &quot;Rep2&quot; = 297, &quot;Rep3&quot; = 115, 
+             &#39;Rep1&amp;Rep2&#39; = 130, 
+             &#39;Rep1&amp;Rep3&#39; = 37, 
+             &#39;Rep2&amp;Rep3&#39; = 74, 
+             &#39;Rep1&amp;Rep2&amp;Rep3&#39; = 768)
+           ),
+     main = &#39;Experiment 1&#39;,
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(1, 3)], alpha = .5))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-104-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="experiment-2" class="section level2 tabset">
+<h2 class="tabset">Experiment 2</h2>
+<div id="halt-treatment" class="section level3">
+<h3>Halt treatment</h3>
+<pre class="r"><code># upset(fromList(list(Rep1 = unique(c(myfiles[[1]]$Accession,
+#                                     myfiles[[2]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[3]]$Accession,
+#                                     myfiles[[4]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[5]]$Accession,
+#                                     myfiles[[6]]$Accession)))))
+
+#pdf(&#39;figures/exp2_halt.pdf&#39;, height = 4, width = 4)
+plot(euler(c(&#39;Rep1&#39; = 657, &quot;Rep2&quot; = 299, &quot;Rep3&quot; = 270, 
+             &#39;Rep1&amp;Rep2&#39; = 139, 
+             &#39;Rep1&amp;Rep3&#39; = 42, 
+             &#39;Rep2&amp;Rep3&#39; = 175, 
+             &#39;Rep1&amp;Rep2&amp;Rep3&#39; = 842)
+           ),
+     main = &#39;Halt&#39;,
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(2, 3)], alpha = .5))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-105-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="nohalt-treatment" class="section level3">
+<h3>NoHalt treatment</h3>
+<pre class="r"><code># upset(fromList(list(Rep1 = unique(c(myfiles[[21]]$Accession,
+#                                     myfiles[[22]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[23]]$Accession,
+#                                     myfiles[[24]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[25]]$Accession,
+#                                     myfiles[[26]]$Accession)))))
+
+#pdf(&#39;figures/exp2_nohalt.pdf&#39;, height = 4, width = 4)
+plot(euler(c(&#39;Rep1&#39; = 165, &quot;Rep2&quot; = 207, &quot;Rep3&quot; = 115, 
+             &#39;Rep1&amp;Rep2&#39; = 72, 
+             &#39;Rep1&amp;Rep3&#39; = 145, 
+             &#39;Rep2&amp;Rep3&#39; = 37, 
+             &#39;Rep1&amp;Rep2&amp;Rep3&#39; = 696)
+           ),
+     main = &#39;NoHalt&#39;,
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(2, 3)], alpha = .5))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-106-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="pbst-treatment" class="section level3">
+<h3>PBST treatment</h3>
+<pre class="r"><code># upset(fromList(list(Rep1 = unique(c(myfiles[[35]]$Accession,
+#                                     myfiles[[36]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[37]]$Accession,
+#                                     myfiles[[38]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[39]]$Accession,
+#                                     myfiles[[40]]$Accession)))))
+
+#pdf(&#39;figures/exp2_PBST.pdf&#39;, height = 4, width = 4)
+plot(euler(c(&#39;Rep1&#39; = 162, &quot;Rep2&quot; = 155, &quot;Rep3&quot; = 149, 
+             &#39;Rep1&amp;Rep2&#39; = 62, 
+             &#39;Rep1&amp;Rep3&#39; = 22, 
+             &#39;Rep2&amp;Rep3&#39; = 52, 
+             &#39;Rep1&amp;Rep2&amp;Rep3&#39; = 743)
+           ),
+     main = &#39;PBST&#39;,
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(2, 3)], alpha = .5))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-107-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+</div>
+<div id="experiment-3" class="section level2 tabset">
+<h2 class="tabset">Experiment 3</h2>
+<div id="pbs-control" class="section level3">
+<h3>PBS control</h3>
+<pre class="r"><code># upset(fromList(list(Rep1 = unique(c(myfiles[[27]]$Accession,
+#                                     myfiles[[28]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[29]]$Accession,
+#                                     myfiles[[30]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[31]]$Accession,
+#                                     myfiles[[32]]$Accession)),
+#                     Rep4 = unique(c(myfiles[[33]]$Accession,
+#                                     myfiles[[34]]$Accession))
+#                     )))
+
+#pdf(&#39;figures/exp3_pbs.pdf&#39;, height = 4, width = 4)
+plot(euler(c(&#39;Rep1&#39; = 394, &quot;Rep2&quot; = 134, &quot;Rep3&quot; = 287, &quot;Rep4&quot; = 161, 
+             &#39;Rep1&amp;Rep2&#39; = 56, 
+             &#39;Rep1&amp;Rep3&#39; = 179, 
+             &#39;Rep1&amp;Rep4&#39; = 30, 
+             &#39;Rep2&amp;Rep3&#39; = 51, 
+             &#39;Rep2&amp;Rep4&#39; = 16, 
+             &#39;Rep3&amp;Rep4&#39; = 17, 
+             &#39;Rep1&amp;Rep2&amp;Rep3&#39; = 222, 
+             &#39;Rep1&amp;Rep2&amp;Rep4&#39; = 28, 
+             &#39;Rep1&amp;Rep4&amp;Rep3&#39; = 41, 
+             &#39;Rep4&amp;Rep2&amp;Rep3&#39; = 12, 
+             &#39;Rep1&amp;Rep2&amp;Rep3&amp;Rep4&#39; = 903)
+           ),
+     main = &#39;PBS control&#39;,
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(3, 4)], alpha = .5))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-108-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="nacl-treatment" class="section level3">
+<h3>NaCl treatment</h3>
+<pre class="r"><code># upset(fromList(list(Rep1 = unique(c(myfiles[[13]]$Accession,
+#                                     myfiles[[14]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[15]]$Accession,
+#                                     myfiles[[16]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[17]]$Accession,
+#                                     myfiles[[18]]$Accession)),
+#                     Rep4 = unique(c(myfiles[[19]]$Accession,
+#                                     myfiles[[20]]$Accession))
+#                     )))
+
+#pdf(&#39;figures/exp3_salt.pdf&#39;, height = 4, width = 4)
+plot(euler(c(&#39;Rep1&#39; = 134, &quot;Rep2&quot; = 220, &quot;Rep3&quot; = 341, &quot;Rep4&quot; = 151, 
+             &#39;Rep1&amp;Rep2&#39; = 44, 
+             &#39;Rep1&amp;Rep3&#39; = 60, 
+             &#39;Rep1&amp;Rep4&#39; = 37, 
+             &#39;Rep2&amp;Rep3&#39; = 105, 
+             &#39;Rep2&amp;Rep4&#39; = 20, 
+             &#39;Rep3&amp;Rep4&#39; = 21, 
+             &#39;Rep1&amp;Rep2&amp;Rep3&#39; = 179, 
+             &#39;Rep1&amp;Rep2&amp;Rep4&#39; = 24, 
+             &#39;Rep1&amp;Rep4&amp;Rep3&#39; = 32, 
+             &#39;Rep4&amp;Rep2&amp;Rep3&#39; = 22, 
+             &#39;Rep1&amp;Rep2&amp;Rep3&amp;Rep4&#39; = 961)
+           ),
+     main = &#39;NaCl treatment&#39;,
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(3, 4)], alpha = .5))</code></pre>
+<p><img src="figure/statistical_analysis.Rmd/unnamed-chunk-109-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre>R version 4.0.3 (2020-10-10)
+<pre>R version 4.1.3 (2022-03-10)
 Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Big Sur 10.16
+Running under: macOS Big Sur/Monterey 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
@@ -8273,60 +8989,61 @@ attached base packages:
 [8] base     
 
 other attached packages:
- [1] knitrhooks_0.0.4     knitr_1.33           pals_1.7            
- [4] DT_0.18              boot_1.3-28          ComplexHeatmap_2.9.3
- [7] pheatmap_1.0.12      edgeR_3.32.1         limma_3.46.0        
-[10] ggpubr_0.4.0         kableExtra_1.3.4     tidybayes_3.0.1     
-[13] readxl_1.3.1         eulerr_6.1.0         UpSetR_1.4.0        
-[16] forcats_0.5.1        stringr_1.4.0        dplyr_1.0.7         
-[19] purrr_0.3.4          readr_2.0.1          tidyr_1.1.4         
-[22] tibble_3.1.5         ggplot2_3.3.5        tidyverse_1.3.1     
-[25] workflowr_1.6.2     
+ [1] knitrhooks_0.0.4      knitr_1.38            pals_1.7             
+ [4] DT_0.22               boot_1.3-28           ComplexHeatmap_2.11.1
+ [7] pheatmap_1.0.12       edgeR_3.36.0          limma_3.50.3         
+[10] ggpubr_0.4.0          kableExtra_1.3.4      tidybayes_3.0.2      
+[13] readxl_1.4.0          eulerr_6.1.1          UpSetR_1.4.0         
+[16] forcats_0.5.1         stringr_1.4.0         dplyr_1.0.8          
+[19] purrr_0.3.4           readr_2.1.2           tidyr_1.2.0          
+[22] tibble_3.1.6          ggplot2_3.3.5         tidyverse_1.3.1      
+[25] workflowr_1.7.0      
 
 loaded via a namespace (and not attached):
-  [1] backports_1.2.1      circlize_0.4.13      systemfonts_1.0.2   
-  [4] plyr_1.8.6           splines_4.0.3        polylabelr_0.2.0    
-  [7] svUnit_1.0.6         crosstalk_1.1.1      digest_0.6.28       
- [10] foreach_1.5.1        htmltools_0.5.1.1    viridis_0.6.1       
- [13] fansi_0.5.0          magrittr_2.0.1       checkmate_2.0.0     
- [16] cluster_2.1.2        doParallel_1.0.16    tzdb_0.1.2          
- [19] openxlsx_4.2.4       modelr_0.1.8         matrixStats_0.60.0  
- [22] vroom_1.5.4          svglite_2.0.0        colorspace_2.0-2    
- [25] ggrepel_0.9.1        rvest_1.0.1          ggdist_3.0.0        
- [28] haven_2.4.3          xfun_0.25            crayon_1.4.2        
- [31] jsonlite_1.7.2       iterators_1.0.13     glue_1.5.0          
- [34] polyclip_1.10-0      gtable_0.3.0         webshot_0.5.2       
- [37] GetoptLong_1.0.5     distributional_0.2.2 car_3.0-11          
- [40] shape_1.4.6          BiocGenerics_0.36.1  maps_3.4.0          
- [43] abind_1.4-5          scales_1.1.1         DBI_1.1.1           
- [46] rstatix_0.7.0        Rcpp_1.0.7           viridisLite_0.4.0   
- [49] clue_0.3-59          bit_4.0.4            foreign_0.8-81      
- [52] mapproj_1.2.7        stats4_4.0.3         htmlwidgets_1.5.3   
- [55] httr_1.4.2           arrayhelpers_1.1-0   RColorBrewer_1.1-2  
- [58] posterior_1.0.1      ellipsis_0.3.2       pkgconfig_2.0.3     
- [61] farver_2.1.0         sass_0.4.0           dbplyr_2.1.1        
- [64] locfit_1.5-9.4       utf8_1.2.2           reshape2_1.4.4      
- [67] labeling_0.4.2       tidyselect_1.1.1     rlang_0.4.12        
- [70] later_1.3.0          munsell_0.5.0        cellranger_1.1.0    
- [73] tools_4.0.3          cli_3.1.0            generics_0.1.1      
- [76] ggridges_0.5.3       broom_0.7.9          evaluate_0.14       
- [79] yaml_2.2.1           bit64_4.0.5          fs_1.5.0            
- [82] zip_2.2.0            nlme_3.1-152         whisker_0.4         
- [85] xml2_1.3.2           compiler_4.0.3       rstudioapi_0.13     
- [88] curl_4.3.2           png_0.1-7            ggsignif_0.6.2      
- [91] reprex_2.0.1         bslib_0.2.5.1        stringi_1.7.5       
- [94] highr_0.9            lattice_0.20-44      Matrix_1.3-4        
- [97] tensorA_0.36.2       vctrs_0.3.8          pillar_1.6.4        
-[100] lifecycle_1.0.1      jquerylib_0.1.4      GlobalOptions_0.1.2 
-[103] data.table_1.14.0    httpuv_1.6.2         R6_2.5.1            
-[106] promises_1.2.0.1     gridExtra_2.3        rio_0.5.27          
-[109] IRanges_2.24.1       codetools_0.2-18     dichromat_2.0-0     
-[112] assertthat_0.2.1     rprojroot_2.0.2      rjson_0.2.20        
-[115] withr_2.4.2          S4Vectors_0.28.1     mgcv_1.8-36         
-[118] parallel_4.0.3       hms_1.1.0            gghalves_0.1.1      
-[121] coda_0.19-4          rmarkdown_2.10       carData_3.0-4       
-[124] Cairo_1.5-12.2       git2r_0.28.0         lubridate_1.7.10    
+  [1] backports_1.4.1      circlize_0.4.14      systemfonts_1.0.4   
+  [4] plyr_1.8.7           splines_4.1.3        polylabelr_0.2.0    
+  [7] svUnit_1.0.6         crosstalk_1.2.0      digest_0.6.29       
+ [10] foreach_1.5.2        htmltools_0.5.2      viridis_0.6.2       
+ [13] fansi_1.0.3          magrittr_2.0.3       checkmate_2.0.0     
+ [16] cluster_2.1.3        doParallel_1.0.17    tzdb_0.3.0          
+ [19] modelr_0.1.8         matrixStats_0.61.0   vroom_1.5.7         
+ [22] svglite_2.1.0        colorspace_2.0-3     ggrepel_0.9.1       
+ [25] rvest_1.0.2          ggdist_3.1.1         haven_2.5.0         
+ [28] xfun_0.30            callr_3.7.0          crayon_1.5.1        
+ [31] jsonlite_1.8.0       iterators_1.0.14     glue_1.6.2          
+ [34] polyclip_1.10-0      gtable_0.3.0         webshot_0.5.3       
+ [37] GetoptLong_1.0.5     distributional_0.3.0 car_3.0-12          
+ [40] shape_1.4.6          BiocGenerics_0.40.0  maps_3.4.0          
+ [43] abind_1.4-5          scales_1.2.0         DBI_1.1.2           
+ [46] rstatix_0.7.0        Rcpp_1.0.8.3         viridisLite_0.4.0   
+ [49] clue_0.3-60          bit_4.0.4            mapproj_1.2.8       
+ [52] stats4_4.1.3         htmlwidgets_1.5.4    httr_1.4.2          
+ [55] arrayhelpers_1.1-0   RColorBrewer_1.1-3   posterior_1.2.1     
+ [58] ellipsis_0.3.2       pkgconfig_2.0.3      farver_2.1.0        
+ [61] sass_0.4.1           dbplyr_2.1.1         locfit_1.5-9.5      
+ [64] utf8_1.2.2           reshape2_1.4.4       labeling_0.4.2      
+ [67] tidyselect_1.1.2     rlang_1.0.2          later_1.3.0         
+ [70] munsell_0.5.0        cellranger_1.1.0     tools_4.1.3         
+ [73] cli_3.2.0            corrr_0.4.3          generics_0.1.2      
+ [76] ggridges_0.5.3       broom_0.8.0          evaluate_0.15       
+ [79] fastmap_1.1.0        yaml_2.3.5           bit64_4.0.5         
+ [82] processx_3.5.3       fs_1.5.2             nlme_3.1-157        
+ [85] whisker_0.4          xml2_1.3.3           compiler_4.1.3      
+ [88] rstudioapi_0.13      png_0.1-7            ggsignif_0.6.3      
+ [91] reprex_2.0.1         bslib_0.3.1          stringi_1.7.6       
+ [94] highr_0.9            ps_1.6.0             lattice_0.20-45     
+ [97] Matrix_1.4-1         tensorA_0.36.2       vctrs_0.4.1         
+[100] pillar_1.7.0         lifecycle_1.0.1      jquerylib_0.1.4     
+[103] GlobalOptions_0.1.2  httpuv_1.6.5         R6_2.5.1            
+[106] promises_1.2.0.1     gridExtra_2.3        IRanges_2.28.0      
+[109] codetools_0.2-18     dichromat_2.0-0      assertthat_0.2.1    
+[112] rprojroot_2.0.3      rjson_0.2.21         withr_2.5.0         
+[115] S4Vectors_0.32.4     mgcv_1.8-40          parallel_4.1.3      
+[118] hms_1.1.1            gghalves_0.1.1       coda_0.19-4         
+[121] rmarkdown_2.13       carData_3.0-5        git2r_0.30.1        
+[124] getPass_0.2-2        lubridate_1.8.0     
 </pre>
+</div>
 </div>
 </div>
 </div>
@@ -8334,7 +9051,7 @@ loaded via a namespace (and not attached):
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
-http://docs.mathjax.org/en/latest/configuration.html.  This will make
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
 the presentation more consistent at the cost of the webpage sometimes
 taking slightly longer to load. Note that this only works because the
 footer is added to webpages before the MathJax javascript. -->
