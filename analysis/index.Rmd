@@ -8,6 +8,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-Statistical analysis to accompany Garlovsky, M. D., Sandler, J., and Karr, T. L., 'Functional diversity and evolutionary dynamics of the *Drosophila melanogaster* sperm proteome'. Data can be found on [Dryad](https://datadryad.org/stash) and via the [ProteomeXchange](link). 
+Statistical analysis to accompany Garlovsky, M. D., Sandler, J., and Karr, T. L., 'Functional diversity and evolutionary dynamics of the *Drosophila melanogaster* sperm proteome'. The [`data`](https://github.com/MartinGarlovsky/DmSP3/tree/master/data) folder contains all files necessary to perform the analyses. Additional proteomics data are available via the [ProteomeXchange Consortium](http://proteomecentral.proteomexchange.org) via the PRIDE partner repository with the identified PXD032033.
 
 ### [1. Statistical analysis](statistical_analysis.html)
