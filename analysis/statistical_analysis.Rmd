@@ -160,11 +160,11 @@ plot(euler(c('exp1' = 392, "exp2" = 247, "exp3" = 416,
 DmSPIII.2 <- data.frame(FBgn = unique(
   c(DmSP_exp1$FBgn, PBST_dat$FBgn, salt_dat$FBgn))) %>%
   separate_rows(FBgn) %>% 
+  drop_na(FBgn) %>% 
   left_join(flybase_results %>% dplyr::select(FBgn, SYMBOL)) %>% 
   distinct(FBgn, .keep_all = TRUE)
 
 ```
-
 
 ## Overlap between DmSP-1, -2, and -3 {.tabset}
 Here we look at the overlap between proteins IDd in the current study (n = `r nrow(DmSPIII.2)`) with the previous releases of the DmSP (n  = `r nrow(DmSP2)`. The current study increases the number of identified proteins significantly.
@@ -179,7 +179,7 @@ listInput <- list(DmSP.1 = DmSPI$FBgn,
 #upset(fromList(listInput), order.by = 'degree')
 
 # Eulerr diagram
-DmSP_overlap <- plot(euler(c('DmSP1' = 68, "DmSP2" = 538, "Current Study" = 2069, 
+DmSP_overlap <- plot(euler(c('DmSP1' = 68, "DmSP2" = 538, "Current Study" = 2068, 
                              'DmSP1&DmSP2' = 8, 
                              'DmSP1&Current Study' = 84, 
                              'DmSP2&Current Study' = 229,
@@ -377,17 +377,17 @@ CV_dat <- DmSP3 %>%
                                grepl('NaCl', name) ~ 'exp3.1',
                                TRUE ~ 'exp3.2'))
 
-# calculate medians
-CV_dat %>% 
-  group_by(FBgn, experiment) %>% 
-  summarise(CV = cv(log_val)) %>% 
-  bind_rows(data.frame(FBgn = DmSP3$FBgn,
-                       experiment = 'All',
-                       CV = allexp)) %>%
-  group_by(experiment) %>%
-  summarise(N = n(),
-            md = median(CV, na.rm = TRUE),
-            sd = sd(CV, na.rm = TRUE))
+# # calculate medians
+# CV_dat %>% 
+#   group_by(FBgn, experiment) %>% 
+#   summarise(CV = cv(log_val)) %>% 
+#   bind_rows(data.frame(FBgn = DmSP3$FBgn,
+#                        experiment = 'All',
+#                        CV = allexp)) %>%
+#   group_by(experiment) %>%
+#   summarise(N = n(),
+#             md = median(CV, na.rm = TRUE),
+#             sd = sd(CV, na.rm = TRUE))
   
 CV_plot <- CV_dat %>% 
   group_by(FBgn, experiment) %>% 
@@ -948,7 +948,7 @@ rib_plot <- rib.test %>%
   scale_fill_brewer(palette = 'RdBu', direction = -1) +
   scale_x_discrete(labels = c('CYT_LARGE' = 'Cyt. large', 'CYT_SMALL' = 'Cyt. small',
                               'MIT_LARGE' = 'Mt. large',  'MIT_SMALL' = 'Mt. small')) +
-  labs(x = "Class", y = "obs. no. genes") +
+  labs(x = "Class", y = "obs. no. proteins") +
   theme_bw() +
   theme(legend.position = 'bottom',
         legend.title = element_blank()) +
@@ -1480,18 +1480,18 @@ pheatmap(
 
 #### MDS plot {.tabset}
 ```{r}
-mdsObj <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))$cmdscale.out
-
-mdsObj <- as.data.frame(as.matrix(mdsObj)) %>% 
-  rownames_to_column() %>% 
-  mutate(condition = str_sub(rowname, 1, 2)) %>% 
-  dplyr::rename(dim1 = V1, dim2 = V2, dim3 = V3)
+mdsObj12 <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,2))
+mdsObj13 <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))
+mdsObj23 <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(2,3))
 
 ```
 
 ##### Dim.1 vs. Dim. 2
 ```{r, fig.width=4.5, fig.height=3.8}
-mdsObj %>% 
+data.frame(sample.info = rownames(mdsObj12$distance.matrix.squared),
+           dim1 = mdsObj12$x,
+           dim2 = mdsObj12$y) %>% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %>% 
   ggplot(aes(x = dim1, y = dim2, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs(x = "Dimension 1", y = "Dimension 2") +
@@ -1509,7 +1509,10 @@ mdsObj %>%
 
 ##### Dim.1 vs. Dim. 3
 ```{r, fig.width=4.5, fig.height=3.8}
-mdsObj %>% 
+data.frame(sample.info = rownames(mdsObj13$distance.matrix.squared),
+           dim1 = mdsObj13$x,
+           dim3 = mdsObj13$y) %>% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %>% 
   ggplot(aes(x = dim1, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = "Dimension 1", y = "Dimension 3") +
@@ -1527,7 +1530,10 @@ mdsObj %>%
 
 ##### Dim.2 vs. Dim. 3
 ```{r, fig.width=4.5, fig.height=3.8}
-mdsObj %>% 
+data.frame(sample.info = rownames(mdsObj23$distance.matrix.squared),
+           dim2 = mdsObj23$x,
+           dim3 = mdsObj23$y) %>% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %>% 
   ggplot(aes(x = dim2, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = "Dimension 2", y = "Dimension 3") +
@@ -1603,7 +1609,7 @@ comb_TABLES %>% filter(threshold != 'SD') %>%
     point.padding = unit(0.3, "lines"),
     max.overlaps = 20
   ) +
-  #ggsave('figures/volcano_PBSTexp.pdf', height = 4, width = 10) +
+  #ggsave('figures/volcano_PBSTexp.pdf', height = 6, width = 16) +
   NULL
 
 # # DA proteins between 'controls'
@@ -1694,6 +1700,7 @@ dgeList_pbst <- DGEList(counts = pbst.Filtered, genes = expr_pbst2$Accession[kee
 dgeList_pbst <- calcNormFactors(dgeList_pbst, method = 'TMM')
 dgeList_pbst <- estimateCommonDisp(dgeList_pbst)
 dgeList_pbst <- estimateTagwiseDisp(dgeList_pbst)
+
 ```
 
 #### Diagnostic plots
@@ -1738,18 +1745,18 @@ pheatmap(
 
 #### MDS plot {.tabset}
 ```{r}
-mdsObj <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))$cmdscale.out
-
-mdsObj <- as.data.frame(as.matrix(mdsObj)) %>% 
-  rownames_to_column() %>% 
-  mutate(condition = str_sub(rowname, 1, 2)) %>% 
-  dplyr::rename(dim1 = V1, dim2 = V2, dim3 = V3)
+mdsObj12 <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,2))
+mdsObj13 <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(1,3))
+mdsObj23 <- plotMDS(dgeList_pbst, plot = F, dim.plot = c(2,3))
 
 ```
 
 ##### Dim.1 vs. Dim. 2
 ```{r, fig.width=4.5, fig.height=3.8}
-mdsObj %>% 
+data.frame(sample.info = rownames(mdsObj12$distance.matrix.squared),
+           dim1 = mdsObj12$x,
+           dim2 = mdsObj12$y) %>% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %>% 
   ggplot(aes(x = dim1, y = dim2, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs(x = "Dimension 1", y = "Dimension 2") +
@@ -1767,7 +1774,10 @@ mdsObj %>%
 
 ##### Dim.1 vs. Dim. 3
 ```{r, fig.width=4.5, fig.height=3.8}
-mdsObj %>% 
+data.frame(sample.info = rownames(mdsObj13$distance.matrix.squared),
+           dim1 = mdsObj13$x,
+           dim3 = mdsObj13$y) %>% 
+  mutate(condition = str_sub(sample.info, 1, 2))  %>% 
   ggplot(aes(x = dim1, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = "Dimension 1", y = "Dimension 3") +
@@ -1785,7 +1795,10 @@ mdsObj %>%
 
 ##### Dim.2 vs. Dim. 3
 ```{r, fig.width=4.5, fig.height=3.8}
-mdsObj %>% 
+data.frame(sample.info = rownames(mdsObj23$distance.matrix.squared),
+           dim2 = mdsObj23$x,
+           dim3 = mdsObj23$y) %>% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %>% 
   ggplot(aes(x = dim2, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = "Dimension 2", y = "Dimension 3") +
@@ -1985,18 +1998,18 @@ par(mfrow=c(1,1))
 
 ### MDS plot {.tabset}
 ```{r}
-mdsObj <- plotMDS(dgeList_salt, plot = F, dim.plot = c(1,3))$cmdscale.out
-
-mdsObj <- as.data.frame(as.matrix(mdsObj)) %>% 
-  rownames_to_column() %>% 
-  mutate(condition = str_sub(rowname, 1, 2)) %>% 
-  dplyr::rename(dim1 = V1, dim2 = V2, dim3 = V3)
+mdsObj12 <- plotMDS(dgeList_salt, plot = F, dim.plot = c(1,2))
+mdsObj13 <- plotMDS(dgeList_salt, plot = F, dim.plot = c(1,3))
+mdsObj23 <- plotMDS(dgeList_salt, plot = F, dim.plot = c(2,3))
 
 ```
 
 #### Dim.1 vs. Dim. 2
 ```{r, fig.width=4.5, fig.height=3.8}
-mdsObj %>% 
+data.frame(sample.info = rownames(mdsObj12$distance.matrix.squared),
+           dim1 = mdsObj12$x,
+           dim2 = mdsObj12$y) %>% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %>% 
   ggplot(aes(x = dim1, y = dim2, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs(x = "Dimension 1", y = "Dimension 2") +
@@ -2014,7 +2027,10 @@ mdsObj %>%
 
 #### Dim.1 vs. Dim. 3
 ```{r, fig.width=4.5, fig.height=3.8}
-mdsObj %>% 
+data.frame(sample.info = rownames(mdsObj13$distance.matrix.squared),
+           dim1 = mdsObj13$x,
+           dim3 = mdsObj13$y) %>% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %>% 
   ggplot(aes(x = dim1, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = "Dimension 1", y = "Dimension 3") +
@@ -2032,7 +2048,10 @@ mdsObj %>%
 
 #### Dim.2 vs. Dim. 3
 ```{r, fig.width=4.5, fig.height=3.8}
-mdsObj %>% 
+data.frame(sample.info = rownames(mdsObj23$distance.matrix.squared),
+           dim2 = mdsObj23$x,
+           dim3 = mdsObj23$y) %>% 
+  mutate(condition = str_sub(sample.info, 1, 2)) %>% 
   ggplot(aes(x = dim2, y = dim3, colour = condition)) +
   geom_point(size = 8, alpha = .7) +
   labs( x = "Dimension 2", y = "Dimension 3") +
@@ -2058,6 +2077,7 @@ lm_salt.tTags.table <- topTags(lrt.salt, n = NULL) %>% as.data.frame() %>%
   left_join(salt_dat2,
             by = c('genes' = 'Accession')) %>% 
   mutate(bin = ntile(logCPM, 10))
+
 lm_salt.tTags.table %>% filter(threshold != 'SD') %>% 
   ggplot(aes(x = logFC, y = -log10(PValue))) +
   geom_point(alpha = .1) +
@@ -2667,6 +2687,40 @@ gridExtra::grid.arrange(#fa2_heatmap,
 
 ```
 
+# Overlap with McCullough et al. 2022 {.tabset}
+Another study recently investigated the presence of seminal fluid proteins associated with sperm in the seminal vesicles prior to ejaculation. Here we use Table S2 from McCullough et al. 2022 which details the 'canonical sperm proteome' (Dataset S2) consisting of 1409 proteins. We first compare the overlap between these 1409 proteins with the DmSP3 (n = 3176). McCullough et al. also identified 67 Sfps (defined by Wigby et al. 2020) associated with sperm dissected from the seminal vesicles. However, they exclude 5 of these proteins (alphaTub84D, CG42807, CG43074, CG43090, and Drs; see supplementary Table S1 in McCullough et al. 2022). Consistent with their results, we analyse the overlap between the remaining 62 Sfps with those we identified in the DmSP3. 
+```{r}
+# load the data
+mccullough_dat <- read_xlsx('data/McCullough2022/pnas.2119899119.sd02.xlsx') %>% 
+  dplyr::select(1:7) %>% 
+  left_join(read_xlsx('data/McCullough2022/pnas.2119899119.sd05.xlsx') %>% 
+              dplyr::select(1, 5:6) %>% 
+              mutate(mn_bursa = rowMeans(dplyr::select(., 2:3), na.rm = TRUE)) %>% 
+              dplyr::select(1, 4))
+
+```
+
+## DmSP3 to McCullough et al. 'canonical sperm proteome'
+```{r}
+upset(fromList(list(DmSP3 = DmSP3$FBgn,
+                    McCul = mccullough_dat$FBgn)))
+
+```
+
+## DmSP3 Sfps to McCullough et al. Sfps
+```{r}
+upset(fromList(list(DmSP3 = DmSP3$FBgn[DmSP3$Sfp == 'SFP.high'],
+                    McCul = mccullough_dat$FBgn[mccullough_dat$SFP == '1'])))
+
+```
+
+## DmSP3 ribosomes to McCullough et al. Sfps
+```{r}
+upset(fromList(list(DmSP3 = all_rib$FBgn[all_rib$sp_prot != 'Other'],
+                    McCul = mccullough_dat$FBgn)))
+
+```
+
 # Evolutionary rates {.tabset}
 Here we import the results of an evolutionary rates analysis from [PAML](http://abacus.gene.ucl.ac.uk/software/paml.html) generated using a custom pipeline [Wright et al. (2015) *Molecular Ecology*](https://onlinelibrary.wiley.com/doi/abs/10.1111/mec.13113). We downloaded coding sequence (CDS) files for *D. melanogaster*, *D. sechellia*, *D. simulans*, and *D. yakuba*, and the protein coding sequence for *D. melanogaster* from [Ensembl](https://www.ensembl.org/index.html). We then identified the longest isoform of each gene and found reciprocal 1:1 orthologs. We aligned orthologs using [PRANK](https://www.ebi.ac.uk/research/goldman/software/prank) and masked poorly aligned reads using [SWAMP](https://journals.sagepub.com/doi/10.4137/EBO.S18193). We then calculated the ratio of nonsynoymous nucleotide substitutions (dN) to synonymous nucleotide substitutions (dS) for each gene using the one ratio test in CODEML (model 0). Finally, we filtered genes with dS < 2 and S*dS <= 1.
 
@@ -2693,26 +2747,43 @@ one_ratio <- read.csv('output/PAML/oneRatio_SWAMP_nofilter.csv') %>%
 
 ```
 
-We compared $\omega$ between groups of genes found in the sperm proteome compared to 'all' genes in the genome (n = 11457). Each group represents an independent set of genes such that 'Sfps' found in the sperm proteome are only in SpermP. Likewise, X_link are not included in SpermP, etc. The dashed line represents the genome average dN/dS.
-
-```{r}
-# Mann-Whitney U tests - sperm proteins vs. other in genome
-# all proteins
-wilcox.test(one_ratio$dN.dS[one_ratio$sperm_protein == 'Sperm'], 
-            one_ratio$dN.dS[one_ratio$sperm_protein == 'Non-sperm'])
-
-# sfps
-wilcox.test(one_ratio$dN.dS[one_ratio$Sfp == 'Sfp' & one_ratio$sperm_protein == 'Non-sperm'], 
-            one_ratio$dN.dS[one_ratio$Sfp == 'Sfp' & one_ratio$sperm_protein == 'Sperm'])
-
-# x-linked
-wilcox.test(one_ratio$dN.dS[one_ratio$x_linked == 'X-linked' & one_ratio$sperm_protein == 'Non-sperm'], 
-            one_ratio$dN.dS[one_ratio$x_linked == 'X-linked' & one_ratio$sperm_protein == 'Sperm'])
+```{r, fig.height=6, fig.width=6}
+par(mfrow = c(2,2))
+hist(one_ratio$dN.dS, breaks = 200, 
+     main = 'All genes, n = 11417',
+     xlab = 'dN/dS')
+hist(one_ratio$dN.dS[one_ratio$sperm_protein == 'Sperm'], breaks = 200, 
+     main = 'DmSP3, n = 2570',
+     xlab = 'dN/dS')
+hist(log(one_ratio$dN.dS), breaks = 200, 
+     main = 'All genes, n = 11417',
+     xlab = 'log(dN/dS)')
+hist(log(one_ratio$dN.dS[one_ratio$sperm_protein == 'Sperm']), breaks = 200, 
+     main = 'DmSP3, n = 2570',
+     xlab = 'log(dN/dS)')
+par(mfrow = c(1,1))
 
 ```
+Histograms showing the distribution of dN/dS values for all genes (left) and genes found in the DmSP3 (right) on original scale (top) and log-transformed (bottom).
+
+We compared $\omega$ between groups of genes found in the sperm proteome compared to 'all' genes in the genome (n = 11457). Each group represents an independent set of genes such that 'Sfps' found in the sperm proteome are only in SpermP. Likewise, X_link are not included in SpermP, etc. The dashed line represents the genome average dN/dS.
 
 ## Sperm proteins vs. other
 ```{r, fig.height=4, fig.width=5}
+# Mann-Whitney U tests - sperm proteins vs. other in genome
+bind_rows(broom::tidy(wilcox.test(one_ratio$dN.dS[one_ratio$sperm_protein == 'Sperm'], 
+            one_ratio$dN.dS[one_ratio$sperm_protein == 'Non-sperm'])),
+          broom::tidy(wilcox.test(one_ratio$dN.dS[one_ratio$Sfp == 'Sfp' & one_ratio$sperm_protein == 'Non-sperm'], 
+            one_ratio$dN.dS[one_ratio$Sfp == 'Sfp' & one_ratio$sperm_protein == 'Sperm'])),
+          broom::tidy(wilcox.test(one_ratio$dN.dS[one_ratio$x_linked == 'X-linked' & one_ratio$sperm_protein == 'Non-sperm'], 
+            one_ratio$dN.dS[one_ratio$x_linked == 'X-linked' & one_ratio$sperm_protein == 'Sperm']))) %>% 
+  mutate(`Gene set` = c('All proteins', 'Sfps', 'X-linked'),
+         p.value = ifelse(p.value < 0.001, '< 0.001', round(p.value, 3))) %>% 
+  dplyr::select(`Gene set`, Statistic = statistic, p.value) %>% 
+  kable(digits = 3, 
+        caption = 'Wilcoxon rank sum test with continuity correction testing difference in evolutionary rates between genes found in the DmSP compared to the remaining genome for each set of genes') %>% 
+  kable_styling(full_width = FALSE)
+
 # boxplots
 bind_rows(one_ratio %>% mutate(gene_set = 'Sfp') %>% filter(Sfp == 'Sfp'),
           one_ratio %>% mutate(gene_set = 'X-linked') %>% filter(x_linked == 'X-linked'),
@@ -2720,6 +2791,7 @@ bind_rows(one_ratio %>% mutate(gene_set = 'Sfp') %>% filter(Sfp == 'Sfp'),
   ggplot(aes(x = gene_set, y = dN.dS, fill = sperm_protein)) +
   geom_boxplot(notch = TRUE, outlier.shape = 1) +
   theme_bw() +
+  scale_colour_manual(values = cbPalette[-1]) +
   scale_fill_manual(values = cbPalette[-1]) +
   labs(x = 'Gene set', y = 'dN/dS') +
   theme(legend.position = 'bottom',#c(0.8, 0.9),
@@ -2766,10 +2838,6 @@ bind_rows(broom::tidy(wilcox.test(sperm_rates$dN.dS[sperm_rates$OMIM == 'omim'],
         caption = 'Wilcoxon rank sum test with continuity correction testing difference in evolutionary rates between each set of genes to the genome average') %>% 
   kable_styling(full_width = FALSE)
 
-```
-
-## Means and standard errors
-```{r, fig.height=4, fig.width=4}
 # means ± SE
 rates_plot <- sperm_rates2 %>% 
   group_by(gene_set) %>% 
@@ -2925,3 +2993,227 @@ gridExtra::grid.arrange(sfp_abun,
 #dev.off()
 
 ```
+
+# Number of PSMs in each experiment
+```{r}
+bind_rows(
+  DmSPintensity %>% 
+  dplyr::select(FBgn, unique.one = `# Unique Peptides`, PSMs = `# PSMs`) %>% 
+  summarise(PSMs = sum(PSMs)),
+  PBST_dat %>% dplyr::select(FBgn, unique.two = `# Unique Peptides`, PSMs = `# PSMs`) %>% 
+  summarise(PSMs = sum(PSMs)),
+  salt_dat %>% dplyr::select(FBgn, unique.three = X..Unique.Peptides, PSMs = X..PSMs) %>% 
+  summarise(PSMs = sum(PSMs))) %>% 
+  mutate(Experiment = c('Experiment 1', 'Experiment 2', 'Experiment 3'), .before = PSMs) %>% 
+  kable(caption = 'Number of PSMs in each experiment') %>% 
+  kable_styling(full_width = FALSE)
+
+```
+
+# Reviewer requests
+
+## Compare PSMs for replicates within experiments
+We re-ran analysis in ProteomeDiscoverer to obtain replicate-specific information. We import the data for each run and calculate the correlation between PSMs between biological replicates within each treatment for each experiment. 
+```{r}
+# import data
+temp = list.files('data/Individual_runs', recursive = TRUE, full.names = TRUE, pattern = '*.xlsx$')
+myfiles = lapply(temp, read_excel)
+
+# update names
+names(myfiles) <- gsub('data/Individual_runs/', '', x = temp)
+names(myfiles) <- gsub('.xlsx', '', x = names(myfiles))
+names(myfiles) <- gsub('KB_10MSE_0', 'REP', x = names(myfiles))
+
+# merge data
+all_dfs <- plyr::ldply(myfiles) %>% 
+  dplyr::select(.id, Accession, 9:16)
+
+# calculate PSMs for each biological replicate (summed across technical replicates)
+adf2 <- all_dfs %>% 
+  mutate(bio_rep = gsub('_.*', '', x = .id)) %>% 
+  group_by(Accession, bio_rep) %>% 
+  summarise(PSMs = sum(`# PSMs`)) %>% 
+  mutate(treatment = str_extract(bio_rep, "^\\D+"),
+         PSMs = log(PSMs + 1))
+
+# split data
+split.dat <- split(adf2, adf2$treatment)
+
+# perform correlations between each bio replicate within each treatment
+map(split.dat, ~ group_by(., treatment) %>%
+     pivot_wider(names_from = bio_rep, 
+                 values_from = PSMs,
+                 values_fill = 0) %>% 
+      ungroup() %>% 
+      dplyr::select(-c(1:2)) %>% 
+      corrr::correlate() %>% corrr::shave() %>% corrr::stretch(.)) %>% 
+  plyr::ldply(.) %>% 
+  na.omit() %>% summary
+
+```
+
+## Proteins identified per replicate
+We calculate the number of proteins identified in each replicate using the replicate-specific ProteomeDiscoverer output.
+
+## Experiment 1
+```{r}
+# upset(fromList(list(Rep1 = unique(c(myfiles[[7]]$Accession,
+#                                     myfiles[[8]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[9]]$Accession,
+#                                     myfiles[[10]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[11]]$Accession,
+#                                     myfiles[[12]]$Accession)))))
+
+#pdf('figures/exp1_all_reps.pdf', height = 4, width = 4)
+plot(euler(c('Rep1' = 243, "Rep2" = 297, "Rep3" = 115, 
+             'Rep1&Rep2' = 130, 
+             'Rep1&Rep3' = 37, 
+             'Rep2&Rep3' = 74, 
+             'Rep1&Rep2&Rep3' = 768)
+           ),
+     main = 'Experiment 1',
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(1, 3)], alpha = .5))
+#dev.off()
+
+```
+
+## Experiment 2 {.tabset}
+
+### Halt treatment
+```{r}
+# upset(fromList(list(Rep1 = unique(c(myfiles[[1]]$Accession,
+#                                     myfiles[[2]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[3]]$Accession,
+#                                     myfiles[[4]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[5]]$Accession,
+#                                     myfiles[[6]]$Accession)))))
+
+#pdf('figures/exp2_halt.pdf', height = 4, width = 4)
+plot(euler(c('Rep1' = 657, "Rep2" = 299, "Rep3" = 270, 
+             'Rep1&Rep2' = 139, 
+             'Rep1&Rep3' = 42, 
+             'Rep2&Rep3' = 175, 
+             'Rep1&Rep2&Rep3' = 842)
+           ),
+     main = 'Halt',
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(2, 3)], alpha = .5))
+#dev.off()
+
+```
+
+### NoHalt treatment
+```{r}
+# upset(fromList(list(Rep1 = unique(c(myfiles[[21]]$Accession,
+#                                     myfiles[[22]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[23]]$Accession,
+#                                     myfiles[[24]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[25]]$Accession,
+#                                     myfiles[[26]]$Accession)))))
+
+#pdf('figures/exp2_nohalt.pdf', height = 4, width = 4)
+plot(euler(c('Rep1' = 165, "Rep2" = 207, "Rep3" = 115, 
+             'Rep1&Rep2' = 72, 
+             'Rep1&Rep3' = 145, 
+             'Rep2&Rep3' = 37, 
+             'Rep1&Rep2&Rep3' = 696)
+           ),
+     main = 'NoHalt',
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(2, 3)], alpha = .5))
+#dev.off()
+
+```
+
+### PBST treatment
+```{r}
+# upset(fromList(list(Rep1 = unique(c(myfiles[[35]]$Accession,
+#                                     myfiles[[36]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[37]]$Accession,
+#                                     myfiles[[38]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[39]]$Accession,
+#                                     myfiles[[40]]$Accession)))))
+
+#pdf('figures/exp2_PBST.pdf', height = 4, width = 4)
+plot(euler(c('Rep1' = 162, "Rep2" = 155, "Rep3" = 149, 
+             'Rep1&Rep2' = 62, 
+             'Rep1&Rep3' = 22, 
+             'Rep2&Rep3' = 52, 
+             'Rep1&Rep2&Rep3' = 743)
+           ),
+     main = 'PBST',
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(2, 3)], alpha = .5))
+#dev.off()
+
+```
+
+## Experiment 3 {.tabset}
+
+### PBS control
+```{r}
+# upset(fromList(list(Rep1 = unique(c(myfiles[[27]]$Accession,
+#                                     myfiles[[28]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[29]]$Accession,
+#                                     myfiles[[30]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[31]]$Accession,
+#                                     myfiles[[32]]$Accession)),
+#                     Rep4 = unique(c(myfiles[[33]]$Accession,
+#                                     myfiles[[34]]$Accession))
+#                     )))
+
+#pdf('figures/exp3_pbs.pdf', height = 4, width = 4)
+plot(euler(c('Rep1' = 394, "Rep2" = 134, "Rep3" = 287, "Rep4" = 161, 
+             'Rep1&Rep2' = 56, 
+             'Rep1&Rep3' = 179, 
+             'Rep1&Rep4' = 30, 
+             'Rep2&Rep3' = 51, 
+             'Rep2&Rep4' = 16, 
+             'Rep3&Rep4' = 17, 
+             'Rep1&Rep2&Rep3' = 222, 
+             'Rep1&Rep2&Rep4' = 28, 
+             'Rep1&Rep4&Rep3' = 41, 
+             'Rep4&Rep2&Rep3' = 12, 
+             'Rep1&Rep2&Rep3&Rep4' = 903)
+           ),
+     main = 'PBS control',
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(3, 4)], alpha = .5))
+#dev.off()
+
+```
+
+### NaCl treatment
+```{r}
+# upset(fromList(list(Rep1 = unique(c(myfiles[[13]]$Accession,
+#                                     myfiles[[14]]$Accession)),
+#                     Rep2 = unique(c(myfiles[[15]]$Accession,
+#                                     myfiles[[16]]$Accession)),
+#                     Rep3 = unique(c(myfiles[[17]]$Accession,
+#                                     myfiles[[18]]$Accession)),
+#                     Rep4 = unique(c(myfiles[[19]]$Accession,
+#                                     myfiles[[20]]$Accession))
+#                     )))
+
+#pdf('figures/exp3_salt.pdf', height = 4, width = 4)
+plot(euler(c('Rep1' = 134, "Rep2" = 220, "Rep3" = 341, "Rep4" = 151, 
+             'Rep1&Rep2' = 44, 
+             'Rep1&Rep3' = 60, 
+             'Rep1&Rep4' = 37, 
+             'Rep2&Rep3' = 105, 
+             'Rep2&Rep4' = 20, 
+             'Rep3&Rep4' = 21, 
+             'Rep1&Rep2&Rep3' = 179, 
+             'Rep1&Rep2&Rep4' = 24, 
+             'Rep1&Rep4&Rep3' = 32, 
+             'Rep4&Rep2&Rep3' = 22, 
+             'Rep1&Rep2&Rep3&Rep4' = 961)
+           ),
+     main = 'NaCl treatment',
+     quantities = TRUE,
+     fills = list(fill = viridis::plasma(n = 3)[rep(3, 4)], alpha = .5))
+#dev.off()
+
+```
+
